@@ -11,25 +11,22 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Header - LMS style */}
-      <header className="sticky top-0 z-40 bg-white border-b border-[#e5e7eb]">
+      {/* Header */}
+      <header className="sticky top-0 z-40 bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
-            {/* Logo - AIM style */}
+            {/* Logo */}
             <Link to="/" className="flex items-center gap-3">
-              {/* AIM Logo icon */}
-              <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="48" stroke="#171717" strokeWidth="4"/>
-                <path d="M50 20 L50 80" stroke="#171717" strokeWidth="4" strokeLinecap="round"/>
-                <path d="M50 20 L30 50" stroke="#171717" strokeWidth="4" strokeLinecap="round"/>
-                <path d="M50 20 L70 50" stroke="#171717" strokeWidth="4" strokeLinecap="round"/>
-                <circle cx="50" cy="65" r="8" fill="#DC2626"/>
-              </svg>
+              <img
+                src="/logo_light.png"
+                alt="AI Mindset"
+                className="h-7"
+              />
               <div className="flex flex-col">
                 <span className="font-mono text-sm font-bold tracking-tight">
                   AI Mindset
                 </span>
-                <span className="font-mono text-[10px] text-[#a3a3a3] uppercase tracking-wider">
+                <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-wider">
                   visual toolkit
                 </span>
               </div>
@@ -43,10 +40,10 @@ export default function Layout() {
                   <Link
                     key={path}
                     to={path}
-                    className={`px-4 py-2 font-mono text-[11px] uppercase tracking-wider transition-all ${
+                    className={`px-4 py-2 text-sm transition-all rounded-lg ${
                       isActive
-                        ? 'bg-[#171717] text-white'
-                        : 'text-[#525252] hover:text-[#DC2626]'
+                        ? 'bg-neutral-900 text-white'
+                        : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'
                     }`}
                   >
                     {label}
@@ -64,7 +61,7 @@ export default function Layout() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#e5e7eb] py-6 bg-[#fafafa]">
+      <footer className="border-t border-neutral-200 py-6 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-6">
@@ -72,7 +69,7 @@ export default function Layout() {
                 href="https://aimindset.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+                className="text-xs text-neutral-400 hover:text-[#DC2626] transition-colors"
               >
                 aimindset.org
               </a>
@@ -80,7 +77,7 @@ export default function Layout() {
                 href="https://learn.aimindset.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+                className="text-xs text-neutral-400 hover:text-[#DC2626] transition-colors"
               >
                 LMS
               </a>
@@ -88,7 +85,7 @@ export default function Layout() {
                 href="https://manifest.aimindset.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+                className="text-xs text-neutral-400 hover:text-[#DC2626] transition-colors"
               >
                 Manifest
               </a>
@@ -96,12 +93,12 @@ export default function Layout() {
                 href="https://github.com/ai-mindset-org/aim-visual-toolkit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+                className="text-xs text-neutral-400 hover:text-[#DC2626] transition-colors"
               >
                 GitHub
               </a>
             </div>
-            <span className="font-mono text-[10px] text-[#a3a3a3]">
+            <span className="text-xs text-neutral-400">
               Swiss Design · 2026
             </span>
           </div>

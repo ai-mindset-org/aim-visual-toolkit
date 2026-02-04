@@ -7,14 +7,14 @@ export default function AboutPage() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero */}
       <div className="flex items-start gap-8 mb-12">
-        <div className="w-24 h-24 shrink-0">
+        <div className="w-24 h-24 shrink-0 border border-neutral-200 rounded-lg p-2 bg-white">
           <StaticMetaphor name="exoskeleton" variant="cover" />
         </div>
         <div>
-          <h1 className="font-mono text-2xl font-bold text-[#171717] uppercase tracking-tight mb-2">
+          <h1 className="text-2xl font-bold text-neutral-900 mb-2">
             AIM Visual Toolkit
           </h1>
-          <p className="text-[#525252]">
+          <p className="text-neutral-500">
             {TOTAL_COUNT} Swiss Design visual metaphors for AI education
           </p>
         </div>
@@ -23,10 +23,10 @@ export default function AboutPage() {
       {/* Content */}
       <div className="space-y-12">
         <section>
-          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-4">
             About
           </h2>
-          <div className="space-y-4 text-sm text-[#525252]">
+          <div className="space-y-4 text-sm text-neutral-600">
             <p>
               AIM Visual Toolkit is a collection of minimalist visual metaphors designed for the{' '}
               <a
@@ -48,30 +48,30 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-4">
             Design Principles
           </h2>
-          <ul className="space-y-3 text-sm text-[#525252]">
+          <ul className="space-y-3 text-sm text-neutral-600">
             <li className="flex items-start gap-3">
-              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] rounded-full mt-2 shrink-0" />
               <span>
                 <strong>Minimalism</strong> — Every element serves a purpose. No decorative noise.
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] rounded-full mt-2 shrink-0" />
               <span>
                 <strong>Geometric</strong> — Built from circles, lines, and simple polygons.
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] rounded-full mt-2 shrink-0" />
               <span>
                 <strong>Red accent</strong> — Swiss Red (#DC2626) as the primary accent color.
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] rounded-full mt-2 shrink-0" />
               <span>
                 <strong>Scalable</strong> — Vector-based, crisp at any size.
               </span>
@@ -80,19 +80,19 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-4">
             Usage
           </h2>
-          <ul className="space-y-2 text-sm text-[#525252]">
+          <ul className="space-y-2 text-sm text-neutral-600">
             <li>• Copy SVG code directly to clipboard</li>
             <li>• Download as SVG for vector editing</li>
-            <li>• Export as PNG (4x resolution) for presentations</li>
+            <li>• Export as PNG for presentations</li>
             <li>• Generate custom metaphors with AI</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-4">
             Links
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -100,7 +100,7 @@ export default function AboutPage() {
               href="https://aimindset.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-600 hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
               AI Mindset <ExternalLink size={10} />
             </a>
@@ -108,7 +108,7 @@ export default function AboutPage() {
               href="https://learn.aimindset.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-600 hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
               AIM LMS <ExternalLink size={10} />
             </a>
@@ -116,7 +116,7 @@ export default function AboutPage() {
               href="https://manifest.aimindset.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-600 hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
               Manifest <ExternalLink size={10} />
             </a>
@@ -124,15 +124,15 @@ export default function AboutPage() {
               href="https://github.com/ai-mindset-org/aim-visual-toolkit"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase bg-[#171717] text-white hover:bg-[#DC2626] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg bg-neutral-900 text-white hover:bg-[#DC2626] transition-colors"
             >
               GitHub <ExternalLink size={10} />
             </a>
           </div>
         </section>
 
-        <section className="pt-8 border-t border-[#e5e7eb]">
-          <p className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3]">
+        <section className="pt-8 border-t border-neutral-200">
+          <p className="text-[10px] uppercase tracking-wider text-neutral-400">
             Format: SVG · Typography: IBM Plex Mono · Colors: #DC2626, #171717
           </p>
         </section>

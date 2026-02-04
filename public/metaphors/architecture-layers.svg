@@ -58,6 +58,4 @@
     <line x1="-100" y1="-80" x2="-100" y2="80" stroke="#DC2626" stroke-width="2" style="animation: scan-line 4s linear infinite;"/>
   </g>
 
-  <text x="40" y="760" class="text" style="font-weight: 700;">ARCHITECTURE</text>
-  <text x="680" y="760" class="text">06/10</text>
 </svg>

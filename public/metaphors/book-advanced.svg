@@ -56,9 +56,4 @@
   <circle cx="440" cy="600" r="8" fill="#DC2626" fill-opacity="0.5"/>
   <circle cx="480" cy="600" r="8" stroke="#E5E7EB" stroke-width="2" fill="none"/>
 
-  <!-- Title -->
-  <text x="40" y="760" class="text" style="font-weight: 700;">ADVANCED</text>
-
-  <!-- Number -->
-  <text x="700" y="760" class="text">04/04</text>
 </svg>

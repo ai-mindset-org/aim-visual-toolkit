@@ -47,9 +47,4 @@
   <circle cx="680" cy="600" r="40" stroke="#E5E7EB" stroke-width="2" fill="none"/>
   <circle cx="120" cy="600" r="40" stroke="#E5E7EB" stroke-width="2" fill="none"/>
 
-  <!-- Title -->
-  <text x="40" y="760" class="text" style="font-weight: 700;">BASICS</text>
-
-  <!-- Number -->
-  <text x="700" y="760" class="text">01/04</text>
 </svg>

@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Copy, Download, Check, FileText } from 'lucide-react';
+import { X, Copy, Download, Check, Bookmark, BookmarkCheck } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { toPng } from 'html-to-image';
 import type { Metaphor } from '../../data/metaphors';
-import { formatIndex, TOTAL_COUNT } from '../../data/metaphors';
 import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../../utils/download';
 import StaticMetaphor from './StaticMetaphor';
 
@@ -18,12 +17,20 @@ const sanitizeSvg = (svg: string): string => {
 interface MetaphorModalProps {
   metaphor: Metaphor | null;
   onClose: () => void;
+  isSaved?: boolean;
+  onSave?: () => void;
+  onRemove?: () => void;
 }
 
-export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps) {
+export default function MetaphorModal({
+  metaphor,
+  onClose,
+  isSaved = false,
+  onSave,
+  onRemove,
+}: MetaphorModalProps) {
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const [showPrompt, setShowPrompt] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -113,22 +120,22 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
       <div
         role="dialog"
         aria-modal="true"
-        className="relative max-w-3xl w-full bg-white overflow-hidden"
+        className="relative max-w-4xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-white border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
         >
-          <X size={16} />
+          <X size={20} />
         </button>
 
-        {/* SVG Preview */}
-        <div className="p-8 bg-[#fafafa]">
+        {/* SVG Preview with frame */}
+        <div className="p-8 bg-neutral-100">
           <div
             ref={previewRef}
-            className="aspect-square max-w-md mx-auto bg-white p-6"
+            className="aspect-square max-w-md mx-auto bg-white border border-neutral-200 rounded-lg p-6"
           >
             {metaphor.format === 'svg-inline' && metaphor.svg ? (
               <div
@@ -142,90 +149,74 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
         </div>
 
         {/* Info */}
-        <div className="p-6 border-t border-[#e5e7eb]">
-          {/* Title + Index */}
-          <div className="flex items-baseline justify-between mb-2">
-            <h2 className="font-mono text-lg font-bold uppercase tracking-tight">
-              {metaphor.titleEn}
-            </h2>
-            {metaphor.index && (
-              <span className="font-mono text-sm text-[#a3a3a3]">
-                {formatIndex(metaphor.index, TOTAL_COUNT)}
-              </span>
-            )}
-          </div>
+        <div className="px-8 pb-8 text-center">
+          <h2 className="text-2xl font-bold mb-1">{metaphor.title}</h2>
+          <p className="text-sm text-neutral-500 font-mono uppercase mb-4">{metaphor.titleEn}</p>
 
-          {/* Description / Insight */}
-          {metaphor.insight ? (
-            <p className="text-sm text-[#525252] mb-4">{metaphor.insight}</p>
-          ) : metaphor.description ? (
-            <p className="text-sm text-[#525252] mb-4">{metaphor.description}</p>
-          ) : null}
+          {metaphor.description && (
+            <p className="text-neutral-600 max-w-xl mx-auto mb-2">{metaphor.description}</p>
+          )}
+
+          {metaphor.insight && (
+            <p className="text-neutral-500 text-sm max-w-xl mx-auto mb-4">{metaphor.insight}</p>
+          )}
 
           {/* Categories */}
-          <div className="flex flex-wrap gap-1 mb-4">
+          <div className="flex flex-wrap justify-center gap-1 mb-6">
             {metaphor.categories.map((cat) => (
               <span
                 key={cat}
-                className="px-2 py-0.5 font-mono text-[10px] uppercase bg-[#f5f5f5] text-[#525252]"
+                className="px-2 py-0.5 font-mono text-[10px] uppercase bg-neutral-100 text-neutral-500 rounded-lg"
               >
                 {cat}
               </span>
             ))}
-            {metaphor.source === 'community' && metaphor.author && (
-              <span className="px-2 py-0.5 font-mono text-[10px] uppercase bg-[#fef2f2] text-[#DC2626]">
-                by {metaphor.author}
-              </span>
-            )}
           </div>
 
-          {/* Prompt (if available) */}
-          {metaphor.prompt && (
-            <div className="mb-4">
-              <button
-                onClick={() => setShowPrompt(!showPrompt)}
-                className="flex items-center gap-1.5 font-mono text-[10px] uppercase text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
-              >
-                <FileText size={12} />
-                {showPrompt ? 'Hide prompt' : 'Show prompt'}
-              </button>
-              {showPrompt && (
-                <div className="mt-2 p-3 bg-[#fafafa] border border-[#e5e7eb]">
-                  <p className="font-mono text-xs text-[#525252]">{metaphor.prompt}</p>
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Actions */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex items-center justify-center flex-wrap gap-2">
+            {/* Save/Remove button */}
+            {(onSave || onRemove) && (
+              <button
+                onClick={isSaved ? onRemove : onSave}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  isSaved
+                    ? 'bg-[#DC2626] text-white hover:bg-[#DC2626]/90'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                }`}
+              >
+                {isSaved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+                {isSaved ? 'Remove' : 'Save'}
+              </button>
+            )}
+
             <button
               onClick={handleCopySvg}
-              className={`flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border transition-all ${
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 copied
-                  ? 'bg-[#22c55e] text-white border-[#22c55e]'
-                  : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
             >
-              {copied ? <Check size={12} /> : <Copy size={12} />}
+              {copied ? <Check size={16} /> : <Copy size={16} />}
               {copied ? 'Copied' : 'Copy SVG'}
             </button>
 
             <button
               onClick={handleDownloadSvg}
-              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] bg-white text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-all"
             >
-              <Download size={12} />
+              <Download size={16} />
               SVG
             </button>
 
             <button
               onClick={handleDownloadPng}
               disabled={exporting}
-              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase bg-[#171717] text-white hover:bg-[#DC2626] transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-neutral-900 text-white hover:bg-[#DC2626] transition-colors disabled:opacity-50"
             >
-              <Download size={12} />
-              {exporting ? 'Exporting...' : 'PNG 4x'}
+              <Download size={16} />
+              {exporting ? 'Exporting...' : 'Download PNG'}
             </button>
           </div>
         </div>

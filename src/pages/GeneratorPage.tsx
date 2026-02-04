@@ -47,7 +47,6 @@ export default function GeneratorPage() {
         model: settings.model,
       };
 
-      // If user has custom key, send it
       if (hasCustomKey) {
         body.apiKey = settings.openRouterKey;
       }
@@ -58,7 +57,6 @@ export default function GeneratorPage() {
         body: JSON.stringify(body),
       });
 
-      // Read response as text first to handle empty responses
       const text = await response.text();
 
       if (!text) {
@@ -135,32 +133,32 @@ export default function GeneratorPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="font-mono text-2xl font-bold text-[#171717] uppercase tracking-tight">
+          <h1 className="text-2xl font-bold text-neutral-900">
             Generator
           </h1>
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className={`p-2 border transition-all ${
+            className={`p-2 rounded-lg transition-all ${
               showSettings
-                ? 'bg-[#171717] text-white border-[#171717]'
-                : 'text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
+                ? 'bg-neutral-900 text-white'
+                : 'text-neutral-500 bg-neutral-100 hover:bg-neutral-200'
             }`}
           >
             <Settings size={16} />
           </button>
         </div>
-        <p className="text-[#525252] text-sm">
+        <p className="text-neutral-500 text-sm">
           Generate custom Swiss Design visual metaphors using AI
         </p>
       </div>
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="mb-6 p-4 border border-[#e5e7eb] bg-[#fafafa]">
+        <div className="mb-6 p-4 border border-neutral-200 bg-neutral-50 rounded-xl">
           <div className="space-y-4">
             {/* API Key */}
             <div>
-              <label className="block font-mono text-[10px] uppercase tracking-wider text-[#525252] mb-2">
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-neutral-500 mb-2">
                 OpenRouter API Key (optional)
               </label>
               <input
@@ -168,23 +166,23 @@ export default function GeneratorPage() {
                 value={settings.openRouterKey}
                 onChange={(e) => updateSettings({ openRouterKey: e.target.value })}
                 placeholder="sk-or-v1-..."
-                className="w-full px-3 py-2 font-mono text-sm border border-[#e5e7eb] bg-white focus:outline-none focus:border-[#DC2626]"
+                className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg bg-white focus:outline-none focus:border-[#DC2626]"
               />
-              <p className="mt-1 text-[10px] text-[#a3a3a3]">
-                Leave empty to use default key. Get your key at openrouter.ai
+              <p className="mt-1 text-[10px] text-neutral-400">
+                Leave empty to use default key. Get yours at openrouter.ai
               </p>
             </div>
 
             {/* Model Selection */}
             <div>
-              <label className="block font-mono text-[10px] uppercase tracking-wider text-[#525252] mb-2">
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-neutral-500 mb-2">
                 Model
               </label>
               <div className="relative">
                 <select
                   value={settings.model}
                   onChange={(e) => updateSettings({ model: e.target.value as typeof settings.model })}
-                  className="w-full px-3 py-2 font-mono text-sm border border-[#e5e7eb] bg-white focus:outline-none focus:border-[#DC2626] appearance-none cursor-pointer"
+                  className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg bg-white focus:outline-none focus:border-[#DC2626] appearance-none cursor-pointer"
                 >
                   {MODELS.map((model) => (
                     <option key={model.id} value={model.id}>
@@ -192,32 +190,32 @@ export default function GeneratorPage() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a3a3a3] pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
               </div>
             </div>
 
             {/* Style */}
             <div>
-              <label className="block font-mono text-[10px] uppercase tracking-wider text-[#525252] mb-2">
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-neutral-500 mb-2">
                 Style
               </label>
               <div className="flex gap-2">
                 <button
                   onClick={() => updateSettings({ style: 'light' })}
-                  className={`flex-1 px-3 py-2 font-mono text-xs uppercase border transition-all ${
+                  className={`flex-1 px-3 py-2 text-sm rounded-lg transition-all ${
                     settings.style === 'light'
-                      ? 'bg-[#171717] text-white border-[#171717]'
-                      : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626]'
+                      ? 'bg-white border-2 border-neutral-900 text-neutral-900'
+                      : 'bg-neutral-100 border-2 border-transparent text-neutral-500 hover:bg-neutral-200'
                   }`}
                 >
                   Light
                 </button>
                 <button
                   onClick={() => updateSettings({ style: 'dark' })}
-                  className={`flex-1 px-3 py-2 font-mono text-xs uppercase border transition-all ${
+                  className={`flex-1 px-3 py-2 text-sm rounded-lg transition-all ${
                     settings.style === 'dark'
-                      ? 'bg-[#171717] text-white border-[#171717]'
-                      : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626]'
+                      ? 'bg-neutral-900 border-2 border-neutral-900 text-white'
+                      : 'bg-neutral-100 border-2 border-transparent text-neutral-500 hover:bg-neutral-200'
                   }`}
                 >
                   Dark
@@ -237,21 +235,21 @@ export default function GeneratorPage() {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Describe your concept... e.g., Knowledge flowing through neural networks"
-              className="w-full px-4 py-3 font-mono text-sm border border-[#e5e7eb] bg-white text-[#171717] placeholder:text-[#a3a3a3] focus:outline-none focus:border-[#DC2626] resize-none"
+              className="w-full px-4 py-3 text-sm border border-neutral-200 rounded-lg bg-white text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#DC2626] resize-none"
               rows={3}
               maxLength={1000}
             />
             <div className="flex justify-between mt-1">
-              <span className="text-[10px] text-[#a3a3a3]">{prompt.length}/1000</span>
+              <span className="text-[10px] text-neutral-400">{prompt.length}/1000</span>
               {hasCustomKey && (
-                <span className="text-[10px] text-[#22c55e]">Using custom API key</span>
+                <span className="text-[10px] text-emerald-500">Using custom API key</span>
               )}
             </div>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="p-3 border border-[#DC2626] bg-[#fef2f2] text-sm text-[#DC2626]">
+            <div className="p-3 border border-red-200 bg-red-50 rounded-lg text-sm text-red-600">
               {error}
             </div>
           )}
@@ -260,7 +258,7 @@ export default function GeneratorPage() {
           <button
             onClick={handleGenerate}
             disabled={isLoading || !prompt.trim()}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 font-mono text-sm uppercase tracking-wider bg-[#171717] text-white hover:bg-[#DC2626] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-[#DC2626] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? (
               <>
@@ -279,31 +277,33 @@ export default function GeneratorPage() {
 
       {/* Result */}
       {result && (
-        <div className="border border-[#e5e7eb]">
-          {/* Preview */}
-          <div className={`p-8 ${settings.style === 'dark' ? 'bg-[#0a0a0a]' : 'bg-[#fafafa]'}`}>
+        <div className="border border-neutral-200 rounded-xl overflow-hidden">
+          {/* Preview with frame */}
+          <div className="p-8 bg-neutral-100">
             <div
               ref={previewRef}
-              className={`aspect-square max-w-md mx-auto ${settings.style === 'dark' ? 'bg-[#0a0a0a]' : 'bg-white'}`}
+              className={`aspect-square max-w-md mx-auto border border-neutral-200 rounded-lg p-6 ${
+                settings.style === 'dark' ? 'bg-neutral-900' : 'bg-white'
+              }`}
               dangerouslySetInnerHTML={{ __html: sanitizeSvg(result.svg) }}
             />
           </div>
 
           {/* Info & Actions */}
-          <div className="p-4 border-t border-[#e5e7eb]">
+          <div className="p-4 border-t border-neutral-200 bg-white">
             <div className="flex items-center justify-between mb-4">
               <div>
                 {result.titleEn && (
                   <span className="font-mono text-sm font-bold uppercase">{result.titleEn}</span>
                 )}
                 {result.elapsed && (
-                  <span className="ml-2 font-mono text-[10px] text-[#a3a3a3]">
+                  <span className="ml-2 font-mono text-[10px] text-neutral-400">
                     {(result.elapsed / 1000).toFixed(1)}s
                   </span>
                 )}
               </div>
               {result.model && (
-                <span className="font-mono text-[10px] text-[#a3a3a3]">
+                <span className="font-mono text-[10px] text-neutral-400">
                   {result.model.split('/').pop()}
                 </span>
               )}
@@ -313,30 +313,30 @@ export default function GeneratorPage() {
             <div className="flex gap-2">
               <button
                 onClick={handleCopy}
-                className={`flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg transition-all ${
                   copied
-                    ? 'bg-[#22c55e] text-white border-[#22c55e]'
-                    : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
               >
-                {copied ? <Check size={12} /> : <Copy size={12} />}
+                {copied ? <Check size={14} /> : <Copy size={14} />}
                 {copied ? 'Copied' : 'Copy SVG'}
               </button>
 
               <button
                 onClick={handleDownloadSvg}
-                className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] bg-white text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+                className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-all"
               >
-                <Download size={12} />
+                <Download size={14} />
                 SVG
               </button>
 
               <button
                 onClick={handleDownloadPng}
-                className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase bg-[#171717] text-white hover:bg-[#DC2626] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg bg-neutral-900 text-white hover:bg-[#DC2626] transition-colors"
               >
-                <Download size={12} />
-                PNG 4x
+                <Download size={14} />
+                Download PNG
               </button>
             </div>
           </div>
@@ -345,9 +345,9 @@ export default function GeneratorPage() {
 
       {/* Prompt used */}
       {result && prompt && (
-        <div className="mt-4 p-3 border border-[#e5e7eb] bg-[#fafafa]">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3]">Prompt:</span>
-          <p className="mt-1 font-mono text-xs text-[#525252]">{prompt}</p>
+        <div className="mt-4 p-3 border border-neutral-200 bg-neutral-50 rounded-lg">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-400">Prompt:</span>
+          <p className="mt-1 text-xs text-neutral-600">{prompt}</p>
         </div>
       )}
     </div>

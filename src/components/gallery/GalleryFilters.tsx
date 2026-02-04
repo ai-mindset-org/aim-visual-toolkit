@@ -1,4 +1,4 @@
-import { Grid2X2, Grid3X3, LayoutGrid } from 'lucide-react';
+import { Grid2X2, Grid3X3, LayoutGrid, LayoutList, Type } from 'lucide-react';
 import { CATEGORIES } from '../../data/metaphors';
 import type { GridSize } from './GalleryGrid';
 
@@ -11,31 +11,20 @@ interface GalleryFiltersProps {
   onGridSizeChange: (size: GridSize) => void;
   showIndex: boolean;
   onShowIndexChange: (show: boolean) => void;
+  showLabels?: boolean;
+  onShowLabelsChange?: (show: boolean) => void;
 }
 
 export default function GalleryFilters({
   activeCategory,
   onCategoryChange,
-  searchQuery,
-  onSearchChange,
   gridSize,
   onGridSizeChange,
-  showIndex,
-  onShowIndexChange,
+  showLabels = true,
+  onShowLabelsChange,
 }: GalleryFiltersProps) {
   return (
-    <div className="space-y-4 mb-8">
-      {/* Search */}
-      <div className="relative">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search metaphors..."
-          className="w-full px-4 py-3 font-mono text-sm border border-[#e5e7eb] bg-white text-[#171717] placeholder:text-[#a3a3a3] focus:outline-none focus:border-[#DC2626] transition-colors"
-        />
-      </div>
-
+    <div className="mb-6">
       {/* Filters Row */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         {/* Category tabs */}
@@ -44,10 +33,10 @@ export default function GalleryFilters({
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all border ${
+              className={`px-3 py-1.5 text-xs transition-all rounded-lg ${
                 activeCategory === cat.id
-                  ? 'bg-[#171717] text-white border-[#171717]'
-                  : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
+                  ? 'bg-neutral-900 text-white'
+                  : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700'
               }`}
             >
               {cat.label}
@@ -58,11 +47,20 @@ export default function GalleryFilters({
         {/* View Controls */}
         <div className="flex items-center gap-2">
           {/* Grid Size */}
-          <div className="flex border border-[#e5e7eb]">
+          <div className="flex rounded-lg border border-neutral-200 overflow-hidden">
+            <button
+              onClick={() => onGridSizeChange('tiny')}
+              className={`p-2 transition-all ${
+                gridSize === 'tiny' ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:bg-neutral-100'
+              }`}
+              title="Tiny grid"
+            >
+              <LayoutList size={14} />
+            </button>
             <button
               onClick={() => onGridSizeChange('small')}
-              className={`p-2 transition-all ${
-                gridSize === 'small' ? 'bg-[#171717] text-white' : 'text-[#525252] hover:text-[#DC2626]'
+              className={`p-2 border-l border-neutral-200 transition-all ${
+                gridSize === 'small' ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:bg-neutral-100'
               }`}
               title="Small grid"
             >
@@ -70,8 +68,8 @@ export default function GalleryFilters({
             </button>
             <button
               onClick={() => onGridSizeChange('medium')}
-              className={`p-2 border-x border-[#e5e7eb] transition-all ${
-                gridSize === 'medium' ? 'bg-[#171717] text-white' : 'text-[#525252] hover:text-[#DC2626]'
+              className={`p-2 border-x border-neutral-200 transition-all ${
+                gridSize === 'medium' ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:bg-neutral-100'
               }`}
               title="Medium grid"
             >
@@ -80,7 +78,7 @@ export default function GalleryFilters({
             <button
               onClick={() => onGridSizeChange('large')}
               className={`p-2 transition-all ${
-                gridSize === 'large' ? 'bg-[#171717] text-white' : 'text-[#525252] hover:text-[#DC2626]'
+                gridSize === 'large' ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:bg-neutral-100'
               }`}
               title="Large grid"
             >
@@ -88,16 +86,20 @@ export default function GalleryFilters({
             </button>
           </div>
 
-          {/* Toggle Index */}
-          <button
-            onClick={() => onShowIndexChange(!showIndex)}
-            className={`p-2 border transition-all ${
-              showIndex ? 'bg-[#171717] text-white border-[#171717]' : 'text-[#525252] border-[#e5e7eb] hover:text-[#DC2626]'
-            }`}
-            title={showIndex ? 'Hide numbers' : 'Show numbers'}
-          >
-            <span className="font-mono text-[10px]">01</span>
-          </button>
+          {/* Labels Toggle */}
+          {onShowLabelsChange && (
+            <button
+              onClick={() => onShowLabelsChange(!showLabels)}
+              className={`p-2 rounded-lg border transition-all ${
+                showLabels
+                  ? 'bg-neutral-900 text-white border-neutral-900'
+                  : 'text-neutral-500 border-neutral-200 hover:bg-neutral-100'
+              }`}
+              title={showLabels ? 'Hide labels' : 'Show labels'}
+            >
+              <Type size={14} />
+            </button>
+          )}
         </div>
       </div>
     </div>

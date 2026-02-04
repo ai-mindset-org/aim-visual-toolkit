@@ -1,0 +1,86 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&amp;display=swap');
+      .text { font-family: 'IBM Plex Mono', monospace; fill: #171717; }
+      .red { fill: #DC2626; }
+      .black { fill: #171717; }
+      .label { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+      .code { font-size: 12px; fill: #666; }
+    </style>
+  </defs>
+
+  <rect width="800" height="800" fill="#FFFFFF"/>
+
+  <!-- Central Agent Circle (pulsing) -->
+  <g transform="translate(400, 380)">
+    <circle r="80" fill="none" stroke="#DC2626" stroke-width="3">
+      <animate attributeName="r" values="75;85;75" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="60" fill="#DC2626"/>
+    <text x="0" y="8" class="text" style="font-size: 20px; font-weight: 700; fill: white; text-anchor: middle;">AGENT</text>
+  </g>
+
+  <!-- Task (Top) -->
+  <g transform="translate(400, 150)">
+    <rect x="-80" y="-40" width="160" height="80" fill="#171717"/>
+    <text x="0" y="8" class="text" style="font-size: 18px; font-weight: 700; fill: white; text-anchor: middle;">TASK</text>
+    <!-- Connection line to center -->
+    <line x1="0" y1="40" x2="0" y2="170" stroke="#171717" stroke-width="2" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" values="0;24" dur="1s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="0,170 -8,155 8,155" fill="#171717"/>
+  </g>
+
+  <!-- Resources (Bottom Left) -->
+  <g transform="translate(200, 580)">
+    <rect x="-80" y="-40" width="160" height="80" fill="none" stroke="#171717" stroke-width="3"/>
+    <text x="0" y="8" class="text" style="font-size: 18px; font-weight: 700; text-anchor: middle;">RESOURCES</text>
+    <!-- Connection line to center -->
+    <line x1="60" y1="-60" x2="160" y2="-140" stroke="#171717" stroke-width="2" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" values="0;24" dur="1.2s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="160,-140 145,-140 152,-155" fill="#171717"/>
+    <!-- Resource icons -->
+    <rect x="-60" y="50" width="24" height="24" fill="#DC2626"/>
+    <rect x="-25" y="50" width="24" height="24" fill="#171717"/>
+    <rect x="10" y="50" width="24" height="24" fill="#DC2626"/>
+    <rect x="45" y="50" width="24" height="24" fill="#171717"/>
+  </g>
+
+  <!-- Permissions (Bottom Right) -->
+  <g transform="translate(600, 580)">
+    <rect x="-80" y="-40" width="160" height="80" fill="none" stroke="#DC2626" stroke-width="3"/>
+    <text x="0" y="8" class="text red" style="font-size: 18px; font-weight: 700; text-anchor: middle;">PERMISSIONS</text>
+    <!-- Connection line to center -->
+    <line x1="-60" y1="-60" x2="-160" y2="-140" stroke="#DC2626" stroke-width="2" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" values="0;24" dur="0.8s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="-160,-140 -145,-140 -152,-155" fill="#DC2626"/>
+    <!-- Permission levels -->
+    <text x="-50" y="60" class="code">READ</text>
+    <text x="0" y="60" class="code">WRITE</text>
+    <text x="50" y="60" class="code red" style="fill: #DC2626;">EXECUTE</text>
+  </g>
+
+  <!-- Flow arrows (bidirectional) -->
+  <g transform="translate(400, 380)">
+    <!-- Outer flow ring -->
+    <circle r="140" fill="none" stroke="#eee" stroke-width="20"/>
+    <!-- Animated flow -->
+    <circle r="140" fill="none" stroke="#DC2626" stroke-width="3" stroke-dasharray="40,60" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="140" fill="none" stroke="#171717" stroke-width="3" stroke-dasharray="30,70" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="rotate" from="180" to="540" dur="8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Equation at bottom -->
+  <text x="400" y="720" class="text" style="font-size: 16px; font-weight: 700; text-anchor: middle;">
+    <tspan fill="#DC2626">AGENCY</tspan>
+    <tspan> = TASK + RESOURCES + PERMISSIONS</tspan>
+  </text>
+
+</svg>

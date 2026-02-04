@@ -1,23 +1,27 @@
 import { useState } from 'react';
-import { Copy, Download, Check, Maximize2 } from 'lucide-react';
+import { Copy, Download, Check, Bookmark, BookmarkCheck } from 'lucide-react';
 import type { Metaphor } from '../../data/metaphors';
-import { formatIndex, TOTAL_COUNT } from '../../data/metaphors';
 import { downloadBlob, downloadFromUrl, MIME_TYPES } from '../../utils/download';
 import StaticMetaphor from './StaticMetaphor';
 
 interface MetaphorCardProps {
   metaphor: Metaphor;
-  showIndex?: boolean;
+  showLabel?: boolean;
   onClick?: () => void;
+  isSaved?: boolean;
+  onSave?: () => void;
+  onRemove?: () => void;
 }
 
 export default function MetaphorCard({
   metaphor,
-  showIndex = true,
+  showLabel = true,
   onClick,
+  isSaved = false,
+  onSave,
+  onRemove,
 }: MetaphorCardProps) {
   const [copied, setCopied] = useState(false);
-  const [hovered, setHovered] = useState(false);
 
   const handleCopySvg = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -48,69 +52,88 @@ export default function MetaphorCard({
     }
   };
 
+  const handleSaveToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isSaved) {
+      onRemove?.();
+    } else {
+      onSave?.();
+    }
+  };
+
   return (
     <div
-      className="group relative bg-white border border-[#e5e7eb] hover:border-[#DC2626] transition-all duration-200 cursor-pointer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="group relative rounded-xl border bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden border-neutral-200 hover:border-neutral-300 cursor-pointer"
       onClick={onClick}
     >
-      {/* SVG Preview - clean, no title */}
-      <div className="aspect-square p-6 flex items-center justify-center bg-white relative">
-        {metaphor.format === 'svg-inline' && metaphor.svg ? (
-          <div
-            className="w-full h-full metaphor-container"
-            dangerouslySetInnerHTML={{ __html: metaphor.svg }}
-          />
-        ) : metaphor.filename ? (
-          <StaticMetaphor name={metaphor.filename} variant="cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#a3a3a3]">
-            <span className="font-mono text-xs">Coming soon</span>
-          </div>
-        )}
-
-        {/* Hover overlay with actions */}
-        <div
-          className={`absolute inset-0 bg-black/5 flex items-center justify-center gap-2 transition-opacity duration-200 ${
-            hovered ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          {/* Enlarge hint */}
-          <div className="absolute top-3 left-3">
-            <Maximize2 size={14} className="text-[#a3a3a3]" />
-          </div>
-
-          {/* Action buttons */}
-          <div className="absolute top-3 right-3 flex gap-1">
-            <button
-              onClick={handleCopySvg}
-              className={`p-1.5 border transition-all ${
-                copied
-                  ? 'bg-[#22c55e] border-[#22c55e] text-white'
-                  : 'bg-white border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626]'
-              }`}
-              title="Copy SVG"
-            >
-              {copied ? <Check size={12} /> : <Copy size={12} />}
-            </button>
-            <button
-              onClick={handleDownload}
-              className="p-1.5 bg-white border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
-              title="Download SVG"
-            >
-              <Download size={12} />
-            </button>
-          </div>
+      {/* SVG Preview with border frame */}
+      <div className="aspect-square p-4 flex items-center justify-center bg-neutral-50 relative">
+        {/* Inner white frame with border */}
+        <div className="w-full h-full bg-white border border-neutral-200 rounded-lg p-4 flex items-center justify-center">
+          {metaphor.format === 'svg-inline' && metaphor.svg ? (
+            <div
+              className="metaphor-container w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
+              dangerouslySetInnerHTML={{ __html: metaphor.svg }}
+            />
+          ) : metaphor.filename ? (
+            <StaticMetaphor name={metaphor.filename} variant="cover" className="opacity-90 group-hover:opacity-100 transition-opacity" />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center text-neutral-400">
+              <span className="text-xs font-mono text-center">Coming soon</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Footer: Index only (title removed from preview) */}
-      {showIndex && metaphor.index && (
-        <div className="flex items-center justify-between px-4 py-2 border-t border-[#e5e7eb]">
-          <span className="font-mono text-[10px] text-[#a3a3a3]">
-            {formatIndex(metaphor.index, TOTAL_COUNT)}
-          </span>
+      {/* Info */}
+      {showLabel && (
+        <div className="p-4 border-t border-neutral-100">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="min-w-0">
+              <h3 className="font-medium text-sm text-neutral-900">{metaphor.title}</h3>
+              <p className="text-[10px] text-neutral-400 font-mono uppercase">{metaphor.titleEn}</p>
+            </div>
+
+            {/* Save button */}
+            {(onSave || onRemove) && (
+              <button
+                onClick={handleSaveToggle}
+                className={`shrink-0 p-1.5 rounded-lg transition-all ${
+                  isSaved
+                    ? 'bg-[#DC2626] text-white'
+                    : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
+                }`}
+                title={isSaved ? 'Remove from collection' : 'Save to collection'}
+              >
+                {isSaved ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
+              </button>
+            )}
+          </div>
+
+          <p className="text-xs text-neutral-500 mb-3 line-clamp-2">{metaphor.description}</p>
+
+          {/* Actions */}
+          <div className="flex items-center flex-wrap gap-2">
+            <button
+              onClick={handleCopySvg}
+              className={`flex items-center gap-1 px-2 py-1 text-[10px] font-mono rounded-lg border transition-all ${
+                copied
+                  ? 'border-emerald-300 bg-emerald-50 text-emerald-600'
+                  : 'border-neutral-200 bg-white hover:border-neutral-300 text-neutral-600'
+              }`}
+            >
+              {copied ? <Check size={10} /> : <Copy size={10} />}
+              {copied ? 'Copied' : 'Copy'}
+            </button>
+
+            <button
+              onClick={handleDownload}
+              className="flex items-center gap-1 px-2 py-1 text-[10px] font-mono rounded-lg border border-neutral-200 bg-white hover:border-neutral-300 text-neutral-600 transition-all"
+            >
+              <Download size={10} />
+              SVG
+            </button>
+          </div>
         </div>
       )}
     </div>
