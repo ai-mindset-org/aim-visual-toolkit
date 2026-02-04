@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/sync-community.js",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "og:convert": "node scripts/convert-og-image.js"
+    "og:convert": "node scripts/convert-og-image.js",
+    "sync:community": "node scripts/sync-community.js"
   },
   "dependencies": {
     "@netlify/functions": "^5.1.2",
