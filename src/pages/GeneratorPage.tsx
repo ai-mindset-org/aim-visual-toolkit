@@ -1,20 +1,18 @@
 import { useState, useRef } from 'react';
-import { Sparkles, Download, Copy, Check, Image, RefreshCw } from 'lucide-react';
+import { Sparkles, Download, Copy, Check, RefreshCw, Settings, ChevronDown } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { toPng } from 'html-to-image';
-import { Button } from '../components/ui';
+import { useSettings, MODELS } from '../hooks/useSettings';
 import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../utils/download';
-
-type Style = 'light' | 'dark';
 
 interface GeneratedMetaphor {
   svg: string;
   title?: string;
   titleEn?: string;
   elapsed?: number;
+  model?: string;
 }
 
-// Sanitize SVG for safe rendering
 const sanitizeSvg = (svg: string): string => {
   return DOMPurify.sanitize(svg, {
     USE_PROFILES: { svg: true, svgFilters: true },
@@ -24,18 +22,18 @@ const sanitizeSvg = (svg: string): string => {
 };
 
 export default function GeneratorPage() {
+  const { settings, updateSettings, hasCustomKey } = useSettings();
   const [prompt, setPrompt] = useState('');
-  const [style, setStyle] = useState<Style>('light');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<GeneratedMetaphor | null>(null);
   const [copied, setCopied] = useState(false);
-  const [exporting, setExporting] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = async () => {
     if (!prompt.trim() || prompt.length < 3) {
-      setError('Please enter at least 3 characters');
+      setError('Enter at least 3 characters');
       return;
     }
 
@@ -43,15 +41,26 @@ export default function GeneratorPage() {
     setError(null);
 
     try {
+      const body: Record<string, string> = {
+        text: prompt,
+        style: settings.style,
+        model: settings.model,
+      };
+
+      // If user has custom key, send it
+      if (hasCustomKey) {
+        body.apiKey = settings.openRouterKey;
+      }
+
       const response = await fetch('/.netlify/functions/generate-metaphor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: prompt, style }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to generate metaphor');
+        throw new Error(data.error || 'Failed to generate');
       }
 
       const data = await response.json();
@@ -60,6 +69,7 @@ export default function GeneratorPage() {
         title: data.title,
         titleEn: data.titleEn,
         elapsed: data.elapsed,
+        model: data.model,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate');
@@ -90,11 +100,10 @@ export default function GeneratorPage() {
   const handleDownloadPng = async () => {
     if (!previewRef.current || !result) return;
 
-    setExporting(true);
     try {
       const dataUrl = await toPng(previewRef.current, {
         pixelRatio: 4,
-        backgroundColor: style === 'dark' ? '#0a0a0a' : '#FFFFFF',
+        backgroundColor: settings.style === 'dark' ? '#0a0a0a' : '#FFFFFF',
       });
 
       const response = await fetch(dataUrl);
@@ -105,8 +114,6 @@ export default function GeneratorPage() {
       downloadBinaryBlob(blob, filename);
     } catch (err) {
       console.error('Failed to export PNG:', err);
-    } finally {
-      setExporting(false);
     }
   };
 
@@ -114,151 +121,220 @@ export default function GeneratorPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-aim-black mb-2">AI Metaphor Generator</h1>
-        <p className="text-aim-gray-600">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="font-mono text-2xl font-bold text-[#171717] uppercase tracking-tight">
+            Generator
+          </h1>
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className={`p-2 border transition-all ${
+              showSettings
+                ? 'bg-[#171717] text-white border-[#171717]'
+                : 'text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
+            }`}
+          >
+            <Settings size={16} />
+          </button>
+        </div>
+        <p className="text-[#525252] text-sm">
           Generate custom Swiss Design visual metaphors using AI
         </p>
       </div>
 
+      {/* Settings Panel */}
+      {showSettings && (
+        <div className="mb-6 p-4 border border-[#e5e7eb] bg-[#fafafa]">
+          <div className="space-y-4">
+            {/* API Key */}
+            <div>
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-[#525252] mb-2">
+                OpenRouter API Key (optional)
+              </label>
+              <input
+                type="password"
+                value={settings.openRouterKey}
+                onChange={(e) => updateSettings({ openRouterKey: e.target.value })}
+                placeholder="sk-or-v1-..."
+                className="w-full px-3 py-2 font-mono text-sm border border-[#e5e7eb] bg-white focus:outline-none focus:border-[#DC2626]"
+              />
+              <p className="mt-1 text-[10px] text-[#a3a3a3]">
+                Leave empty to use default key. Get your key at openrouter.ai
+              </p>
+            </div>
+
+            {/* Model Selection */}
+            <div>
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-[#525252] mb-2">
+                Model
+              </label>
+              <div className="relative">
+                <select
+                  value={settings.model}
+                  onChange={(e) => updateSettings({ model: e.target.value as typeof settings.model })}
+                  className="w-full px-3 py-2 font-mono text-sm border border-[#e5e7eb] bg-white focus:outline-none focus:border-[#DC2626] appearance-none cursor-pointer"
+                >
+                  {MODELS.map((model) => (
+                    <option key={model.id} value={model.id}>
+                      {model.name} — {model.description}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a3a3a3] pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Style */}
+            <div>
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-[#525252] mb-2">
+                Style
+              </label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => updateSettings({ style: 'light' })}
+                  className={`flex-1 px-3 py-2 font-mono text-xs uppercase border transition-all ${
+                    settings.style === 'light'
+                      ? 'bg-[#171717] text-white border-[#171717]'
+                      : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626]'
+                  }`}
+                >
+                  Light
+                </button>
+                <button
+                  onClick={() => updateSettings({ style: 'dark' })}
+                  className={`flex-1 px-3 py-2 font-mono text-xs uppercase border transition-all ${
+                    settings.style === 'dark'
+                      ? 'bg-[#171717] text-white border-[#171717]'
+                      : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626]'
+                  }`}
+                >
+                  Dark
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Generator Form */}
-      <div className="bg-white border border-aim-gray-200 rounded-xl p-6 mb-8">
+      <div className="mb-8">
         <div className="space-y-4">
-          {/* Prompt Input */}
+          {/* Prompt */}
           <div>
-            <label htmlFor="prompt" className="block text-sm font-medium text-aim-gray-700 mb-2">
-              Describe your concept
-            </label>
             <textarea
-              id="prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="e.g., Knowledge flowing through neural networks, Human-AI collaboration..."
-              className="w-full px-4 py-3 border border-aim-gray-200 rounded-lg bg-white text-aim-black placeholder:text-aim-gray-400 focus:outline-none focus:ring-2 focus:ring-aim-red focus:border-transparent resize-none"
+              placeholder="Describe your concept... e.g., Knowledge flowing through neural networks"
+              className="w-full px-4 py-3 font-mono text-sm border border-[#e5e7eb] bg-white text-[#171717] placeholder:text-[#a3a3a3] focus:outline-none focus:border-[#DC2626] resize-none"
               rows={3}
               maxLength={1000}
             />
-            <p className="text-xs text-aim-gray-400 mt-1">{prompt.length}/1000 characters</p>
-          </div>
-
-          {/* Style Selector */}
-          <div>
-            <label className="block text-sm font-medium text-aim-gray-700 mb-2">Style</label>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setStyle('light')}
-                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  style === 'light'
-                    ? 'bg-aim-black text-white'
-                    : 'bg-aim-gray-100 text-aim-gray-600 hover:bg-aim-gray-200'
-                }`}
-              >
-                Light
-              </button>
-              <button
-                onClick={() => setStyle('dark')}
-                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  style === 'dark'
-                    ? 'bg-aim-black text-white'
-                    : 'bg-aim-gray-100 text-aim-gray-600 hover:bg-aim-gray-200'
-                }`}
-              >
-                Dark
-              </button>
+            <div className="flex justify-between mt-1">
+              <span className="text-[10px] text-[#a3a3a3]">{prompt.length}/1000</span>
+              {hasCustomKey && (
+                <span className="text-[10px] text-[#22c55e]">Using custom API key</span>
+              )}
             </div>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+            <div className="p-3 border border-[#DC2626] bg-[#fef2f2] text-sm text-[#DC2626]">
               {error}
             </div>
           )}
 
           {/* Generate Button */}
-          <Button
+          <button
             onClick={handleGenerate}
             disabled={isLoading || !prompt.trim()}
-            className="w-full"
-            size="lg"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 font-mono text-sm uppercase tracking-wider bg-[#171717] text-white hover:bg-[#DC2626] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? (
               <>
-                <RefreshCw size={18} className="animate-spin" />
+                <RefreshCw size={16} className="animate-spin" />
                 Generating...
               </>
             ) : (
               <>
-                <Sparkles size={18} />
-                Generate Metaphor
+                <Sparkles size={16} />
+                Generate
               </>
             )}
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* Result */}
       {result && (
-        <div className="bg-white border border-aim-gray-200 rounded-xl overflow-hidden animate-fade-in">
+        <div className="border border-[#e5e7eb]">
           {/* Preview */}
-          <div className={`p-8 ${style === 'dark' ? 'bg-[#0a0a0a]' : 'bg-aim-gray-50'}`}>
+          <div className={`p-8 ${settings.style === 'dark' ? 'bg-[#0a0a0a]' : 'bg-[#fafafa]'}`}>
             <div
               ref={previewRef}
-              className={`aspect-square max-w-lg mx-auto rounded-lg p-4 ${
-                style === 'dark' ? 'bg-[#0a0a0a]' : 'bg-white'
-              }`}
+              className={`aspect-square max-w-md mx-auto ${settings.style === 'dark' ? 'bg-[#0a0a0a]' : 'bg-white'}`}
               dangerouslySetInnerHTML={{ __html: sanitizeSvg(result.svg) }}
             />
           </div>
 
           {/* Info & Actions */}
-          <div className="p-6 border-t border-aim-gray-100">
-            {(result.title || result.titleEn) && (
-              <div className="text-center mb-4">
-                {result.title && <h3 className="text-xl font-bold">{result.title}</h3>}
+          <div className="p-4 border-t border-[#e5e7eb]">
+            <div className="flex items-center justify-between mb-4">
+              <div>
                 {result.titleEn && (
-                  <p className="text-sm text-aim-gray-500 font-mono">{result.titleEn}</p>
+                  <span className="font-mono text-sm font-bold uppercase">{result.titleEn}</span>
+                )}
+                {result.elapsed && (
+                  <span className="ml-2 font-mono text-[10px] text-[#a3a3a3]">
+                    {(result.elapsed / 1000).toFixed(1)}s
+                  </span>
                 )}
               </div>
-            )}
+              {result.model && (
+                <span className="font-mono text-[10px] text-[#a3a3a3]">
+                  {result.model.split('/').pop()}
+                </span>
+              )}
+            </div>
 
-            {result.elapsed && (
-              <p className="text-xs text-aim-gray-400 text-center mb-4">
-                Generated in {(result.elapsed / 1000).toFixed(1)}s
-              </p>
-            )}
-
-            {/* Action buttons */}
-            <div className="flex flex-wrap justify-center gap-2">
+            {/* Actions */}
+            <div className="flex gap-2">
               <button
                 onClick={handleCopy}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border transition-all ${
                   copied
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-aim-gray-100 text-aim-gray-700 hover:bg-aim-gray-200'
+                    ? 'bg-[#22c55e] text-white border-[#22c55e]'
+                    : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
                 }`}
               >
-                {copied ? <Check size={16} /> : <Copy size={16} />}
-                {copied ? 'Copied!' : 'Copy SVG'}
+                {copied ? <Check size={12} /> : <Copy size={12} />}
+                {copied ? 'Copied' : 'Copy SVG'}
               </button>
 
               <button
                 onClick={handleDownloadSvg}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-aim-gray-100 text-aim-gray-700 hover:bg-aim-gray-200 transition-all"
+                className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] bg-white text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
               >
-                <Download size={16} />
-                Download SVG
+                <Download size={12} />
+                SVG
               </button>
 
               <button
                 onClick={handleDownloadPng}
-                disabled={exporting}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-aim-black text-white hover:bg-aim-gray-800 transition-all disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase bg-[#171717] text-white hover:bg-[#DC2626] transition-colors"
               >
-                <Image size={16} />
-                {exporting ? 'Exporting...' : 'Download PNG (4x)'}
+                <Download size={12} />
+                PNG 4x
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Prompt used */}
+      {result && prompt && (
+        <div className="mt-4 p-3 border border-[#e5e7eb] bg-[#fafafa]">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3]">Prompt:</span>
+          <p className="mt-1 font-mono text-xs text-[#525252]">{prompt}</p>
         </div>
       )}
     </div>

@@ -1,113 +1,140 @@
 import { ExternalLink } from 'lucide-react';
 import { StaticMetaphor } from '../components/metaphors';
+import { TOTAL_COUNT } from '../data/metaphors';
 
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero */}
-      <div className="text-center mb-12">
-        <div className="w-32 h-32 mx-auto mb-6">
+      <div className="flex items-start gap-8 mb-12">
+        <div className="w-24 h-24 shrink-0">
           <StaticMetaphor name="exoskeleton" variant="cover" />
         </div>
-        <h1 className="text-4xl font-bold text-aim-black mb-4">AIM Visual Toolkit</h1>
-        <p className="text-xl text-aim-gray-600">
-          Swiss Design visual metaphors for AI education
-        </p>
+        <div>
+          <h1 className="font-mono text-2xl font-bold text-[#171717] uppercase tracking-tight mb-2">
+            AIM Visual Toolkit
+          </h1>
+          <p className="text-[#525252]">
+            {TOTAL_COUNT} Swiss Design visual metaphors for AI education
+          </p>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="prose prose-aim max-w-none">
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">About</h2>
-          <p className="text-aim-gray-600 mb-4">
-            AIM Visual Toolkit is a collection of minimalist visual metaphors designed for the
-            <a
-              href="https://aimindset.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-aim-red hover:underline ml-1"
-            >
-              AI Mindset
-            </a>{' '}
-            educational platform. Each metaphor follows Swiss Design principles — clean lines,
-            geometric shapes, and purposeful use of color.
-          </p>
-          <p className="text-aim-gray-600">
-            The toolkit includes 24+ hand-crafted SVG metaphors representing key AI concepts,
-            plus an AI-powered generator for creating custom visuals.
-          </p>
+      <div className="space-y-12">
+        <section>
+          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+            About
+          </h2>
+          <div className="space-y-4 text-sm text-[#525252]">
+            <p>
+              AIM Visual Toolkit is a collection of minimalist visual metaphors designed for the{' '}
+              <a
+                href="https://aimindset.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#DC2626] hover:underline"
+              >
+                AI Mindset
+              </a>{' '}
+              educational platform.
+            </p>
+            <p>
+              Each metaphor follows Swiss Design principles — clean lines, geometric shapes,
+              and purposeful use of color. The toolkit includes hand-crafted SVG metaphors
+              representing key AI concepts, plus an AI-powered generator for creating custom visuals.
+            </p>
+          </div>
         </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Design Principles</h2>
-          <ul className="space-y-3 text-aim-gray-600">
+        <section>
+          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+            Design Principles
+          </h2>
+          <ul className="space-y-3 text-sm text-[#525252]">
             <li className="flex items-start gap-3">
-              <span className="w-2 h-2 bg-aim-red rounded-full mt-2 flex-shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
               <span>
-                <strong>Minimalism:</strong> Every element serves a purpose. No decorative noise.
+                <strong>Minimalism</strong> — Every element serves a purpose. No decorative noise.
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-2 h-2 bg-aim-red rounded-full mt-2 flex-shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
               <span>
-                <strong>Geometric:</strong> Built from circles, lines, and simple polygons.
+                <strong>Geometric</strong> — Built from circles, lines, and simple polygons.
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-2 h-2 bg-aim-red rounded-full mt-2 flex-shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
               <span>
-                <strong>Red accent:</strong> Swiss Red (#DC2626) as the primary accent color.
+                <strong>Red accent</strong> — Swiss Red (#DC2626) as the primary accent color.
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-2 h-2 bg-aim-red rounded-full mt-2 flex-shrink-0" />
+              <span className="w-1.5 h-1.5 bg-[#DC2626] mt-2 shrink-0" />
               <span>
-                <strong>Scalable:</strong> Vector-based, crisp at any size.
+                <strong>Scalable</strong> — Vector-based, crisp at any size.
               </span>
             </li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Usage</h2>
-          <p className="text-aim-gray-600 mb-4">
-            All metaphors are available as SVG files. You can:
-          </p>
-          <ul className="space-y-2 text-aim-gray-600">
-            <li>Copy SVG code directly to clipboard</li>
-            <li>Download as SVG for vector editing</li>
-            <li>Export as PNG (4x resolution) for presentations</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-4">Links</h2>
-          <div className="flex flex-wrap gap-4">
+          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+            Usage
+          </h2>
+          <ul className="space-y-2 text-sm text-[#525252]">
+            <li>• Copy SVG code directly to clipboard</li>
+            <li>• Download as SVG for vector editing</li>
+            <li>• Export as PNG (4x resolution) for presentations</li>
+            <li>• Generate custom metaphors with AI</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717] mb-4">
+            Links
+          </h2>
+          <div className="flex flex-wrap gap-2">
             <a
               href="https://aimindset.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-aim-gray-100 rounded-lg text-aim-gray-700 hover:bg-aim-gray-200 transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
-              AI Mindset <ExternalLink size={14} />
+              AI Mindset <ExternalLink size={10} />
             </a>
             <a
               href="https://learn.aimindset.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-aim-gray-100 rounded-lg text-aim-gray-700 hover:bg-aim-gray-200 transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
-              AIM LMS <ExternalLink size={14} />
+              AIM LMS <ExternalLink size={10} />
+            </a>
+            <a
+              href="https://manifest.aimindset.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+            >
+              Manifest <ExternalLink size={10} />
             </a>
             <a
               href="https://github.com/ai-mindset-org/aim-visual-toolkit"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-aim-black rounded-lg text-white hover:bg-aim-gray-800 transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase bg-[#171717] text-white hover:bg-[#DC2626] transition-colors"
             >
-              GitHub <ExternalLink size={14} />
+              GitHub <ExternalLink size={10} />
             </a>
           </div>
+        </section>
+
+        <section className="pt-8 border-t border-[#e5e7eb]">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3]">
+            Format: SVG · Typography: IBM Plex Mono · Colors: #DC2626, #171717
+          </p>
         </section>
       </div>
     </div>

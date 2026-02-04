@@ -1,10 +1,18 @@
+import { Grid2X2, Grid3X3, LayoutGrid } from 'lucide-react';
 import { CATEGORIES } from '../../data/metaphors';
+import type { GridSize } from './GalleryGrid';
 
 interface GalleryFiltersProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  gridSize: GridSize;
+  onGridSizeChange: (size: GridSize) => void;
+  showTitle: boolean;
+  onShowTitleChange: (show: boolean) => void;
+  showIndex: boolean;
+  onShowIndexChange: (show: boolean) => void;
 }
 
 export default function GalleryFilters({
@@ -12,48 +20,100 @@ export default function GalleryFilters({
   onCategoryChange,
   searchQuery,
   onSearchChange,
+  gridSize,
+  onGridSizeChange,
+  showTitle,
+  onShowTitleChange,
+  showIndex,
+  onShowIndexChange,
 }: GalleryFiltersProps) {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-8">
-      {/* Category tabs */}
-      <div className="flex flex-wrap gap-2">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => onCategoryChange(cat.id)}
-            className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-all ${
-              activeCategory === cat.id
-                ? 'bg-aim-black text-white'
-                : 'bg-aim-gray-100 text-aim-gray-600 hover:bg-aim-gray-200'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
-
+    <div className="space-y-4 mb-8">
       {/* Search */}
-      <div className="relative w-full sm:w-64">
+      <div className="relative">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search..."
-          className="w-full px-4 py-2 pr-10 border border-aim-gray-200 rounded-lg bg-white text-aim-black placeholder:text-aim-gray-400 focus:outline-none focus:ring-2 focus:ring-aim-red focus:border-transparent"
+          placeholder="Search metaphors..."
+          className="w-full px-4 py-3 font-mono text-sm border border-[#e5e7eb] bg-white text-[#171717] placeholder:text-[#a3a3a3] focus:outline-none focus:border-[#DC2626] transition-colors"
         />
-        <svg
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-aim-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
+      </div>
+
+      {/* Filters Row */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        {/* Category tabs */}
+        <div className="flex flex-wrap gap-1">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => onCategoryChange(cat.id)}
+              className={`px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all border ${
+                activeCategory === cat.id
+                  ? 'bg-[#171717] text-white border-[#171717]'
+                  : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* View Controls */}
+        <div className="flex items-center gap-2">
+          {/* Grid Size */}
+          <div className="flex border border-[#e5e7eb]">
+            <button
+              onClick={() => onGridSizeChange('small')}
+              className={`p-2 transition-all ${
+                gridSize === 'small' ? 'bg-[#171717] text-white' : 'text-[#525252] hover:text-[#DC2626]'
+              }`}
+              title="Small grid"
+            >
+              <Grid3X3 size={14} />
+            </button>
+            <button
+              onClick={() => onGridSizeChange('medium')}
+              className={`p-2 border-x border-[#e5e7eb] transition-all ${
+                gridSize === 'medium' ? 'bg-[#171717] text-white' : 'text-[#525252] hover:text-[#DC2626]'
+              }`}
+              title="Medium grid"
+            >
+              <Grid2X2 size={14} />
+            </button>
+            <button
+              onClick={() => onGridSizeChange('large')}
+              className={`p-2 transition-all ${
+                gridSize === 'large' ? 'bg-[#171717] text-white' : 'text-[#525252] hover:text-[#DC2626]'
+              }`}
+              title="Large grid"
+            >
+              <LayoutGrid size={14} />
+            </button>
+          </div>
+
+          {/* Toggle Title */}
+          <button
+            onClick={() => onShowTitleChange(!showTitle)}
+            className={`p-2 border transition-all ${
+              showTitle ? 'bg-[#171717] text-white border-[#171717]' : 'text-[#525252] border-[#e5e7eb] hover:text-[#DC2626]'
+            }`}
+            title={showTitle ? 'Hide titles' : 'Show titles'}
+          >
+            <span className="font-mono text-[10px] uppercase">Aa</span>
+          </button>
+
+          {/* Toggle Index */}
+          <button
+            onClick={() => onShowIndexChange(!showIndex)}
+            className={`p-2 border transition-all ${
+              showIndex ? 'bg-[#171717] text-white border-[#171717]' : 'text-[#525252] border-[#e5e7eb] hover:text-[#DC2626]'
+            }`}
+            title={showIndex ? 'Hide numbers' : 'Show numbers'}
+          >
+            <span className="font-mono text-[10px]">01</span>
+          </button>
+        </div>
       </div>
     </div>
   );

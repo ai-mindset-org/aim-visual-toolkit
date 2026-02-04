@@ -1,47 +1,45 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Sparkles, LayoutGrid, Info } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { path: '/', label: 'Catalog', icon: LayoutGrid },
-  { path: '/generator', label: 'Generator', icon: Sparkles },
-  { path: '/about', label: 'About', icon: Info },
+  { path: '/', label: 'Catalog' },
+  { path: '/generator', label: 'Generator' },
+  { path: '/about', label: 'About' },
 ];
 
 export default function Layout() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-aim-gray-200">
+      <header className="sticky top-0 z-40 bg-white border-b border-[#e5e7eb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-aim-red rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-[#DC2626] flex items-center justify-center">
+                <span className="text-white font-mono font-bold text-xs">A</span>
               </div>
-              <span className="font-mono font-bold text-lg tracking-tight">
+              <span className="font-mono text-xs font-bold tracking-tight uppercase">
                 AIM Visual Toolkit
               </span>
             </Link>
 
             {/* Navigation */}
             <nav className="flex items-center gap-1">
-              {NAV_ITEMS.map(({ path, label, icon: Icon }) => {
+              {NAV_ITEMS.map(({ path, label }) => {
                 const isActive = location.pathname === path;
                 return (
                   <Link
                     key={path}
                     to={path}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all border ${
                       isActive
-                        ? 'bg-aim-black text-white'
-                        : 'text-aim-gray-600 hover:bg-aim-gray-100'
+                        ? 'bg-[#171717] text-white border-[#171717]'
+                        : 'text-[#525252] border-transparent hover:text-[#DC2626]'
                     }`}
                   >
-                    <Icon size={16} />
-                    <span className="hidden sm:inline">{label}</span>
+                    {label}
                   </Link>
                 );
               })}
@@ -56,30 +54,46 @@ export default function Layout() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-aim-gray-200 py-6">
+      <footer className="border-t border-[#e5e7eb] py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-aim-gray-500">
-            <p>
-              <span className="font-mono">AIM Visual Toolkit</span> — Swiss Design Metaphors
-            </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <a
                 href="https://aimindset.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-aim-black transition-colors"
+                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
               >
                 AI Mindset
+              </a>
+              <a
+                href="https://learn.aimindset.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+              >
+                LMS
+              </a>
+              <a
+                href="https://manifest.aimindset.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+              >
+                Manifest
               </a>
               <a
                 href="https://github.com/ai-mindset-org/aim-visual-toolkit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-aim-black transition-colors"
+                className="font-mono text-[10px] uppercase tracking-wider text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
               >
                 GitHub
               </a>
             </div>
+            <span className="font-mono text-[10px] text-[#a3a3a3]">
+              Swiss Design · 2026
+            </span>
           </div>
         </div>
       </footer>

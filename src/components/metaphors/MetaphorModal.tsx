@@ -121,7 +121,7 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
             ref={previewRef}
             className="aspect-square max-w-lg mx-auto bg-white rounded-lg p-4"
           >
-            <StaticMetaphor name={metaphor.filename} variant="cover" />
+            <StaticMetaphor name={metaphor.filename || metaphor.id} variant="cover" />
           </div>
         </div>
 
