@@ -1,0 +1,3 @@
+[submodule "lms"]
+	path = lms
+	url = https://github.com/ai-mindset-org/aim-lms.git
