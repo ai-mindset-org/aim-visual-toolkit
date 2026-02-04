@@ -46,6 +46,4 @@
   <!-- Connection Lines -->
   <line x1="280" y1="400" x2="520" y2="400" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 4" style="animation: sync 1s infinite alternate;"/>
 
-  <text x="40" y="760" class="text" style="font-weight: 700;">DIGITAL TWIN</text>
-  <text x="680" y="760" class="text">05/05</text>
 </svg>

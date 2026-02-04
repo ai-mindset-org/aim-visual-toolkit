@@ -73,6 +73,4 @@
     <circle cx="400" cy="500" r="5" fill="#171717" opacity="0.6"/>
   </g>
 
-  <text x="40" y="760" class="text" style="font-weight: 700;">MODEL LANDSCAPE</text>
-  <text x="680" y="760" class="text">08/10</text>
 </svg>

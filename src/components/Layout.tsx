@@ -1,13 +1,17 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Bookmark } from 'lucide-react';
+import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Catalog' },
   { path: '/generator', label: 'Generator' },
+  { path: '/saved', label: 'Saved', showCount: true },
   { path: '/about', label: 'About' },
 ];
 
 export default function Layout() {
   const location = useLocation();
+  const { totalCount } = useSavedMetaphors();
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -34,19 +38,32 @@ export default function Layout() {
 
             {/* Navigation */}
             <nav className="flex items-center gap-1">
-              {NAV_ITEMS.map(({ path, label }) => {
+              {NAV_ITEMS.map(({ path, label, showCount }) => {
                 const isActive = location.pathname === path;
+                const isSaved = path === '/saved';
                 return (
                   <Link
                     key={path}
                     to={path}
-                    className={`px-4 py-2 text-sm transition-all rounded-lg ${
+                    className={`px-4 py-2 text-sm transition-all rounded-lg flex items-center gap-2 ${
                       isActive
                         ? 'bg-neutral-900 text-white'
                         : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'
                     }`}
                   >
+                    {isSaved && <Bookmark size={14} />}
                     {label}
+                    {showCount && totalCount > 0 && (
+                      <span
+                        className={`px-1.5 py-0.5 text-[10px] font-mono rounded ${
+                          isActive
+                            ? 'bg-[#DC2626] text-white'
+                            : 'bg-neutral-200 text-neutral-500'
+                        }`}
+                      >
+                        {totalCount}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

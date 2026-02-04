@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { Sparkles, Download, Copy, Check, RefreshCw, Settings, ChevronDown } from 'lucide-react';
+import { Sparkles, Download, Copy, Check, RefreshCw, Settings, ChevronDown, Bookmark, BookmarkCheck, Globe, Loader2 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { toPng } from 'html-to-image';
 import { useSettings, MODELS } from '../hooks/useSettings';
 import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../utils/download';
+import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
 
 interface GeneratedMetaphor {
   svg: string;
@@ -23,12 +24,17 @@ const sanitizeSvg = (svg: string): string => {
 
 export default function GeneratorPage() {
   const { settings, updateSettings, hasCustomKey } = useSettings();
+  const { addGeneratedMetaphor, isGeneratedSaved } = useSavedMetaphors();
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<GeneratedMetaphor | null>(null);
   const [copied, setCopied] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [communitySaving, setCommunitySaving] = useState(false);
+  const [communitySaved, setCommunitySaved] = useState(false);
+  const [communityError, setCommunityError] = useState<string | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = async () => {
@@ -39,6 +45,9 @@ export default function GeneratorPage() {
 
     setIsLoading(true);
     setError(null);
+    setSaved(false);
+    setCommunitySaved(false);
+    setCommunityError(null);
 
     try {
       const body: Record<string, string> = {
@@ -127,6 +136,59 @@ export default function GeneratorPage() {
       console.error('Failed to export PNG:', err);
     }
   };
+
+  const handleSave = () => {
+    if (!result) return;
+
+    addGeneratedMetaphor({
+      svg: result.svg,
+      title: result.title,
+      titleEn: result.titleEn,
+      prompt: prompt,
+      model: result.model,
+      style: settings.style,
+    });
+    setSaved(true);
+  };
+
+  const handleSaveToCommunity = async () => {
+    if (!result || !result.title || !result.titleEn) {
+      setCommunityError('Missing title information');
+      return;
+    }
+
+    setCommunitySaving(true);
+    setCommunityError(null);
+
+    try {
+      const response = await fetch('/.netlify/functions/save-community-metaphor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          svg: result.svg,
+          title: result.title,
+          titleEn: result.titleEn,
+          prompt: prompt,
+          author: 'community', // Simple implementation - no auth
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save to community');
+      }
+
+      setCommunitySaved(true);
+    } catch (err) {
+      console.error('Community save error:', err);
+      setCommunityError(err instanceof Error ? err.message : 'Failed to save');
+    } finally {
+      setCommunitySaving(false);
+    }
+  };
+
+  const isSavedAlready = result ? isGeneratedSaved(result.svg) : false;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -282,11 +344,15 @@ export default function GeneratorPage() {
           <div className="p-8 bg-neutral-100">
             <div
               ref={previewRef}
-              className={`aspect-square max-w-md mx-auto border border-neutral-200 rounded-lg p-6 ${
+              className={`aspect-square max-w-md mx-auto border border-neutral-200 rounded-lg p-6 overflow-hidden ${
                 settings.style === 'dark' ? 'bg-neutral-900' : 'bg-white'
               }`}
-              dangerouslySetInnerHTML={{ __html: sanitizeSvg(result.svg) }}
-            />
+            >
+              <div
+                className="w-full h-full flex items-center justify-center [&>svg]:max-w-full [&>svg]:max-h-full [&>svg]:w-auto [&>svg]:h-auto"
+                dangerouslySetInnerHTML={{ __html: sanitizeSvg(result.svg) }}
+              />
+            </div>
           </div>
 
           {/* Info & Actions */}
@@ -310,7 +376,40 @@ export default function GeneratorPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={handleSave}
+                disabled={saved || isSavedAlready}
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg transition-all ${
+                  saved || isSavedAlready
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-[#DC2626] text-white hover:bg-[#b91c1c]'
+                }`}
+              >
+                {saved || isSavedAlready ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
+                {saved || isSavedAlready ? 'Saved' : 'Save'}
+              </button>
+
+              <button
+                onClick={handleSaveToCommunity}
+                disabled={communitySaving || communitySaved}
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg transition-all ${
+                  communitySaved
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50'
+                }`}
+                title="Share to community gallery on AIM LMS"
+              >
+                {communitySaving ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : communitySaved ? (
+                  <Check size={14} />
+                ) : (
+                  <Globe size={14} />
+                )}
+                {communitySaving ? 'Saving...' : communitySaved ? 'Shared' : 'Share'}
+              </button>
+
               <button
                 onClick={handleCopy}
                 className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg transition-all ${
@@ -339,6 +438,13 @@ export default function GeneratorPage() {
                 Download PNG
               </button>
             </div>
+
+            {/* Community save error */}
+            {communityError && (
+              <div className="mt-3 p-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg">
+                {communityError}
+              </div>
+            )}
           </div>
         </div>
       )}

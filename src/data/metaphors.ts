@@ -21,6 +21,7 @@ export interface Metaphor {
 export type Category = {
   id: string;
   label: string;
+  accent?: boolean; // Special styling (red accent)
 };
 
 export const CATEGORIES: Category[] = [
@@ -31,6 +32,7 @@ export const CATEGORIES: Category[] = [
   { id: 'communication', label: 'Communication' },
   { id: 'learning', label: 'Learning' },
   { id: 'fos', label: 'Founder OS' },
+  { id: 'community', label: 'Community', accent: true },
 ];
 
 export const METAPHORS: Metaphor[] = [
@@ -305,29 +307,155 @@ export const METAPHORS: Metaphor[] = [
     format: 'svg-file',
     filename: 'agent-triad.svg',
   },
+  {
+    id: 'signal',
+    title: 'Signal',
+    titleEn: 'SIGNAL',
+    description: 'Separating signal from noise in information flow',
+    insight: 'AI helps find what matters in the chaos of data.',
+    categories: ['thinking', 'communication'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'signal.svg',
+  },
 ];
 
+// Community metaphors loaded from community.json
+// This is the initial state - will be populated by loadCommunityMetaphors()
+let communityMetaphorsCache: Metaphor[] = [];
+let communityMetaphorsLoaded = false;
+
+/**
+ * Raw community metaphor from community.json
+ */
+interface CommunityMetaphorRaw {
+  id: string;
+  title: string;
+  titleEn: string;
+  description: string;
+  insight?: string;
+  prompt?: string;
+  svg?: string;
+  author?: string;
+  votes?: { up: number; down: number };
+  createdAt: string;
+  source: 'community';
+}
+
+/**
+ * Community JSON file structure
+ */
+interface CommunityJsonFile {
+  version: number;
+  updatedAt: string;
+  metaphors: CommunityMetaphorRaw[];
+}
+
+/**
+ * Convert raw community metaphor to Metaphor type
+ */
+function convertCommunityMetaphor(raw: CommunityMetaphorRaw): Metaphor {
+  return {
+    id: raw.id,
+    title: raw.titleEn || raw.title,
+    titleEn: raw.titleEn?.toUpperCase() || raw.title.toUpperCase(),
+    description: raw.description,
+    insight: raw.insight,
+    categories: ['community'],
+    source: 'community',
+    format: raw.svg ? 'svg-inline' : 'svg-file',
+    svg: raw.svg,
+    prompt: raw.prompt,
+    author: raw.author,
+  };
+}
+
+/**
+ * Load community metaphors from community.json
+ * Returns cached results on subsequent calls
+ */
+export async function loadCommunityMetaphors(): Promise<Metaphor[]> {
+  if (communityMetaphorsLoaded) {
+    return communityMetaphorsCache;
+  }
+
+  try {
+    const response = await fetch('/metaphors/community.json');
+    if (!response.ok) {
+      console.warn('Failed to load community.json:', response.status);
+      return [];
+    }
+
+    const data: CommunityJsonFile = await response.json();
+    communityMetaphorsCache = data.metaphors.map(convertCommunityMetaphor);
+    communityMetaphorsLoaded = true;
+    return communityMetaphorsCache;
+  } catch (error) {
+    console.warn('Error loading community metaphors:', error);
+    return [];
+  }
+}
+
+/**
+ * Get cached community metaphors (empty until loadCommunityMetaphors is called)
+ */
+export function getCommunityMetaphors(): Metaphor[] {
+  return communityMetaphorsCache;
+}
+
+/**
+ * Check if community metaphors have been loaded
+ */
+export function isCommunityLoaded(): boolean {
+  return communityMetaphorsLoaded;
+}
+
+// Legacy export for backwards compatibility
 export const COMMUNITY_METAPHORS: Metaphor[] = [];
 
-export const ALL_METAPHORS = [...METAPHORS, ...COMMUNITY_METAPHORS];
-export const TOTAL_COUNT = ALL_METAPHORS.length;
+export const ALL_METAPHORS = [...METAPHORS];
+export let TOTAL_COUNT = ALL_METAPHORS.length;
+
+/**
+ * Get all metaphors including community (must be called after loadCommunityMetaphors)
+ */
+export function getAllMetaphors(): Metaphor[] {
+  return [...METAPHORS, ...communityMetaphorsCache];
+}
+
+/**
+ * Get total count including community metaphors
+ */
+export function getTotalCount(): number {
+  return METAPHORS.length + communityMetaphorsCache.length;
+}
 
 export function getMetaphorsByCategory(categoryId: string): Metaphor[] {
-  if (categoryId === 'all') return ALL_METAPHORS;
-  return ALL_METAPHORS.filter((m) => m.categories.includes(categoryId));
+  const all = getAllMetaphors();
+  if (categoryId === 'all') return all;
+  if (categoryId === 'community') return communityMetaphorsCache;
+  return all.filter((m) => m.categories.includes(categoryId));
 }
 
 export function getMetaphorById(id: string): Metaphor | undefined {
-  return ALL_METAPHORS.find((m) => m.id === id);
+  return getAllMetaphors().find((m) => m.id === id);
 }
 
 export function searchMetaphors(query: string): Metaphor[] {
   const q = query.toLowerCase();
-  return ALL_METAPHORS.filter(
+  return getAllMetaphors().filter(
     (m) =>
       m.title.toLowerCase().includes(q) ||
       m.titleEn.toLowerCase().includes(q) ||
       m.description.toLowerCase().includes(q) ||
       m.insight?.toLowerCase().includes(q)
   );
+}
+
+/**
+ * Check if a category has the accent styling
+ */
+export function isCategoryAccent(categoryId: string): boolean {
+  const cat = CATEGORIES.find((c) => c.id === categoryId);
+  return cat?.accent ?? false;
 }

@@ -46,9 +46,4 @@
   <line x1="340" y1="460" x2="360" y2="440" stroke="#E5E7EB" stroke-width="2"/>
   <line x1="460" y1="460" x2="440" y2="440" stroke="#E5E7EB" stroke-width="2"/>
 
-  <!-- Title -->
-  <text x="40" y="760" class="text" style="font-weight: 700;">DESIGN</text>
-
-  <!-- Number -->
-  <text x="700" y="760" class="text">02/04</text>
 </svg>

@@ -85,6 +85,4 @@
   <line x1="180" y1="418" x2="280" y2="564" stroke="#9CA3AF" stroke-width="1" opacity="0.5"/>
   <line x1="620" y1="418" x2="520" y2="564" stroke="#9CA3AF" stroke-width="1" opacity="0.5"/>
 
-  <text x="40" y="760" class="text" style="font-weight: 700;">SECOND BRAIN</text>
-  <text x="680" y="760" class="text">12/12</text>
 </svg>

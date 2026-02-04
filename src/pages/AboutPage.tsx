@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Youtube } from 'lucide-react';
 import { StaticMetaphor } from '../components/metaphors';
 import { TOTAL_COUNT } from '../data/metaphors';
 
@@ -127,6 +127,14 @@ export default function AboutPage() {
               className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg bg-neutral-900 text-white hover:bg-[#DC2626] transition-colors"
             >
               GitHub <ExternalLink size={10} />
+            </a>
+            <a
+              href="https://youtube.com/@ai_mindset"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-600 hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+            >
+              YouTube <Youtube size={10} />
             </a>
           </div>
         </section>

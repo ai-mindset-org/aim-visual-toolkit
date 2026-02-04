@@ -2,11 +2,6 @@
   <!-- Background -->
   <rect width="400" height="400" fill="#FFFFFF"/>
   
-  <!-- Title -->
-  <text x="200" y="30" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#1D1D1F">
-    AI SPRINT AUTOMATION
-  </text>
-  
   <!-- Task Queue (left) -->
   <g id="queue">
     <rect x="30" y="100" width="80" height="200" fill="none" stroke="#1D1D1F" stroke-width="2" stroke-dasharray="4"/>
@@ -103,8 +98,4 @@
     <circle cx="350" cy="350" r="3" fill="#1D1D1F"/>
   </g>
   
-  <!-- Footer label -->
-  <text x="200" y="385" text-anchor="middle" font-family="monospace" font-size="9" fill="#1D1D1F" opacity="0.5">
-    PARALLEL EXECUTION
-  </text>
 </svg>

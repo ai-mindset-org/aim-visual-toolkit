@@ -2,11 +2,6 @@
   <!-- Background -->
   <rect width="400" height="400" fill="#FFFFFF"/>
   
-  <!-- Title -->
-  <text x="200" y="30" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#1D1D1F">
-    FOS #18: TWO SYSTEMS
-  </text>
-  
   <!-- Left System: Obsidian CMS -->
   <g id="system-left">
     <!-- Container -->
@@ -104,8 +99,4 @@
     </text>
   </g>
   
-  <!-- Bottom label -->
-  <text x="200" y="390" text-anchor="middle" font-family="monospace" font-size="9" fill="#1D1D1F" opacity="0.5">
-    TWO SPEEDS · ONE PRINCIPLE
-  </text>
 </svg>

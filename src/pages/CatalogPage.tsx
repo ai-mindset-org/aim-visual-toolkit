@@ -1,10 +1,21 @@
-import { useState, useMemo } from 'react';
-import { Search, BookmarkCheck } from 'lucide-react';
-import { getMetaphorsByCategory, searchMetaphors, TOTAL_COUNT, type Metaphor } from '../data/metaphors';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { Search, BookmarkCheck, Download, Loader2, Users } from 'lucide-react';
+import JSZip from 'jszip';
+import { Link } from 'react-router-dom';
+import {
+  getMetaphorsByCategory,
+  searchMetaphors,
+  getTotalCount,
+  loadCommunityMetaphors,
+  getCommunityMetaphors,
+  isCommunityLoaded,
+  type Metaphor,
+} from '../data/metaphors';
 import { GalleryFilters, GalleryGrid } from '../components/gallery';
 import { MetaphorModal } from '../components/metaphors';
 import type { GridSize } from '../components/gallery/GalleryGrid';
 import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
+import { downloadBinaryBlob } from '../utils/download';
 
 export default function CatalogPage() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -12,8 +23,21 @@ export default function CatalogPage() {
   const [gridSize, setGridSize] = useState<GridSize>('small');
   const [showLabels, setShowLabels] = useState(true);
   const [selectedMetaphor, setSelectedMetaphor] = useState<Metaphor | null>(null);
+  const [communityLoaded, setCommunityLoaded] = useState(isCommunityLoaded());
 
-  const { savedIds, count, addMetaphor, removeMetaphor, isSaved } = useSavedMetaphors();
+  const { savedIds, totalCount, addMetaphor, removeMetaphor, isSaved } = useSavedMetaphors();
+
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState({ current: 0, total: 0 });
+
+  // Load community metaphors on mount
+  useEffect(() => {
+    if (!communityLoaded) {
+      loadCommunityMetaphors().then(() => {
+        setCommunityLoaded(true);
+      });
+    }
+  }, [communityLoaded]);
 
   const filteredMetaphors = useMemo(() => {
     let results = searchQuery
@@ -25,7 +49,69 @@ export default function CatalogPage() {
     }
 
     return results;
-  }, [activeCategory, searchQuery]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCategory, searchQuery, communityLoaded]);
+
+  // Get community metaphors for the special section (only when showing 'all')
+  const communityMetaphors = useMemo(() => {
+    if (activeCategory !== 'all' || searchQuery) return [];
+    return getCommunityMetaphors();
+  }, [activeCategory, searchQuery, communityLoaded]);
+
+  // Core metaphors (excluding community when showing 'all')
+  const coreMetaphors = useMemo(() => {
+    if (activeCategory === 'community') return [];
+    if (activeCategory !== 'all' || searchQuery) return filteredMetaphors;
+    return filteredMetaphors.filter((m) => m.source !== 'community');
+  }, [filteredMetaphors, activeCategory, searchQuery]);
+
+  const handleDownloadAllSvg = useCallback(async () => {
+    if (filteredMetaphors.length === 0 || isDownloading) return;
+
+    setIsDownloading(true);
+    setDownloadProgress({ current: 0, total: filteredMetaphors.length });
+
+    try {
+      const zip = new JSZip();
+
+      for (let i = 0; i < filteredMetaphors.length; i++) {
+        const metaphor = filteredMetaphors[i];
+        setDownloadProgress({ current: i + 1, total: filteredMetaphors.length });
+
+        let svgContent: string;
+
+        if (metaphor.format === 'svg-inline' && metaphor.svg) {
+          svgContent = metaphor.svg;
+        } else if (metaphor.filename) {
+          try {
+            const response = await fetch(`/metaphors/${metaphor.filename}`);
+            if (!response.ok) continue;
+            svgContent = await response.text();
+          } catch {
+            console.warn(`Failed to fetch ${metaphor.filename}`);
+            continue;
+          }
+        } else {
+          continue;
+        }
+
+        const filename = `${metaphor.id}.svg`;
+        zip.file(filename, svgContent);
+      }
+
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const zipFilename = activeCategory === 'all' && !searchQuery
+        ? 'aim-metaphors-all.zip'
+        : `aim-metaphors-${activeCategory || 'filtered'}.zip`;
+
+      downloadBinaryBlob(blob, zipFilename);
+    } catch (error) {
+      console.error('Failed to create ZIP:', error);
+    } finally {
+      setIsDownloading(false);
+      setDownloadProgress({ current: 0, total: 0 });
+    }
+  }, [filteredMetaphors, isDownloading, activeCategory, searchQuery]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -39,18 +125,45 @@ export default function CatalogPage() {
             Metaphors
           </h1>
           <p className="text-sm text-neutral-500 max-w-2xl">
-            {TOTAL_COUNT} visual metaphors for AI concepts. Each metaphor captures an insight.
+            {getTotalCount()} visual metaphors for AI concepts. Each metaphor captures an insight.
             Save to collection and use in your projects.
           </p>
         </div>
 
-        {/* Saved counter */}
-        {count > 0 && (
-          <div className="shrink-0 flex items-center gap-2 px-3 py-2 bg-neutral-100 rounded-lg">
-            <BookmarkCheck size={16} className="text-[#DC2626]" />
-            <span className="text-sm font-mono font-medium">{count}</span>
-          </div>
-        )}
+        <div className="shrink-0 flex items-center gap-2">
+          {/* Download All Button */}
+          <button
+            onClick={handleDownloadAllSvg}
+            disabled={isDownloading || filteredMetaphors.length === 0}
+            className="flex items-center gap-2 px-3 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            title={`Download ${filteredMetaphors.length} SVG files as ZIP`}
+          >
+            {isDownloading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span className="text-sm font-mono">
+                  {downloadProgress.current}/{downloadProgress.total}
+                </span>
+              </>
+            ) : (
+              <>
+                <Download size={16} />
+                <span className="text-sm font-mono">ZIP ({filteredMetaphors.length})</span>
+              </>
+            )}
+          </button>
+
+          {/* Saved counter */}
+          {totalCount > 0 && (
+            <Link
+              to="/saved"
+              className="flex items-center gap-2 px-3 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors"
+            >
+              <BookmarkCheck size={16} className="text-[#DC2626]" />
+              <span className="text-sm font-mono font-medium">{totalCount}</span>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Search */}
@@ -82,10 +195,10 @@ export default function CatalogPage() {
         onShowLabelsChange={setShowLabels}
       />
 
-      {/* Grid */}
-      {filteredMetaphors.length > 0 ? (
+      {/* Core Metaphors Grid */}
+      {coreMetaphors.length > 0 ? (
         <GalleryGrid
-          metaphors={filteredMetaphors}
+          metaphors={coreMetaphors}
           gridSize={gridSize}
           showLabels={showLabels}
           onSelect={setSelectedMetaphor}
@@ -93,7 +206,7 @@ export default function CatalogPage() {
           onSave={addMetaphor}
           onRemove={removeMetaphor}
         />
-      ) : (
+      ) : activeCategory === 'community' ? null : (
         <div className="py-16 text-center">
           <p className="text-neutral-400 text-sm mb-2">No metaphors found</p>
           <button
@@ -102,6 +215,46 @@ export default function CatalogPage() {
           >
             Clear search
           </button>
+        </div>
+      )}
+
+      {/* Community Section - shown at bottom when viewing 'all' or 'community' */}
+      {(communityMetaphors.length > 0 || activeCategory === 'community') && (
+        <div className="mt-12">
+          {/* Community Section Header */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#DC2626] text-white rounded-lg">
+              <Users size={14} />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider">
+                Community
+              </span>
+            </div>
+            <div className="flex-1 h-px bg-gradient-to-r from-[#DC2626]/30 to-transparent" />
+            <span className="text-xs text-neutral-400 font-mono">
+              {activeCategory === 'community' ? filteredMetaphors.length : communityMetaphors.length} metaphors
+            </span>
+          </div>
+
+          {/* Community Grid with red accent border */}
+          <div className="p-4 rounded-xl border-2 border-[#DC2626]/20 bg-gradient-to-br from-red-50/50 to-transparent">
+            {(activeCategory === 'community' ? filteredMetaphors : communityMetaphors).length > 0 ? (
+              <GalleryGrid
+                metaphors={activeCategory === 'community' ? filteredMetaphors : communityMetaphors}
+                gridSize={gridSize}
+                showLabels={showLabels}
+                onSelect={setSelectedMetaphor}
+                savedIds={savedIds}
+                onSave={addMetaphor}
+                onRemove={removeMetaphor}
+              />
+            ) : (
+              <div className="py-8 text-center">
+                <p className="text-neutral-400 text-sm">
+                  No community metaphors yet. Be the first to contribute!
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

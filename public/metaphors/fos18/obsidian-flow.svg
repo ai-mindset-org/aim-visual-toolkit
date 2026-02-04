@@ -2,11 +2,6 @@
   <!-- Background -->
   <rect width="400" height="400" fill="#FFFFFF"/>
   
-  <!-- Title -->
-  <text x="200" y="30" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#1D1D1F">
-    OBSIDIAN → CONTENT FLOW
-  </text>
-  
   <!-- Source: Obsidian Vault (brain/knowledge graph) -->
   <g id="source">
     <circle cx="80" cy="200" r="40" fill="none" stroke="#1D1D1F" stroke-width="2"/>
@@ -80,8 +75,4 @@
     <text x="340" y="357" text-anchor="middle" font-family="monospace" font-size="8" fill="#1D1D1F">MULTI-OUT</text>
   </g>
   
-  <!-- Graph links preserved -->
-  <text x="200" y="385" text-anchor="middle" font-family="monospace" font-size="9" fill="#1D1D1F" opacity="0.5">
-    GRAPH CONNECTIONS PRESERVED
-  </text>
 </svg>

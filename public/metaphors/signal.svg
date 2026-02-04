@@ -1,0 +1,113 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #FFFFFF; }
+      .black { fill: #171717; }
+      .red { fill: #DC2626; stroke: #DC2626; }
+      .gray { fill: #9CA3AF; }
+      .gray-dark { fill: #6B7280; }
+      .noise { fill: #D1D5DB; }
+
+      @keyframes signal-pulse {
+        0%, 100% { stroke-dashoffset: 0; }
+        50% { stroke-dashoffset: -40; }
+      }
+
+      @keyframes noise-fade {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.6; }
+      }
+    </style>
+  </defs>
+
+  <rect width="800" height="800" class="bg"/>
+
+  <!-- Noise field - scattered dots and short lines (left side, fading toward center) -->
+  <g style="animation: noise-fade 3s ease-in-out infinite;">
+    <!-- Scattered noise dots - dense on left, sparse toward middle -->
+    <circle cx="80" cy="200" r="4" class="gray"/>
+    <circle cx="120" cy="180" r="3" class="gray-dark"/>
+    <circle cx="100" cy="240" r="5" class="noise"/>
+    <circle cx="150" cy="220" r="3" class="gray"/>
+    <circle cx="60" cy="280" r="4" class="gray-dark"/>
+    <circle cx="130" cy="300" r="3" class="noise"/>
+    <circle cx="90" cy="340" r="5" class="gray"/>
+    <circle cx="170" cy="260" r="4" class="gray-dark"/>
+    <circle cx="110" cy="380" r="3" class="gray"/>
+    <circle cx="140" cy="360" r="4" class="noise"/>
+    <circle cx="70" cy="400" r="5" class="gray-dark"/>
+    <circle cx="160" cy="420" r="3" class="gray"/>
+    <circle cx="100" cy="450" r="4" class="noise"/>
+    <circle cx="130" cy="480" r="3" class="gray-dark"/>
+    <circle cx="80" cy="520" r="5" class="gray"/>
+    <circle cx="150" cy="500" r="4" class="noise"/>
+    <circle cx="60" cy="560" r="3" class="gray-dark"/>
+    <circle cx="120" cy="580" r="4" class="gray"/>
+    <circle cx="180" cy="340" r="3" class="noise"/>
+    <circle cx="200" cy="380" r="4" class="gray"/>
+    <circle cx="190" cy="440" r="3" class="gray-dark"/>
+
+    <!-- Short noise lines -->
+    <line x1="85" y1="160" x2="105" y2="170" stroke="#9CA3AF" stroke-width="2"/>
+    <line x1="55" y1="230" x2="75" y2="225" stroke="#6B7280" stroke-width="2"/>
+    <line x1="145" y1="290" x2="165" y2="285" stroke="#D1D5DB" stroke-width="2"/>
+    <line x1="95" y1="410" x2="115" y2="415" stroke="#9CA3AF" stroke-width="2"/>
+    <line x1="65" y1="480" x2="85" y2="475" stroke="#6B7280" stroke-width="2"/>
+    <line x1="135" y1="540" x2="155" y2="545" stroke="#D1D5DB" stroke-width="2"/>
+    <line x1="175" y1="200" x2="195" y2="210" stroke="#9CA3AF" stroke-width="2"/>
+    <line x1="210" y1="300" x2="230" y2="310" stroke="#6B7280" stroke-width="2"/>
+    <line x1="220" y1="420" x2="240" y2="425" stroke="#D1D5DB" stroke-width="2"/>
+    <line x1="200" y1="520" x2="220" y2="515" stroke="#9CA3AF" stroke-width="2"/>
+
+    <!-- Additional noise - medium zone -->
+    <circle cx="230" cy="250" r="3" class="noise"/>
+    <circle cx="260" cy="320" r="4" class="gray"/>
+    <circle cx="240" cy="390" r="3" class="gray-dark"/>
+    <circle cx="270" cy="460" r="4" class="noise"/>
+    <circle cx="250" cy="540" r="3" class="gray"/>
+    <circle cx="280" cy="280" r="3" class="gray-dark"/>
+    <circle cx="300" cy="360" r="4" class="noise"/>
+    <circle cx="290" cy="440" r="3" class="gray"/>
+    <circle cx="310" cy="500" r="4" class="gray-dark"/>
+  </g>
+
+  <!-- Filter/separator zone - vertical gradient effect using rectangles -->
+  <rect x="320" y="100" width="4" height="600" fill="#E5E5E5"/>
+  <rect x="340" y="120" width="2" height="560" fill="#F3F4F6"/>
+
+  <!-- The Signal - bold red sine wave emerging from the filter -->
+  <path
+    d="M 340 400
+       Q 400 300, 460 400
+       Q 520 500, 580 400
+       Q 640 300, 700 400
+       L 760 400"
+    stroke="#DC2626"
+    stroke-width="12"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    style="animation: signal-pulse 2s linear infinite; stroke-dasharray: 40 0;"
+  />
+
+  <!-- Signal emphasis - thin parallel line above for depth -->
+  <path
+    d="M 340 400
+       Q 400 300, 460 400
+       Q 520 500, 580 400
+       Q 640 300, 700 400
+       L 760 400"
+    stroke="#171717"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(0, -20)"
+    opacity="0.3"
+  />
+
+  <!-- Clean endpoint indicator -->
+  <circle cx="760" cy="400" r="16" class="red" stroke="none"/>
+  <circle cx="760" cy="400" r="8" fill="#FFFFFF"/>
+
+</svg>

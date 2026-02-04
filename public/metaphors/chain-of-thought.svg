@@ -77,6 +77,4 @@
     <path d="M35 70 Q50 80 65 70" fill="none" stroke="#171717" stroke-width="2"/>
   </g>
 
-  <text x="40" y="760" class="text" style="font-weight: 700;">CHAIN OF THOUGHT</text>
-  <text x="680" y="760" class="text">07/10</text>
 </svg>

@@ -29,19 +29,30 @@ export default function GalleryFilters({
       <div className="flex flex-wrap items-center justify-between gap-4">
         {/* Category tabs */}
         <div className="flex flex-wrap gap-1">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => onCategoryChange(cat.id)}
-              className={`px-3 py-1.5 text-xs transition-all rounded-lg ${
-                activeCategory === cat.id
-                  ? 'bg-neutral-900 text-white'
-                  : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.id;
+            const isAccent = cat.accent;
+
+            // Community category has special red accent styling
+            const activeClass = isAccent
+              ? 'bg-[#DC2626] text-white'
+              : 'bg-neutral-900 text-white';
+            const inactiveClass = isAccent
+              ? 'bg-red-50 text-[#DC2626] border border-[#DC2626]/30 hover:bg-red-100'
+              : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700';
+
+            return (
+              <button
+                key={cat.id}
+                onClick={() => onCategoryChange(cat.id)}
+                className={`px-3 py-1.5 text-xs transition-all rounded-lg ${
+                  isActive ? activeClass : inactiveClass
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* View Controls */}

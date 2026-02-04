@@ -60,6 +60,4 @@
   <circle cx="300" cy="600" class="red joint" />
   <circle cx="500" cy="600" class="red joint" />
 
-  <text x="40" y="760" class="text" style="font-weight: 700;">EXOSKELETON</text>
-  <text x="680" y="760" class="text">01/05</text>
 </svg>

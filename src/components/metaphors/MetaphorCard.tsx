@@ -66,23 +66,20 @@ export default function MetaphorCard({
       className="group relative rounded-xl border bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden border-neutral-200 hover:border-neutral-300 cursor-pointer"
       onClick={onClick}
     >
-      {/* SVG Preview with border frame */}
-      <div className="aspect-square p-4 flex items-center justify-center bg-neutral-50 relative">
-        {/* Inner white frame with border */}
-        <div className="w-full h-full bg-white border border-neutral-200 rounded-lg p-4 flex items-center justify-center">
-          {metaphor.format === 'svg-inline' && metaphor.svg ? (
-            <div
-              className="metaphor-container w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
-              dangerouslySetInnerHTML={{ __html: metaphor.svg }}
-            />
-          ) : metaphor.filename ? (
-            <StaticMetaphor name={metaphor.filename} variant="cover" className="opacity-90 group-hover:opacity-100 transition-opacity" />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center text-neutral-400">
-              <span className="text-xs font-mono text-center">Coming soon</span>
-            </div>
-          )}
-        </div>
+      {/* SVG Preview */}
+      <div className="aspect-square p-4 flex items-center justify-center bg-white relative">
+        {metaphor.format === 'svg-inline' && metaphor.svg ? (
+          <div
+            className="metaphor-container w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
+            dangerouslySetInnerHTML={{ __html: metaphor.svg }}
+          />
+        ) : metaphor.filename ? (
+          <StaticMetaphor name={metaphor.filename} variant="cover" className="opacity-90 group-hover:opacity-100 transition-opacity" />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center text-neutral-400">
+            <span className="text-xs font-mono text-center">Coming soon</span>
+          </div>
+        )}
       </div>
 
       {/* Info */}

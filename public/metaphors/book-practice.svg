@@ -50,9 +50,4 @@
   <path d="M100 200 L80 200 L80 400 L100 400" stroke="#E5E7EB" stroke-width="2" fill="none"/>
   <path d="M700 200 L720 200 L720 400 L700 400" stroke="#E5E7EB" stroke-width="2" fill="none"/>
 
-  <!-- Title -->
-  <text x="40" y="760" class="text" style="font-weight: 700;">PRACTICE</text>
-
-  <!-- Number -->
-  <text x="700" y="760" class="text">03/04</text>
 </svg>
