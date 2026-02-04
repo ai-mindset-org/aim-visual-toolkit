@@ -1,0 +1,61 @@
+<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&amp;display=swap');
+      .frame { stroke: #000; stroke-width: 2; fill: none; }
+      .accent { fill: #DC2626; }
+      .core { fill: #000; }
+      .support { stroke: #DC2626; stroke-width: 1.5; fill: none; stroke-dasharray: 4 4; }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.7; }
+      }
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes expand {
+        0% { r: 40; opacity: 0.8; }
+        100% { r: 120; opacity: 0; }
+      }
+      
+      .anim-pulse { transform-origin: center; animation: pulse 3s infinite ease-in-out; }
+      .anim-rotate { transform-origin: center; animation: rotate 40s linear infinite; }
+      .anim-expand { transform-origin: center; animation: expand 2.5s infinite ease-out; }
+      .text { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 24px; fill: #000; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="#FFFFFF" />
+
+  <!-- AI Exoskeleton Structure (Hexagonal) -->
+  <g class="anim-rotate">
+    <polygon points="400,150 616,275 616,525 400,650 184,525 184,275" class="frame" />
+    <polygon points="400,200 573,300 573,500 400,600 227,500 227,300" class="support" />
+    <circle cx="400" cy="150" r="6" class="accent" />
+    <circle cx="616" cy="275" r="6" class="accent" />
+    <circle cx="616" cy="525" r="6" class="accent" />
+    <circle cx="400" cy="650" r="6" class="accent" />
+    <circle cx="184" cy="525" r="6" class="accent" />
+    <circle cx="184" cy="275" r="6" class="accent" />
+  </g>
+
+  <!-- Coach Core -->
+  <circle cx="400" cy="400" r="60" class="core anim-pulse" />
+  
+  <!-- Expansion Waves (AI augmentation) -->
+  <circle cx="400" cy="400" r="80" class="support anim-expand" />
+  <circle cx="400" cy="400" r="100" class="support anim-expand" style="animation-delay: 1s;" />
+
+  <!-- Connection Lines -->
+  <line x1="400" y1="150" x2="400" y2="340" class="frame" stroke-opacity="0.2" />
+  <line x1="400" y1="650" x2="400" y2="460" class="frame" stroke-opacity="0.2" />
+  <line x1="184" y1="400" x2="340" y2="400" class="frame" stroke-opacity="0.2" />
+  <line x1="616" y1="400" x2="460" y2="400" class="frame" stroke-opacity="0.2" />
+
+  <!-- Title -->
+  <text x="50" y="750" class="text">AI AS EXOSKELETON FOR COACH</text>
+  <rect x="50" y="710" width="40" height="4" class="accent" />
+</svg>

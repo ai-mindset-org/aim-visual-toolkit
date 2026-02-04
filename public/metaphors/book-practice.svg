@@ -1,0 +1,58 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; }
+      .text-small { font-family: 'IBM Plex Mono', monospace; font-size: 14px; fill: #6B7280; }
+      @keyframes flow { 0% { stroke-dashoffset: 40; } 100% { stroke-dashoffset: 0; } }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      .flow { stroke-dasharray: 10 5; animation: flow 2s linear infinite; }
+      .pulse { animation: pulse 1.5s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="#FFFFFF"/>
+
+  <!-- Grid -->
+  <path d="M400 0V800 M0 400H800" stroke="#F3F4F6" stroke-width="2"/>
+
+  <!-- Workflow nodes -->
+
+  <!-- Node 1: Trigger -->
+  <circle cx="180" cy="300" r="50" fill="#F9FAFB" stroke="#171717" stroke-width="3"/>
+  <text x="180" y="307" text-anchor="middle" class="text-small" style="font-weight: 700;">1</text>
+
+  <!-- Node 2: Process -->
+  <circle cx="400" cy="250" r="50" fill="#F9FAFB" stroke="#171717" stroke-width="3"/>
+  <text x="400" y="257" text-anchor="middle" class="text-small" style="font-weight: 700;">2</text>
+
+  <!-- Node 3: Transform -->
+  <circle cx="620" cy="300" r="50" fill="#F9FAFB" stroke="#171717" stroke-width="3"/>
+  <text x="620" y="307" text-anchor="middle" class="text-small" style="font-weight: 700;">3</text>
+
+  <!-- Node 4: Output -->
+  <circle cx="400" cy="550" r="70" fill="#DC2626" fill-opacity="0.1" stroke="#DC2626" stroke-width="3" class="pulse"/>
+  <path d="M375 540 L410 560 L375 580 Z" fill="#DC2626"/>
+
+  <!-- Flow connections -->
+  <path d="M230 300 Q 300 250 350 250" stroke="#171717" stroke-width="2" fill="none" class="flow"/>
+  <path d="M450 250 Q 520 250 570 300" stroke="#171717" stroke-width="2" fill="none" class="flow"/>
+  <path d="M620 350 Q 620 450 470 530" stroke="#171717" stroke-width="2" fill="none" class="flow"/>
+  <path d="M180 350 Q 180 450 330 530" stroke="#171717" stroke-width="2" fill="none" class="flow"/>
+
+  <!-- Labels -->
+  <text x="180" y="380" text-anchor="middle" class="text-small">n8n</text>
+  <text x="400" y="180" text-anchor="middle" class="text-small">Make</text>
+  <text x="620" y="380" text-anchor="middle" class="text-small">Google</text>
+  <text x="400" y="660" text-anchor="middle" class="text-small" style="fill: #DC2626;">RESULT</text>
+
+  <!-- Decorative brackets -->
+  <path d="M100 200 L80 200 L80 400 L100 400" stroke="#E5E7EB" stroke-width="2" fill="none"/>
+  <path d="M700 200 L720 200 L720 400 L700 400" stroke="#E5E7EB" stroke-width="2" fill="none"/>
+
+  <!-- Title -->
+  <text x="40" y="760" class="text" style="font-weight: 700;">PRACTICE</text>
+
+  <!-- Number -->
+  <text x="700" y="760" class="text">03/04</text>
+</svg>

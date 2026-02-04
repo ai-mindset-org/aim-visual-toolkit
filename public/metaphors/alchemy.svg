@@ -1,0 +1,44 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&amp;display=swap');
+      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; }
+      .stroke { stroke: #171717; stroke-width: 3; fill: none; }
+      
+      @keyframes rotate-cw { 100% { transform: rotate(360deg); } }
+      @keyframes rotate-ccw { 100% { transform: rotate(-360deg); } }
+      
+      @keyframes transmute {
+        0%, 45% { fill: transparent; transform: scale(0.5); }
+        50%, 60% { fill: #DC2626; transform: scale(1); }
+        65%, 100% { fill: transparent; transform: scale(0.5); }
+      }
+    </style>
+  </defs>
+  
+  <rect width="800" height="800" fill="#FFFFFF"/>
+  
+  <g transform="translate(400, 400)">
+    <!-- Outer Square -->
+    <g style="animation: rotate-cw 20s linear infinite;">
+      <rect x="-250" y="-250" width="500" height="500" class="stroke"/>
+    </g>
+    
+    <!-- Middle Triangle -->
+    <g style="animation: rotate-ccw 15s linear infinite;">
+      <path d="M0 -220 L190 110 L-190 110 Z" class="stroke"/>
+    </g>
+    
+    <!-- Inner Circle -->
+    <g>
+      <circle r="120" class="stroke"/>
+    </g>
+    
+    <!-- The Stone / Core -->
+    <circle r="60" fill="#DC2626" style="animation: transmute 4s ease-in-out infinite;">
+    </circle>
+  </g>
+
+  <text x="40" y="760" class="text" style="font-weight: 700;">ALCHEMY OF CONTEXT</text>
+  <text x="680" y="760" class="text">04/05</text>
+</svg>

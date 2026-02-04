@@ -1,0 +1,82 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&amp;display=swap');
+      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; }
+      .label { font-size: 14px; }
+      .red { fill: #DC2626; stroke: #DC2626; }
+      .black { fill: #171717; stroke: #171717; }
+      
+      @keyframes appear {
+        0% { opacity: 0; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      
+      @keyframes draw {
+        0% { stroke-dashoffset: 100; }
+        100% { stroke-dashoffset: 0; }
+      }
+    </style>
+  </defs>
+  
+  <rect width="800" height="800" fill="#FFFFFF"/>
+  
+  <!-- Step 1 -->
+  <g style="animation: appear 0.5s ease-out forwards;">
+    <circle cx="150" cy="200" r="40" fill="none" stroke="#DC2626" stroke-width="4"/>
+    <text x="150" y="210" text-anchor="middle" class="text" style="font-size: 32px; font-weight: bold; fill: #DC2626;">1</text>
+    <text x="150" y="280" text-anchor="middle" class="text label">Разбей на</text>
+    <text x="150" y="300" text-anchor="middle" class="text label">подзадачи</text>
+  </g>
+  
+  <!-- Arrow 1-2 -->
+  <path d="M200 200 Q 275 150 350 200" fill="none" stroke="#171717" stroke-width="3" stroke-dasharray="100" style="animation: draw 1s ease-out 0.5s forwards; stroke-dashoffset: 100;">
+    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1s" begin="0.5s" fill="freeze"/>
+  </path>
+  <polygon points="340,190 360,200 340,210" fill="#171717" opacity="0">
+    <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.5s" fill="freeze"/>
+  </polygon>
+  
+  <!-- Step 2 -->
+  <g style="animation: appear 0.5s ease-out 1s forwards; opacity: 0;">
+    <circle cx="400" cy="200" r="40" fill="none" stroke="#171717" stroke-width="4"/>
+    <text x="400" y="210" text-anchor="middle" class="text" style="font-size: 32px; font-weight: bold;">2</text>
+    <text x="400" y="280" text-anchor="middle" class="text label">Определи</text>
+    <text x="400" y="300" text-anchor="middle" class="text label">подход</text>
+  </g>
+  
+  <!-- Arrow 2-3 -->
+  <path d="M450 200 Q 525 150 600 200" fill="none" stroke="#171717" stroke-width="3" stroke-dasharray="100">
+    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1s" begin="1.5s" fill="freeze"/>
+  </path>
+  
+  <!-- Step 3 -->
+  <g style="animation: appear 0.5s ease-out 2s forwards; opacity: 0;">
+    <circle cx="650" cy="200" r="40" fill="none" stroke="#DC2626" stroke-width="4"/>
+    <text x="650" y="210" text-anchor="middle" class="text" style="font-size: 32px; font-weight: bold; fill: #DC2626;">3</text>
+    <text x="650" y="280" text-anchor="middle" class="text label">Проверь</text>
+    <text x="650" y="300" text-anchor="middle" class="text label">логику</text>
+  </g>
+  
+  <!-- Arrow 3-4 -->
+  <path d="M650 250 Q 650 350 400 450" fill="none" stroke="#171717" stroke-width="3" stroke-dasharray="150">
+    <animate attributeName="stroke-dashoffset" from="150" to="0" dur="1.5s" begin="2.5s" fill="freeze"/>
+  </path>
+  
+  <!-- Step 4 (Result) -->
+  <g style="animation: appear 0.5s ease-out 3.5s forwards; opacity: 0;">
+    <rect x="300" y="420" width="200" height="100" fill="#DC2626"/>
+    <text x="400" y="480" text-anchor="middle" class="text" style="font-size: 28px; font-weight: bold; fill: white;">ОТВЕТ</text>
+  </g>
+  
+  <!-- Brain icon hint -->
+  <g transform="translate(100, 500)" opacity="0.3">
+    <path d="M50 0 Q80 20 80 50 Q80 80 50 100 Q20 80 20 50 Q20 20 50 0" fill="none" stroke="#171717" stroke-width="2"/>
+    <path d="M35 30 Q50 40 65 30" fill="none" stroke="#171717" stroke-width="2"/>
+    <path d="M35 50 Q50 60 65 50" fill="none" stroke="#171717" stroke-width="2"/>
+    <path d="M35 70 Q50 80 65 70" fill="none" stroke="#171717" stroke-width="2"/>
+  </g>
+
+  <text x="40" y="760" class="text" style="font-weight: 700;">CHAIN OF THOUGHT</text>
+  <text x="680" y="760" class="text">07/10</text>
+</svg>

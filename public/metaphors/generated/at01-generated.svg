@@ -1,0 +1,77 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&amp;display=swap');
+      .label { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 700; fill: #000; }
+      .sub-label { font-family: 'IBM Plex Mono', monospace; font-size: 14px; fill: #DC2626; text-transform: uppercase; letter-spacing: 2px; }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+      }
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes expand {
+        0% { stroke-dashoffset: 1000; opacity: 0; }
+        100% { stroke-dashoffset: 0; opacity: 1; }
+      }
+      
+      .core { transform-origin: center; animation: pulse 3s ease-in-out infinite; }
+      .exoskeleton { transform-origin: center; animation: rotate 40s linear infinite; }
+      .data-line { stroke-dasharray: 1000; animation: expand 2s ease-out forwards; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="#FFFFFF" />
+  
+  <!-- Grid Pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#F3F4F6" stroke-width="1"/>
+  </pattern>
+  <rect width="800" height="800" fill="url(#grid)" />
+
+  <!-- The Metaphor: Exoskeleton (Hexagonal Structure) -->
+  <g transform="translate(400, 360)">
+    <!-- Outer Frame (AI Exoskeleton) -->
+    <g class="exoskeleton">
+      <path d="M0 -220 L190.5 -110 L190.5 110 L0 220 L-190.5 110 L-190.5 -110 Z" fill="none" stroke="#DC2626" stroke-width="2" stroke-dasharray="8 8" />
+      <circle cx="0" cy="-220" r="6" fill="#DC2626" />
+      <circle cx="190.5" cy="-110" r="6" fill="#DC2626" />
+      <circle cx="190.5" cy="110" r="6" fill="#DC2626" />
+      <circle cx="0" cy="220" r="6" fill="#DC2626" />
+      <circle cx="-190.5" cy="110" r="6" fill="#DC2626" />
+      <circle cx="-190.5" cy="-110" r="6" fill="#DC2626" />
+    </g>
+
+    <!-- Inner Core (Human Expertise / About Me File) -->
+    <g class="core">
+      <circle cx="0" cy="0" r="80" fill="#000" />
+      <text x="0" y="5" text-anchor="middle" fill="#FFF" font-family="IBM Plex Mono" font-weight="bold" font-size="12">ABOUT ME</text>
+      <!-- IFS Sub-elements -->
+      <circle cx="0" cy="-40" r="4" fill="#FFF" opacity="0.6" />
+      <circle cx="35" cy="20" r="4" fill="#FFF" opacity="0.6" />
+      <circle cx="-35" cy="20" r="4" fill="#FFF" opacity="0.6" />
+    </g>
+
+    <!-- Connecting Data Flows -->
+    <line x1="0" y1="-80" x2="0" y2="-220" stroke="#000" stroke-width="1" class="data-line" />
+    <line x1="69" y1="40" x2="190.5" y2="110" stroke="#000" stroke-width="1" class="data-line" />
+    <line x1="-69" y1="40" x2="-190.5" y2="110" stroke="#000" stroke-width="1" class="data-line" />
+    
+    <!-- External Sources Indicators -->
+    <text x="0" y="-240" text-anchor="middle" class="sub-label">Perplexity</text>
+    <text x="210" y="135" text-anchor="start" class="sub-label">Memory</text>
+    <text x="-210" y="135" text-anchor="end" class="sub-label">Therapy</text>
+  </g>
+
+  <!-- Typography -->
+  <text x="40" y="720" class="label">AT01: КОУЧИНГ</text>
+  <text x="40" y="750" class="sub-label">AI КАК ЭКЗОСКЕЛЕТ ЭКСПЕРТИЗЫ</text>
+  
+  <!-- Decorative Swiss Cross -->
+  <rect x="720" y="40" width="40" height="8" fill="#DC2626" />
+  <rect x="736" y="24" width="8" height="40" fill="#DC2626" />
+</svg>

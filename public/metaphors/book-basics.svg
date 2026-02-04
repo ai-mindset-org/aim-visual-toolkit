@@ -1,0 +1,55 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; }
+      .text-small { font-family: 'IBM Plex Mono', monospace; font-size: 16px; fill: #6B7280; }
+      @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+      @keyframes flow { 0% { stroke-dashoffset: 20; } 100% { stroke-dashoffset: 0; } }
+      .pulse { animation: pulse 2s ease-in-out infinite; }
+      .flow { stroke-dasharray: 8 4; animation: flow 1s linear infinite; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="#FFFFFF"/>
+
+  <!-- Grid -->
+  <path d="M400 0V800 M0 400H800" stroke="#F3F4F6" stroke-width="2"/>
+
+  <!-- IFTTT Logic: If → Then -->
+
+  <!-- Trigger Box (left) -->
+  <rect x="120" y="320" width="160" height="160" rx="12" fill="#F9FAFB" stroke="#171717" stroke-width="3"/>
+  <text x="200" y="410" text-anchor="middle" class="text" style="font-weight: 700;">IF</text>
+
+  <!-- Lightning icon inside trigger -->
+  <path d="M200 360 L185 395 H200 L195 430" stroke="#DC2626" stroke-width="3" stroke-linecap="round" fill="none" class="pulse"/>
+
+  <!-- Arrow flow -->
+  <line x1="300" y1="400" x2="500" y2="400" stroke="#171717" stroke-width="3" class="flow"/>
+  <polygon points="500,400 480,390 480,410" fill="#171717"/>
+
+  <!-- Action Box (right) -->
+  <rect x="520" y="320" width="160" height="160" rx="12" fill="#DC2626" fill-opacity="0.1" stroke="#DC2626" stroke-width="3"/>
+  <text x="600" y="410" text-anchor="middle" class="text" style="font-weight: 700; fill: #DC2626;">THEN</text>
+
+  <!-- Checkmark inside action -->
+  <path d="M575 385 L590 400 L625 365" stroke="#DC2626" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- API/JSON symbols below -->
+  <text x="200" y="560" text-anchor="middle" class="text-small">trigger</text>
+  <text x="400" y="560" text-anchor="middle" class="text-small">→ API → JSON →</text>
+  <text x="600" y="560" text-anchor="middle" class="text-small">action</text>
+
+  <!-- Decorative elements -->
+  <circle cx="120" cy="200" r="40" stroke="#E5E7EB" stroke-width="2" fill="none"/>
+  <circle cx="680" cy="200" r="40" stroke="#E5E7EB" stroke-width="2" fill="none"/>
+  <circle cx="680" cy="600" r="40" stroke="#E5E7EB" stroke-width="2" fill="none"/>
+  <circle cx="120" cy="600" r="40" stroke="#E5E7EB" stroke-width="2" fill="none"/>
+
+  <!-- Title -->
+  <text x="40" y="760" class="text" style="font-weight: 700;">BASICS</text>
+
+  <!-- Number -->
+  <text x="700" y="760" class="text">01/04</text>
+</svg>

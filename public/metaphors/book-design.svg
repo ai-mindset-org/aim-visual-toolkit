@@ -1,0 +1,54 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; }
+      .text-small { font-family: 'IBM Plex Mono', monospace; font-size: 14px; fill: #6B7280; }
+      @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+      .spin { transform-origin: 400px 400px; animation: rotate 20s linear infinite; }
+      .pulse { animation: pulse 2s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="#FFFFFF"/>
+
+  <!-- Grid -->
+  <path d="M400 0V800 M0 400H800" stroke="#F3F4F6" stroke-width="2"/>
+
+  <!-- Compass outer ring -->
+  <circle cx="400" cy="400" r="200" stroke="#171717" stroke-width="3" fill="none"/>
+
+  <!-- Compass inner ring -->
+  <circle cx="400" cy="400" r="150" stroke="#E5E7EB" stroke-width="2" fill="none" class="spin"/>
+
+  <!-- Compass directions -->
+  <text x="400" y="180" text-anchor="middle" class="text" style="font-weight: 700;">6T</text>
+  <text x="620" y="405" text-anchor="middle" class="text-small">ROI</text>
+  <text x="400" y="630" text-anchor="middle" class="text-small">ATBD</text>
+  <text x="180" y="405" text-anchor="middle" class="text-small">WHY</text>
+
+  <!-- Compass needle -->
+  <polygon points="400,250 385,420 400,400 415,420" fill="#DC2626" class="pulse"/>
+  <polygon points="400,550 385,380 400,400 415,380" fill="#171717"/>
+
+  <!-- Center dot -->
+  <circle cx="400" cy="400" r="15" fill="#DC2626"/>
+  <circle cx="400" cy="400" r="8" fill="#FFFFFF"/>
+
+  <!-- Framework labels around -->
+  <rect x="280" y="100" width="240" height="40" rx="20" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+  <text x="400" y="126" text-anchor="middle" class="text-small">framework-first</text>
+
+  <!-- Decorative quadrant markers -->
+  <line x1="340" y1="340" x2="360" y2="360" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="460" y1="340" x2="440" y2="360" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="340" y1="460" x2="360" y2="440" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="460" y1="460" x2="440" y2="440" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="40" y="760" class="text" style="font-weight: 700;">DESIGN</text>
+
+  <!-- Number -->
+  <text x="700" y="760" class="text">02/04</text>
+</svg>
