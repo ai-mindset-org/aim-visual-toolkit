@@ -2,14 +2,12 @@ import type { Metaphor } from '../../data/metaphors';
 import { MetaphorCard } from '../metaphors';
 
 export type GridSize = 'small' | 'medium' | 'large';
-export type ViewMode = 'compact' | 'detailed';
 
 interface GalleryGridProps {
   metaphors: Metaphor[];
   gridSize?: GridSize;
-  viewMode?: ViewMode;
-  showTitle?: boolean;
   showIndex?: boolean;
+  onSelect?: (metaphor: Metaphor) => void;
 }
 
 const GRID_CLASSES: Record<GridSize, string> = {
@@ -21,9 +19,8 @@ const GRID_CLASSES: Record<GridSize, string> = {
 export default function GalleryGrid({
   metaphors,
   gridSize = 'medium',
-  viewMode = 'compact',
-  showTitle = true,
   showIndex = true,
+  onSelect,
 }: GalleryGridProps) {
   if (metaphors.length === 0) {
     return (
@@ -39,9 +36,8 @@ export default function GalleryGrid({
         <MetaphorCard
           key={metaphor.id}
           metaphor={metaphor}
-          viewMode={viewMode}
-          showTitle={showTitle}
           showIndex={showIndex}
+          onClick={() => onSelect?.(metaphor)}
         />
       ))}
     </div>

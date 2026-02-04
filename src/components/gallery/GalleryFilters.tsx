@@ -9,8 +9,6 @@ interface GalleryFiltersProps {
   onSearchChange: (query: string) => void;
   gridSize: GridSize;
   onGridSizeChange: (size: GridSize) => void;
-  showTitle: boolean;
-  onShowTitleChange: (show: boolean) => void;
   showIndex: boolean;
   onShowIndexChange: (show: boolean) => void;
 }
@@ -22,8 +20,6 @@ export default function GalleryFilters({
   onSearchChange,
   gridSize,
   onGridSizeChange,
-  showTitle,
-  onShowTitleChange,
   showIndex,
   onShowIndexChange,
 }: GalleryFiltersProps) {
@@ -91,17 +87,6 @@ export default function GalleryFilters({
               <LayoutGrid size={14} />
             </button>
           </div>
-
-          {/* Toggle Title */}
-          <button
-            onClick={() => onShowTitleChange(!showTitle)}
-            className={`p-2 border transition-all ${
-              showTitle ? 'bg-[#171717] text-white border-[#171717]' : 'text-[#525252] border-[#e5e7eb] hover:text-[#DC2626]'
-            }`}
-            title={showTitle ? 'Hide titles' : 'Show titles'}
-          >
-            <span className="font-mono text-[10px] uppercase">Aa</span>
-          </button>
 
           {/* Toggle Index */}
           <button

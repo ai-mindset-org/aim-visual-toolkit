@@ -1,6 +1,5 @@
 /**
  * Metaphor Data Types and Catalog
- * Based on LMS CORE_METAPHORS with full metadata
  */
 
 export interface Metaphor {
@@ -15,9 +14,8 @@ export interface Metaphor {
   filename?: string;
   svg?: string;
   workshop?: string;
-  week?: number;
-  index?: number; // For display like 01/20
-  prompt?: string; // Generation prompt
+  index?: number;
+  prompt?: string;
   author?: string;
 }
 
@@ -26,236 +24,55 @@ export type Category = {
   label: string;
 };
 
+// Categories by topic (not by week)
 export const CATEGORIES: Category[] = [
   { id: 'all', label: 'All' },
-  { id: 'w1', label: 'Week 1' },
-  { id: 'w2', label: 'Week 2' },
-  { id: 'w3', label: 'Week 3' },
-  { id: 'w4', label: 'Week 4' },
-  { id: 'advanced', label: 'Advanced' },
+  { id: 'ai', label: 'AI & Models' },
+  { id: 'thinking', label: 'Thinking' },
+  { id: 'system', label: 'Systems' },
+  { id: 'communication', label: 'Communication' },
+  { id: 'learning', label: 'Learning' },
   { id: 'fos', label: 'Founder OS' },
   { id: 'community', label: 'Community' },
 ];
 
-// Core Metaphors from LMS - ordered by workshop sequence
 export const METAPHORS: Metaphor[] = [
-  // WS00: INTRO
+  // AI & Models
   {
     id: 'exoskeleton',
     title: 'Exoskeleton',
     titleEn: 'EXOSKELETON',
     description: 'AI as external frame amplifying human capabilities',
     insight: 'AI doesn\'t replace expertise — it amplifies it.',
-    categories: ['w1'],
+    categories: ['ai', 'system'],
     source: 'core',
     format: 'svg-file',
     filename: 'exoskeleton.svg',
-    workshop: 'ws00',
-    week: 1,
     index: 1,
   },
-
-  // WS01: PROMPT ENGINEERING
-  {
-    id: 'prompt-structure',
-    title: 'Prompt Structure',
-    titleEn: 'PROMPT STRUCTURE',
-    description: 'Anatomy of effective request: context, task, format, constraints',
-    insight: 'Not clever prompts, but quality of context and clarity of task.',
-    categories: ['w1'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'prompt-structure.svg',
-    workshop: 'ws01',
-    week: 1,
-    index: 2,
-  },
-  {
-    id: 'chain-of-thought',
-    title: 'Chain of Thought',
-    titleEn: 'CHAIN OF THOUGHT',
-    description: 'Step-by-step reasoning for complex tasks',
-    insight: 'LLM predicts next token. Better context = better prediction.',
-    categories: ['w1'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'chain-of-thought.svg',
-    workshop: 'ws01',
-    week: 1,
-    index: 3,
-  },
-  {
-    id: 'voice-wave',
-    title: 'Voice Wave',
-    titleEn: 'VOICE WAVE',
-    description: 'Voice as natural interface for AI interaction',
-    insight: 'Voice input accelerates work dramatically.',
-    categories: ['w1'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'voice-wave.svg',
-    workshop: 'ws01',
-    week: 1,
-    index: 4,
-  },
-  {
-    id: 'second-brain',
-    title: 'Second Brain',
-    titleEn: 'SECOND BRAIN',
-    description: 'Personal knowledge base for storing and processing context',
-    insight: 'Context should live with you, not in service memory.',
-    categories: ['w1'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'second-brain.svg',
-    workshop: 'ws01',
-    week: 1,
-    index: 5,
-  },
-  {
-    id: 'four-weeks',
-    title: 'Four Weeks',
-    titleEn: 'FOUR WEEKS',
-    description: 'Lab structure: Prompt → Context → Mind → Life',
-    insight: 'Each week — a new layer of AI integration into life.',
-    categories: ['w1'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'four-weeks.svg',
-    workshop: 'ws01',
-    week: 1,
-    index: 6,
-  },
-
-  // WS02: CONTEXT ENGINEERING
-  {
-    id: 'context-ai',
-    title: 'Context + AI',
-    titleEn: 'CONTEXT + AI',
-    description: 'Symbiosis of personal context and artificial intelligence',
-    insight: 'Context matters more than prompts.',
-    categories: ['w2'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'context-ai.svg',
-    workshop: 'ws02',
-    week: 2,
-    index: 7,
-  },
-  {
-    id: 'alchemy',
-    title: 'Context Alchemy',
-    titleEn: 'CONTEXT ALCHEMY',
-    description: 'Transforming raw data into golden insights',
-    insight: 'Mixing sources creates new artifacts.',
-    categories: ['w2'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'alchemy.svg',
-    workshop: 'ws02',
-    week: 2,
-    index: 8,
-  },
-
-  // WS03: MIND ENGINEERING
-  {
-    id: 'symbiosis-loop',
-    title: 'Symbiosis Loop',
-    titleEn: 'SYMBIOSIS LOOP',
-    description: 'Mutual enhancement of human and AI through iteration',
-    insight: 'Productivity is not speed, but awareness.',
-    categories: ['w3'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'symbiosis-loop.svg',
-    workshop: 'ws03',
-    week: 3,
-    index: 9,
-  },
-
-  // WS04: LIFE ENGINEERING
   {
     id: 'digital-twin',
     title: 'Digital Twin',
     titleEn: 'DIGITAL TWIN',
     description: 'Virtual copy for modeling and testing decisions',
     insight: 'About Me file is your digital twin.',
-    categories: ['w4'],
+    categories: ['ai', 'system'],
     source: 'core',
     format: 'svg-file',
     filename: 'digital-twin.svg',
-    workshop: 'ws04',
-    week: 4,
-    index: 10,
-  },
-
-  // ADVANCED TRACK
-  {
-    id: 'alignment',
-    title: 'Alignment',
-    titleEn: 'ALIGNMENT',
-    description: 'Aligning human and AI goals',
-    insight: 'Success criterion: what state is the target.',
-    categories: ['advanced'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'alignment.svg',
-    workshop: 'at01',
-    index: 11,
+    index: 2,
   },
   {
-    id: 'architecture-layers',
-    title: 'Architecture Layers',
-    titleEn: 'ARCHITECTURE LAYERS',
-    description: 'Multi-level structure of agent systems',
-    insight: 'Agent = AI + tools + memory + goal.',
-    categories: ['advanced'],
+    id: 'context-ai',
+    title: 'Context + AI',
+    titleEn: 'CONTEXT + AI',
+    description: 'Symbiosis of personal context and AI',
+    insight: 'Context matters more than prompts.',
+    categories: ['ai', 'communication'],
     source: 'core',
     format: 'svg-file',
-    filename: 'architecture-layers.svg',
-    workshop: 'at02',
-    index: 12,
-  },
-  {
-    id: 'intent-economy',
-    title: 'Intent Economy',
-    titleEn: 'INTENT ECONOMY',
-    description: 'Transition from attention economy to intent economy',
-    insight: 'AI allows monetizing intentions, not attention.',
-    categories: ['advanced'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'intent-economy.svg',
-    workshop: 'at04',
-    index: 13,
-  },
-  {
-    id: 'interface-portal',
-    title: 'Interface Portal',
-    titleEn: 'INTERFACE PORTAL',
-    description: 'AI OS as single entry point to all tools',
-    insight: 'Not scattered chats, but unified system with context.',
-    categories: ['advanced'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'interface-portal.svg',
-    workshop: 'at05',
-    index: 14,
-  },
-
-  // GENERAL
-  {
-    id: 'leverage',
-    title: 'Leverage',
-    titleEn: 'LEVERAGE',
-    description: 'AI as lever for multiplying productivity and impact',
-    insight: 'One context file transforms every AI conversation.',
-    categories: ['advanced'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'leverage.svg',
-    workshop: 'demo-day',
-    index: 15,
+    filename: 'context-ai.svg',
+    index: 3,
   },
   {
     id: 'model-landscape',
@@ -263,14 +80,210 @@ export const METAPHORS: Metaphor[] = [
     titleEn: 'MODEL LANDSCAPE',
     description: 'Map of AI models and their capabilities',
     insight: 'Different models for different tasks.',
-    categories: ['advanced'],
+    categories: ['ai'],
     source: 'core',
     format: 'svg-file',
     filename: 'model-landscape.svg',
+    index: 4,
+  },
+  {
+    id: 'symbiosis-loop',
+    title: 'Symbiosis Loop',
+    titleEn: 'SYMBIOSIS LOOP',
+    description: 'Mutual enhancement of human and AI',
+    insight: 'Productivity is not speed, but awareness.',
+    categories: ['ai', 'system'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'symbiosis-loop.svg',
+    index: 5,
+  },
+
+  // Thinking
+  {
+    id: 'chain-of-thought',
+    title: 'Chain of Thought',
+    titleEn: 'CHAIN OF THOUGHT',
+    description: 'Step-by-step reasoning for complex tasks',
+    insight: 'Better context = better prediction.',
+    categories: ['thinking', 'ai'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'chain-of-thought.svg',
+    index: 6,
+  },
+  {
+    id: 'prompt-structure',
+    title: 'Prompt Structure',
+    titleEn: 'PROMPT STRUCTURE',
+    description: 'Anatomy of effective request',
+    insight: 'Not clever prompts, but quality of context.',
+    categories: ['thinking', 'communication'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'prompt-structure.svg',
+    index: 7,
+  },
+  {
+    id: 'second-brain',
+    title: 'Second Brain',
+    titleEn: 'SECOND BRAIN',
+    description: 'Personal knowledge base for context',
+    insight: 'Context should live with you, not in service memory.',
+    categories: ['thinking', 'system'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'second-brain.svg',
+    index: 8,
+  },
+  {
+    id: 'alchemy',
+    title: 'Context Alchemy',
+    titleEn: 'CONTEXT ALCHEMY',
+    description: 'Transforming raw data into insights',
+    insight: 'Mixing sources creates new artifacts.',
+    categories: ['thinking'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'alchemy.svg',
+    index: 9,
+  },
+  {
+    id: 'alignment',
+    title: 'Alignment',
+    titleEn: 'ALIGNMENT',
+    description: 'Aligning human and AI goals',
+    insight: 'Success criterion: what state is the target.',
+    categories: ['thinking', 'ai'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'alignment.svg',
+    index: 10,
+  },
+
+  // Systems
+  {
+    id: 'architecture-layers',
+    title: 'Architecture Layers',
+    titleEn: 'ARCHITECTURE LAYERS',
+    description: 'Multi-level structure of agent systems',
+    insight: 'Agent = AI + tools + memory + goal.',
+    categories: ['system'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'architecture-layers.svg',
+    index: 11,
+  },
+  {
+    id: 'leverage',
+    title: 'Leverage',
+    titleEn: 'LEVERAGE',
+    description: 'AI as lever for multiplying impact',
+    insight: 'One context file transforms every conversation.',
+    categories: ['system'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'leverage.svg',
+    index: 12,
+  },
+  {
+    id: 'four-weeks',
+    title: 'Four Weeks',
+    titleEn: 'FOUR WEEKS',
+    description: 'Lab structure: Prompt → Context → Mind → Life',
+    insight: 'Each week — a new layer of AI integration.',
+    categories: ['system', 'learning'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'four-weeks.svg',
+    index: 13,
+  },
+
+  // Communication
+  {
+    id: 'voice-wave',
+    title: 'Voice Wave',
+    titleEn: 'VOICE WAVE',
+    description: 'Voice as natural interface for AI',
+    insight: 'Voice input accelerates work dramatically.',
+    categories: ['communication'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'voice-wave.svg',
+    index: 14,
+  },
+  {
+    id: 'interface-portal',
+    title: 'Interface Portal',
+    titleEn: 'INTERFACE PORTAL',
+    description: 'AI OS as single entry point',
+    insight: 'Not scattered chats, but unified system.',
+    categories: ['communication', 'system'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'interface-portal.svg',
+    index: 15,
+  },
+  {
+    id: 'intent-economy',
+    title: 'Intent Economy',
+    titleEn: 'INTENT ECONOMY',
+    description: 'From attention economy to intent economy',
+    insight: 'AI allows monetizing intentions.',
+    categories: ['communication'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'intent-economy.svg',
     index: 16,
   },
 
-  // FOUNDER OS
+  // Learning (Books)
+  {
+    id: 'book-basics',
+    title: 'Book: Basics',
+    titleEn: 'BOOK BASICS',
+    description: 'Fundamental knowledge about AI',
+    categories: ['learning'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'book-basics.svg',
+    index: 17,
+  },
+  {
+    id: 'book-practice',
+    title: 'Book: Practice',
+    titleEn: 'BOOK PRACTICE',
+    description: 'Practical skills for working with AI',
+    categories: ['learning'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'book-practice.svg',
+    index: 18,
+  },
+  {
+    id: 'book-design',
+    title: 'Book: Design',
+    titleEn: 'BOOK DESIGN',
+    description: 'Designing interactions with AI',
+    categories: ['learning'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'book-design.svg',
+    index: 19,
+  },
+  {
+    id: 'book-advanced',
+    title: 'Book: Advanced',
+    titleEn: 'BOOK ADVANCED',
+    description: 'Advanced techniques for AI',
+    categories: ['learning'],
+    source: 'core',
+    format: 'svg-file',
+    filename: 'book-advanced.svg',
+    index: 20,
+  },
+
+  // Founder OS
   {
     id: 'founder-os-system',
     title: 'Founder OS',
@@ -281,100 +294,54 @@ export const METAPHORS: Metaphor[] = [
     source: 'core',
     format: 'svg-file',
     filename: 'fos18/founder-os-system.svg',
-    index: 17,
+    index: 21,
   },
   {
     id: 'fos18-two-systems',
     title: 'Two Systems',
     titleEn: 'TWO SYSTEMS',
-    description: 'Obsidian CMS (8 months) + AI Mindset LMS (1 week)',
-    insight: 'AI accelerates development, but you design architecture.',
+    description: 'Obsidian CMS + AI Mindset LMS',
+    insight: 'AI accelerates, you design architecture.',
     categories: ['fos'],
     source: 'core',
     format: 'svg-file',
     filename: 'fos18/fos18-two-systems.svg',
-    index: 18,
+    index: 22,
   },
   {
     id: 'obsidian-flow',
     title: 'Content Flow',
     titleEn: 'CONTENT FLOW',
-    description: 'Markdown → AI processing → multi-channel publishing',
+    description: 'Markdown → AI → multi-channel publishing',
     insight: 'Single source of truth, multiple outputs.',
     categories: ['fos'],
     source: 'core',
     format: 'svg-file',
     filename: 'fos18/obsidian-flow.svg',
-    index: 19,
+    index: 23,
   },
   {
     id: 'ai-sprint',
     title: 'AI Sprint',
     titleEn: 'AI SPRINT',
-    description: 'Parallel task execution by multiple AI agents',
-    insight: 'Not sequential, but parallel. 3 agents = 3x faster.',
+    description: 'Parallel task execution by AI agents',
+    insight: '3 agents = 3x faster.',
     categories: ['fos'],
     source: 'core',
     format: 'svg-file',
     filename: 'fos18/ai-sprint.svg',
-    index: 20,
-  },
-
-  // BOOKS (bonus)
-  {
-    id: 'book-basics',
-    title: 'Book: Basics',
-    titleEn: 'BOOK BASICS',
-    description: 'Fundamental knowledge about AI',
-    categories: ['w1'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'book-basics.svg',
-    index: 21,
-  },
-  {
-    id: 'book-practice',
-    title: 'Book: Practice',
-    titleEn: 'BOOK PRACTICE',
-    description: 'Practical skills for working with AI',
-    categories: ['w2'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'book-practice.svg',
-    index: 22,
-  },
-  {
-    id: 'book-design',
-    title: 'Book: Design',
-    titleEn: 'BOOK DESIGN',
-    description: 'Designing interactions with AI',
-    categories: ['w3'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'book-design.svg',
-    index: 23,
-  },
-  {
-    id: 'book-advanced',
-    title: 'Book: Advanced',
-    titleEn: 'BOOK ADVANCED',
-    description: 'Advanced techniques for working with AI',
-    categories: ['w4'],
-    source: 'core',
-    format: 'svg-file',
-    filename: 'book-advanced.svg',
     index: 24,
   },
 ];
 
-// Community metaphor from LMS
+// Community metaphors
 export const COMMUNITY_METAPHORS: Metaphor[] = [
   {
     id: 'cm-digital-smile',
     title: 'Digital Smile',
     titleEn: 'DIGITAL SMILE',
     description: 'Wide smile on screen - connection through interface',
-    insight: 'Remember how they embraced me beautifully',
+    insight: 'Human warmth through digital channels',
     categories: ['community'],
     source: 'community',
     format: 'svg-inline',
@@ -412,27 +379,17 @@ export const COMMUNITY_METAPHORS: Metaphor[] = [
 ];
 
 export const ALL_METAPHORS = [...METAPHORS, ...COMMUNITY_METAPHORS];
-
 export const TOTAL_COUNT = ALL_METAPHORS.length;
 
-/**
- * Get metaphors filtered by category
- */
 export function getMetaphorsByCategory(categoryId: string): Metaphor[] {
   if (categoryId === 'all') return ALL_METAPHORS;
   return ALL_METAPHORS.filter((m) => m.categories.includes(categoryId));
 }
 
-/**
- * Get metaphor by ID
- */
 export function getMetaphorById(id: string): Metaphor | undefined {
   return ALL_METAPHORS.find((m) => m.id === id);
 }
 
-/**
- * Search metaphors by text
- */
 export function searchMetaphors(query: string): Metaphor[] {
   const q = query.toLowerCase();
   return ALL_METAPHORS.filter(
@@ -444,9 +401,6 @@ export function searchMetaphors(query: string): Metaphor[] {
   );
 }
 
-/**
- * Format index as XX/YY
- */
 export function formatIndex(index: number | undefined, total: number = TOTAL_COUNT): string {
   if (!index) return '';
   return `${String(index).padStart(2, '0')}/${total}`;

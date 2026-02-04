@@ -1,21 +1,21 @@
 import { useState, useMemo } from 'react';
-import { getMetaphorsByCategory, searchMetaphors, TOTAL_COUNT } from '../data/metaphors';
+import { getMetaphorsByCategory, searchMetaphors, TOTAL_COUNT, type Metaphor } from '../data/metaphors';
 import { GalleryFilters, GalleryGrid } from '../components/gallery';
+import { MetaphorModal } from '../components/metaphors';
 import type { GridSize } from '../components/gallery/GalleryGrid';
 
 export default function CatalogPage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [gridSize, setGridSize] = useState<GridSize>('medium');
-  const [showTitle, setShowTitle] = useState(true);
   const [showIndex, setShowIndex] = useState(true);
+  const [selectedMetaphor, setSelectedMetaphor] = useState<Metaphor | null>(null);
 
   const filteredMetaphors = useMemo(() => {
     let results = searchQuery
       ? searchMetaphors(searchQuery)
       : getMetaphorsByCategory(activeCategory);
 
-    // If searching, also filter by category (unless 'all')
     if (searchQuery && activeCategory !== 'all') {
       results = results.filter((m) => m.categories.includes(activeCategory));
     }
@@ -34,7 +34,7 @@ export default function CatalogPage() {
           <span className="font-mono text-sm text-[#a3a3a3]">{TOTAL_COUNT}</span>
         </div>
         <p className="text-[#525252] text-sm">
-          Swiss Design visual metaphors for AI concepts. Copy or download any metaphor.
+          Swiss Design visual metaphors for AI concepts. Click to enlarge, hover for actions.
         </p>
       </div>
 
@@ -49,8 +49,6 @@ export default function CatalogPage() {
         onSearchChange={setSearchQuery}
         gridSize={gridSize}
         onGridSizeChange={setGridSize}
-        showTitle={showTitle}
-        onShowTitleChange={setShowTitle}
         showIndex={showIndex}
         onShowIndexChange={setShowIndex}
       />
@@ -59,8 +57,14 @@ export default function CatalogPage() {
       <GalleryGrid
         metaphors={filteredMetaphors}
         gridSize={gridSize}
-        showTitle={showTitle}
         showIndex={showIndex}
+        onSelect={setSelectedMetaphor}
+      />
+
+      {/* Modal */}
+      <MetaphorModal
+        metaphor={selectedMetaphor}
+        onClose={() => setSelectedMetaphor(null)}
       />
 
       {/* Footer */}

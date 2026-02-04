@@ -58,12 +58,24 @@ export default function GeneratorPage() {
         body: JSON.stringify(body),
       });
 
+      // Read response as text first to handle empty responses
+      const text = await response.text();
+
+      if (!text) {
+        throw new Error('Empty response from server');
+      }
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(`Invalid response: ${text.slice(0, 100)}`);
+      }
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.error || 'Failed to generate');
       }
 
-      const data = await response.json();
       setResult({
         svg: data.svg,
         title: data.title,
@@ -72,6 +84,7 @@ export default function GeneratorPage() {
         model: data.model,
       });
     } catch (err) {
+      console.error('Generate error:', err);
       setError(err instanceof Error ? err.message : 'Failed to generate');
     } finally {
       setIsLoading(false);

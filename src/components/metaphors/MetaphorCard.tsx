@@ -1,24 +1,20 @@
 import { useState } from 'react';
-import { Copy, Download, Check } from 'lucide-react';
+import { Copy, Download, Check, Maximize2 } from 'lucide-react';
 import type { Metaphor } from '../../data/metaphors';
 import { formatIndex, TOTAL_COUNT } from '../../data/metaphors';
 import { downloadBlob, downloadFromUrl, MIME_TYPES } from '../../utils/download';
 import StaticMetaphor from './StaticMetaphor';
 
-type ViewMode = 'compact' | 'detailed';
-
 interface MetaphorCardProps {
   metaphor: Metaphor;
-  viewMode?: ViewMode;
-  showTitle?: boolean;
   showIndex?: boolean;
+  onClick?: () => void;
 }
 
 export default function MetaphorCard({
   metaphor,
-  viewMode = 'compact',
-  showTitle = true,
   showIndex = true,
+  onClick,
 }: MetaphorCardProps) {
   const [copied, setCopied] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -52,16 +48,15 @@ export default function MetaphorCard({
     }
   };
 
-  const isCompact = viewMode === 'compact';
-
   return (
     <div
-      className="group relative bg-white border border-[#e5e7eb] hover:border-[#DC2626] transition-all duration-200"
+      className="group relative bg-white border border-[#e5e7eb] hover:border-[#DC2626] transition-all duration-200 cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={onClick}
     >
-      {/* SVG Preview */}
-      <div className={`${isCompact ? 'aspect-square' : 'aspect-[4/3]'} p-4 flex items-center justify-center bg-white relative`}>
+      {/* SVG Preview - clean, no title */}
+      <div className="aspect-square p-6 flex items-center justify-center bg-white relative">
         {metaphor.format === 'svg-inline' && metaphor.svg ? (
           <div
             className="w-full h-full metaphor-container"
@@ -75,46 +70,47 @@ export default function MetaphorCard({
           </div>
         )}
 
-        {/* Hover Actions */}
+        {/* Hover overlay with actions */}
         <div
-          className={`absolute top-2 right-2 flex gap-1 transition-opacity duration-200 ${
+          className={`absolute inset-0 bg-black/5 flex items-center justify-center gap-2 transition-opacity duration-200 ${
             hovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <button
-            onClick={handleCopySvg}
-            className={`p-1.5 border transition-all ${
-              copied
-                ? 'bg-[#22c55e] border-[#22c55e] text-white'
-                : 'bg-white border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626]'
-            }`}
-            title="Copy SVG"
-          >
-            {copied ? <Check size={12} /> : <Copy size={12} />}
-          </button>
-          <button
-            onClick={handleDownload}
-            className="p-1.5 bg-white border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
-            title="Download SVG"
-          >
-            <Download size={12} />
-          </button>
+          {/* Enlarge hint */}
+          <div className="absolute top-3 left-3">
+            <Maximize2 size={14} className="text-[#a3a3a3]" />
+          </div>
+
+          {/* Action buttons */}
+          <div className="absolute top-3 right-3 flex gap-1">
+            <button
+              onClick={handleCopySvg}
+              className={`p-1.5 border transition-all ${
+                copied
+                  ? 'bg-[#22c55e] border-[#22c55e] text-white'
+                  : 'bg-white border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626]'
+              }`}
+              title="Copy SVG"
+            >
+              {copied ? <Check size={12} /> : <Copy size={12} />}
+            </button>
+            <button
+              onClick={handleDownload}
+              className="p-1.5 bg-white border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+              title="Download SVG"
+            >
+              <Download size={12} />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Footer: Title + Index */}
-      {(showTitle || showIndex) && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-[#e5e7eb]">
-          {showTitle && (
-            <span className="font-mono text-xs font-bold tracking-wide text-[#171717] uppercase">
-              {metaphor.titleEn}
-            </span>
-          )}
-          {showIndex && metaphor.index && (
-            <span className="font-mono text-xs text-[#a3a3a3]">
-              {formatIndex(metaphor.index, TOTAL_COUNT)}
-            </span>
-          )}
+      {/* Footer: Index only (title removed from preview) */}
+      {showIndex && metaphor.index && (
+        <div className="flex items-center justify-between px-4 py-2 border-t border-[#e5e7eb]">
+          <span className="font-mono text-[10px] text-[#a3a3a3]">
+            {formatIndex(metaphor.index, TOTAL_COUNT)}
+          </span>
         </div>
       )}
     </div>

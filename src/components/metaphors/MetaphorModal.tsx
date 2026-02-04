@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Copy, Download, Check, Image } from 'lucide-react';
+import { X, Copy, Download, Check, FileText } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { toPng } from 'html-to-image';
 import type { Metaphor } from '../../data/metaphors';
+import { formatIndex, TOTAL_COUNT } from '../../data/metaphors';
 import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../../utils/download';
 import StaticMetaphor from './StaticMetaphor';
 
-// Configure DOMPurify for SVG
 const sanitizeSvg = (svg: string): string => {
   return DOMPurify.sanitize(svg, {
     USE_PROFILES: { svg: true, svgFilters: true },
-    ADD_TAGS: ['use', 'feGaussianBlur', 'feOffset', 'feMerge', 'feMergeNode', 'feBlend'],
+    ADD_TAGS: ['use', 'feGaussianBlur', 'feOffset', 'feMerge', 'feMergeNode', 'feBlend', 'animate'],
     ADD_ATTR: ['xlink:href', 'href', 'clip-path', 'fill-opacity', 'stroke-opacity'],
   });
 };
@@ -23,10 +23,9 @@ interface MetaphorModalProps {
 export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps) {
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
-  const isOpen = metaphor !== null;
 
-  // Handle Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && metaphor) {
@@ -37,9 +36,8 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
     return () => document.removeEventListener('keydown', handleEscape);
   }, [metaphor, onClose]);
 
-  // Prevent body scroll when modal is open
   useEffect(() => {
-    if (isOpen) {
+    if (metaphor) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -47,14 +45,21 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [metaphor]);
 
   if (!metaphor) return null;
 
   const handleCopySvg = async () => {
     try {
-      const response = await fetch(`/metaphors/${metaphor.filename}`);
-      const svg = await response.text();
+      let svg: string;
+      if (metaphor.format === 'svg-inline' && metaphor.svg) {
+        svg = metaphor.svg;
+      } else if (metaphor.filename) {
+        const response = await fetch(`/metaphors/${metaphor.filename}`);
+        svg = await response.text();
+      } else {
+        return;
+      }
       await navigator.clipboard.writeText(sanitizeSvg(svg));
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -65,8 +70,15 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
 
   const handleDownloadSvg = async () => {
     try {
-      const response = await fetch(`/metaphors/${metaphor.filename}`);
-      const svg = await response.text();
+      let svg: string;
+      if (metaphor.format === 'svg-inline' && metaphor.svg) {
+        svg = metaphor.svg;
+      } else if (metaphor.filename) {
+        const response = await fetch(`/metaphors/${metaphor.filename}`);
+        svg = await response.text();
+      } else {
+        return;
+      }
       downloadBlob(svg, `${metaphor.id}.svg`, MIME_TYPES.SVG);
     } catch (err) {
       console.error('Failed to download:', err);
@@ -79,11 +91,10 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
     setExporting(true);
     try {
       const dataUrl = await toPng(previewRef.current, {
-        pixelRatio: 4, // 4x resolution
+        pixelRatio: 4,
         backgroundColor: '#FFFFFF',
       });
 
-      // Convert data URL to blob
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       downloadBinaryBlob(blob, `${metaphor.id}.png`);
@@ -102,86 +113,119 @@ export default function MetaphorModal({ metaphor, onClose }: MetaphorModalProps)
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="metaphor-modal-title"
-        className="relative max-w-4xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl animate-fade-in"
+        className="relative max-w-3xl w-full bg-white overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          aria-label="Close"
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+          className="absolute top-4 right-4 z-10 p-2 bg-white border border-[#e5e7eb] text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
         >
-          <X size={20} />
+          <X size={16} />
         </button>
 
         {/* SVG Preview */}
-        <div className="p-8 bg-aim-gray-50">
+        <div className="p-8 bg-[#fafafa]">
           <div
             ref={previewRef}
-            className="aspect-square max-w-lg mx-auto bg-white rounded-lg p-4"
+            className="aspect-square max-w-md mx-auto bg-white p-6"
           >
-            <StaticMetaphor name={metaphor.filename || metaphor.id} variant="cover" />
+            {metaphor.format === 'svg-inline' && metaphor.svg ? (
+              <div
+                className="w-full h-full metaphor-container"
+                dangerouslySetInnerHTML={{ __html: sanitizeSvg(metaphor.svg) }}
+              />
+            ) : metaphor.filename ? (
+              <StaticMetaphor name={metaphor.filename} variant="cover" />
+            ) : null}
           </div>
         </div>
 
         {/* Info */}
-        <div className="px-8 pb-8 pt-6 text-center">
-          <h2 id="metaphor-modal-title" className="text-2xl font-bold mb-1">
-            {metaphor.title}
-          </h2>
-          <p className="text-sm text-aim-gray-500 font-mono mb-4">{metaphor.titleEn}</p>
-          {metaphor.insight && (
-            <p className="text-aim-gray-600 max-w-xl mx-auto">{metaphor.insight}</p>
-          )}
-          {metaphor.description && !metaphor.insight && (
-            <p className="text-aim-gray-600 max-w-xl mx-auto">{metaphor.description}</p>
-          )}
+        <div className="p-6 border-t border-[#e5e7eb]">
+          {/* Title + Index */}
+          <div className="flex items-baseline justify-between mb-2">
+            <h2 className="font-mono text-lg font-bold uppercase tracking-tight">
+              {metaphor.titleEn}
+            </h2>
+            {metaphor.index && (
+              <span className="font-mono text-sm text-[#a3a3a3]">
+                {formatIndex(metaphor.index, TOTAL_COUNT)}
+              </span>
+            )}
+          </div>
 
-          {/* Category badges */}
-          <div className="flex justify-center gap-2 mt-4">
+          {/* Description / Insight */}
+          {metaphor.insight ? (
+            <p className="text-sm text-[#525252] mb-4">{metaphor.insight}</p>
+          ) : metaphor.description ? (
+            <p className="text-sm text-[#525252] mb-4">{metaphor.description}</p>
+          ) : null}
+
+          {/* Categories */}
+          <div className="flex flex-wrap gap-1 mb-4">
             {metaphor.categories.map((cat) => (
               <span
                 key={cat}
-                className="px-3 py-1 text-xs font-mono bg-aim-gray-100 text-aim-gray-600 rounded-full"
+                className="px-2 py-0.5 font-mono text-[10px] uppercase bg-[#f5f5f5] text-[#525252]"
               >
                 {cat}
               </span>
             ))}
+            {metaphor.source === 'community' && metaphor.author && (
+              <span className="px-2 py-0.5 font-mono text-[10px] uppercase bg-[#fef2f2] text-[#DC2626]">
+                by {metaphor.author}
+              </span>
+            )}
           </div>
 
+          {/* Prompt (if available) */}
+          {metaphor.prompt && (
+            <div className="mb-4">
+              <button
+                onClick={() => setShowPrompt(!showPrompt)}
+                className="flex items-center gap-1.5 font-mono text-[10px] uppercase text-[#a3a3a3] hover:text-[#DC2626] transition-colors"
+              >
+                <FileText size={12} />
+                {showPrompt ? 'Hide prompt' : 'Show prompt'}
+              </button>
+              {showPrompt && (
+                <div className="mt-2 p-3 bg-[#fafafa] border border-[#e5e7eb]">
+                  <p className="font-mono text-xs text-[#525252]">{metaphor.prompt}</p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Actions */}
-          <div className="flex items-center justify-center flex-wrap gap-2 mt-6">
-            {/* Copy SVG button */}
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={handleCopySvg}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border transition-all ${
                 copied
-                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
-                  : 'bg-aim-gray-100 text-aim-gray-700 hover:bg-aim-gray-200'
+                  ? 'bg-[#22c55e] text-white border-[#22c55e]'
+                  : 'bg-white text-[#525252] border-[#e5e7eb] hover:border-[#DC2626] hover:text-[#DC2626]'
               }`}
             >
-              {copied ? <Check size={16} /> : <Copy size={16} />}
-              {copied ? 'Copied!' : 'Copy SVG'}
+              {copied ? <Check size={12} /> : <Copy size={12} />}
+              {copied ? 'Copied' : 'Copy SVG'}
             </button>
 
-            {/* Download SVG button */}
             <button
               onClick={handleDownloadSvg}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-aim-gray-100 text-aim-gray-700 hover:bg-aim-gray-200 transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase border border-[#e5e7eb] bg-white text-[#525252] hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
-              <Download size={16} />
-              Download SVG
+              <Download size={12} />
+              SVG
             </button>
 
-            {/* Download PNG button */}
             <button
               onClick={handleDownloadPng}
               disabled={exporting}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-aim-black text-white hover:bg-aim-gray-800 transition-all disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-2 font-mono text-[10px] uppercase bg-[#171717] text-white hover:bg-[#DC2626] transition-colors disabled:opacity-50"
             >
-              <Image size={16} />
-              {exporting ? 'Exporting...' : 'Download PNG (4x)'}
+              <Download size={12} />
+              {exporting ? 'Exporting...' : 'PNG 4x'}
             </button>
           </div>
         </div>
