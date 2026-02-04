@@ -1,4 +1,4 @@
-import { ExternalLink, Youtube } from 'lucide-react';
+import { ExternalLink, Youtube, Send } from 'lucide-react';
 import { StaticMetaphor } from '../components/metaphors';
 import { TOTAL_COUNT } from '../data/metaphors';
 
@@ -129,12 +129,20 @@ export default function AboutPage() {
               GitHub <ExternalLink size={10} />
             </a>
             <a
-              href="https://youtube.com/@ai_mindset"
+              href="https://www.youtube.com/@A-I-Mindset"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-600 hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
             >
               YouTube <Youtube size={10} />
+            </a>
+            <a
+              href="https://t.me/ai_mind_set"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-600 hover:border-[#DC2626] hover:text-[#DC2626] transition-all"
+            >
+              Telegram <Send size={10} />
             </a>
           </div>
         </section>

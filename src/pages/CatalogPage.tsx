@@ -1,7 +1,6 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Search, BookmarkCheck, Download, Loader2, Users } from 'lucide-react';
-import JSZip from 'jszip';
-import { Link } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, BookmarkCheck, Users, Plus } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   getMetaphorsByCategory,
   searchMetaphors,
@@ -15,9 +14,9 @@ import { GalleryFilters, GalleryGrid } from '../components/gallery';
 import { MetaphorModal } from '../components/metaphors';
 import type { GridSize } from '../components/gallery/GalleryGrid';
 import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
-import { downloadBinaryBlob } from '../utils/download';
 
 export default function CatalogPage() {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [gridSize, setGridSize] = useState<GridSize>('small');
@@ -26,9 +25,6 @@ export default function CatalogPage() {
   const [communityLoaded, setCommunityLoaded] = useState(isCommunityLoaded());
 
   const { savedIds, totalCount, addMetaphor, removeMetaphor, isSaved } = useSavedMetaphors();
-
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [downloadProgress, setDownloadProgress] = useState({ current: 0, total: 0 });
 
   // Load community metaphors on mount
   useEffect(() => {
@@ -65,54 +61,6 @@ export default function CatalogPage() {
     return filteredMetaphors.filter((m) => m.source !== 'community');
   }, [filteredMetaphors, activeCategory, searchQuery]);
 
-  const handleDownloadAllSvg = useCallback(async () => {
-    if (filteredMetaphors.length === 0 || isDownloading) return;
-
-    setIsDownloading(true);
-    setDownloadProgress({ current: 0, total: filteredMetaphors.length });
-
-    try {
-      const zip = new JSZip();
-
-      for (let i = 0; i < filteredMetaphors.length; i++) {
-        const metaphor = filteredMetaphors[i];
-        setDownloadProgress({ current: i + 1, total: filteredMetaphors.length });
-
-        let svgContent: string;
-
-        if (metaphor.format === 'svg-inline' && metaphor.svg) {
-          svgContent = metaphor.svg;
-        } else if (metaphor.filename) {
-          try {
-            const response = await fetch(`/metaphors/${metaphor.filename}`);
-            if (!response.ok) continue;
-            svgContent = await response.text();
-          } catch {
-            console.warn(`Failed to fetch ${metaphor.filename}`);
-            continue;
-          }
-        } else {
-          continue;
-        }
-
-        const filename = `${metaphor.id}.svg`;
-        zip.file(filename, svgContent);
-      }
-
-      const blob = await zip.generateAsync({ type: 'blob' });
-      const zipFilename = activeCategory === 'all' && !searchQuery
-        ? 'aim-metaphors-all.zip'
-        : `aim-metaphors-${activeCategory || 'filtered'}.zip`;
-
-      downloadBinaryBlob(blob, zipFilename);
-    } catch (error) {
-      console.error('Failed to create ZIP:', error);
-    } finally {
-      setIsDownloading(false);
-      setDownloadProgress({ current: 0, total: 0 });
-    }
-  }, [filteredMetaphors, isDownloading, activeCategory, searchQuery]);
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
@@ -130,40 +78,16 @@ export default function CatalogPage() {
           </p>
         </div>
 
-        <div className="shrink-0 flex items-center gap-2">
-          {/* Download All Button */}
-          <button
-            onClick={handleDownloadAllSvg}
-            disabled={isDownloading || filteredMetaphors.length === 0}
-            className="flex items-center gap-2 px-3 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            title={`Download ${filteredMetaphors.length} SVG files as ZIP`}
+        {/* Saved counter */}
+        {totalCount > 0 && (
+          <Link
+            to="/saved"
+            className="shrink-0 flex items-center gap-2 px-3 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors"
           >
-            {isDownloading ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                <span className="text-sm font-mono">
-                  {downloadProgress.current}/{downloadProgress.total}
-                </span>
-              </>
-            ) : (
-              <>
-                <Download size={16} />
-                <span className="text-sm font-mono">ZIP ({filteredMetaphors.length})</span>
-              </>
-            )}
-          </button>
-
-          {/* Saved counter */}
-          {totalCount > 0 && (
-            <Link
-              to="/saved"
-              className="flex items-center gap-2 px-3 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors"
-            >
-              <BookmarkCheck size={16} className="text-[#DC2626]" />
-              <span className="text-sm font-mono font-medium">{totalCount}</span>
-            </Link>
-          )}
-        </div>
+            <BookmarkCheck size={16} className="text-[#DC2626]" />
+            <span className="text-sm font-mono font-medium">{totalCount}</span>
+          </Link>
+        )}
       </div>
 
       {/* Search */}
@@ -255,6 +179,26 @@ export default function CatalogPage() {
               </div>
             )}
           </div>
+
+          {/* Generate Your Own Card */}
+          <button
+            onClick={() => navigate('/generator')}
+            className="mt-6 w-full p-6 rounded-xl border-2 border-dashed border-[#DC2626]/40 bg-white hover:bg-red-50/50 hover:border-[#DC2626] transition-all group"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-12 h-12 rounded-lg bg-[#DC2626]/10 flex items-center justify-center group-hover:bg-[#DC2626]/20 transition-colors">
+                <Plus size={24} className="text-[#DC2626]" />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-bold text-neutral-900 group-hover:text-[#DC2626] transition-colors">
+                  Generate Your Own
+                </p>
+                <p className="text-xs text-neutral-500">
+                  Create a custom metaphor with AI
+                </p>
+              </div>
+            </div>
+          </button>
         </div>
       )}
 

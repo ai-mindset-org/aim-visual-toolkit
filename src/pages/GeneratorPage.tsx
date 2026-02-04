@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Sparkles, Download, Copy, Check, RefreshCw, Settings, ChevronDown, Bookmark, BookmarkCheck, Globe, Loader2 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { toPng } from 'html-to-image';
-import { useSettings, MODELS } from '../hooks/useSettings';
+import { useSettings, MODELS, COMPLEXITY_OPTIONS, ANIMATION_OPTIONS } from '../hooks/useSettings';
 import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../utils/download';
 import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
 
@@ -54,6 +54,8 @@ export default function GeneratorPage() {
         text: prompt,
         style: settings.style,
         model: settings.model,
+        complexity: settings.complexity,
+        animation: settings.animation,
       };
 
       if (hasCustomKey) {
@@ -284,6 +286,58 @@ export default function GeneratorPage() {
                 </button>
               </div>
             </div>
+
+            {/* Complexity */}
+            <div>
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-neutral-500 mb-2">
+                Complexity
+              </label>
+              <div className="flex gap-2">
+                {COMPLEXITY_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => updateSettings({ complexity: option.id })}
+                    className={`flex-1 px-3 py-2 text-sm rounded-lg transition-all ${
+                      settings.complexity === option.id
+                        ? 'bg-white border-2 border-neutral-900 text-neutral-900'
+                        : 'bg-neutral-100 border-2 border-transparent text-neutral-500 hover:bg-neutral-200'
+                    }`}
+                    title={option.description}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-1 text-[10px] text-neutral-400">
+                Controls the level of detail in the generated SVG
+              </p>
+            </div>
+
+            {/* Animation */}
+            <div>
+              <label className="block font-mono text-[10px] uppercase tracking-wider text-neutral-500 mb-2">
+                Animation
+              </label>
+              <div className="flex gap-2">
+                {ANIMATION_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => updateSettings({ animation: option.id })}
+                    className={`flex-1 px-3 py-2 text-sm rounded-lg transition-all ${
+                      settings.animation === option.id
+                        ? 'bg-white border-2 border-neutral-900 text-neutral-900'
+                        : 'bg-neutral-100 border-2 border-transparent text-neutral-500 hover:bg-neutral-200'
+                    }`}
+                    title={option.description}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-1 text-[10px] text-neutral-400">
+                Controls CSS animation intensity (none = static SVG)
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -383,20 +437,20 @@ export default function GeneratorPage() {
                 className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg transition-all ${
                   saved || isSavedAlready
                     ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-[#DC2626] text-white hover:bg-[#b91c1c]'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
               >
                 {saved || isSavedAlready ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
-                {saved || isSavedAlready ? 'Saved' : 'Save'}
+                {saved || isSavedAlready ? 'Saved' : 'Save Locally'}
               </button>
 
               <button
                 onClick={handleSaveToCommunity}
                 disabled={communitySaving || communitySaved}
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg transition-all ${
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                   communitySaved
                     ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50'
+                    : 'bg-[#DC2626] text-white hover:bg-[#b91c1c] disabled:opacity-50'
                 }`}
                 title="Share to community gallery on AIM LMS"
               >
@@ -407,7 +461,7 @@ export default function GeneratorPage() {
                 ) : (
                   <Globe size={14} />
                 )}
-                {communitySaving ? 'Saving...' : communitySaved ? 'Shared' : 'Share'}
+                {communitySaving ? 'Sharing...' : communitySaved ? 'Shared to Community' : 'Share to Community'}
               </button>
 
               <button
@@ -438,6 +492,13 @@ export default function GeneratorPage() {
                 Download PNG
               </button>
             </div>
+
+            {/* Community save success message */}
+            {communitySaved && (
+              <div className="mt-3 p-3 text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg">
+                <span className="font-medium">Shared successfully!</span> Your metaphor will appear in the Community section after moderation.
+              </div>
+            )}
 
             {/* Community save error */}
             {communityError && (

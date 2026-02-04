@@ -372,15 +372,19 @@ function convertCommunityMetaphor(raw: CommunityMetaphorRaw): Metaphor {
 
 /**
  * Load community metaphors from community.json
- * Returns cached results on subsequent calls
+ * Returns cached results on subsequent calls unless forceReload is true
  */
-export async function loadCommunityMetaphors(): Promise<Metaphor[]> {
-  if (communityMetaphorsLoaded) {
+export async function loadCommunityMetaphors(forceReload = false): Promise<Metaphor[]> {
+  if (communityMetaphorsLoaded && !forceReload) {
     return communityMetaphorsCache;
   }
 
   try {
-    const response = await fetch('/metaphors/community.json');
+    // Add cache-busting param when force reloading
+    const url = forceReload
+      ? `/metaphors/community.json?t=${Date.now()}`
+      : '/metaphors/community.json';
+    const response = await fetch(url);
     if (!response.ok) {
       console.warn('Failed to load community.json:', response.status);
       return [];
@@ -394,6 +398,23 @@ export async function loadCommunityMetaphors(): Promise<Metaphor[]> {
     console.warn('Error loading community metaphors:', error);
     return [];
   }
+}
+
+/**
+ * Force reload community metaphors from server
+ * Bypasses cache and fetches fresh data
+ */
+export async function reloadCommunityMetaphors(): Promise<Metaphor[]> {
+  return loadCommunityMetaphors(true);
+}
+
+/**
+ * Clear community metaphors cache
+ * Next call to loadCommunityMetaphors will fetch fresh data
+ */
+export function clearCommunityCache(): void {
+  communityMetaphorsCache = [];
+  communityMetaphorsLoaded = false;
 }
 
 /**

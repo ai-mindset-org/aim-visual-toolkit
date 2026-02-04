@@ -2,14 +2,24 @@
  * Netlify Function: Generate Visual Metaphor
  *
  * POST /.netlify/functions/generate-metaphor
- * Body: { text: string, style?: 'light' | 'dark', model?: string, apiKey?: string }
+ * Body: {
+ *   text: string,
+ *   style?: 'light' | 'dark',
+ *   model?: string,
+ *   apiKey?: string,
+ *   complexity?: 'minimal' | 'standard' | 'detailed',
+ *   animation?: 'none' | 'subtle' | 'active'
+ * }
  */
 
 import type { Handler, HandlerEvent } from '@netlify/functions';
 
+type ComplexityLevel = 'minimal' | 'standard' | 'detailed';
+type AnimationLevel = 'none' | 'subtle' | 'active';
+
 const CONFIG = {
   apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
-  defaultModel: 'google/gemini-3-flash-preview',
+  defaultModel: 'google/gemini-2.5-pro',
   fallbackModel: 'google/gemini-2.5-flash',
   svgSize: 800,
   colors: {
@@ -28,8 +38,73 @@ const CONFIG = {
   },
 };
 
-const getSystemPrompt = (style: 'light' | 'dark' = 'light') => {
+const getComplexityInstructions = (complexity: ComplexityLevel): string => {
+  switch (complexity) {
+    case 'minimal':
+      return `COMPLEXITY: MINIMAL
+- Use only 3-5 basic shapes (circles, rectangles, lines)
+- Maximum 50 lines of SVG code
+- Single focal point, no decorative elements
+- Clean negative space, very sparse composition
+- Prefer solid fills over gradients`;
+    case 'detailed':
+      return `COMPLEXITY: DETAILED
+- Use 10-20 shapes with varied types
+- Maximum 150 lines of SVG code
+- Multiple visual layers and depth
+- Include decorative elements and patterns
+- Use gradients, shadows, and visual effects
+- Add secondary accents and supporting elements`;
+    default: // standard
+      return `COMPLEXITY: STANDARD
+- Use 5-10 shapes
+- Maximum 100 lines of SVG code
+- Balanced composition with clear hierarchy
+- Some decorative elements allowed`;
+  }
+};
+
+const getAnimationInstructions = (animation: AnimationLevel): string => {
+  switch (animation) {
+    case 'none':
+      return `ANIMATION: NONE
+- Do NOT include any CSS animations or keyframes
+- Do NOT use <animate> or <animateTransform> elements
+- Create a completely static SVG
+- No transitions, no movement`;
+    case 'active':
+      return `ANIMATION: ACTIVE
+- Include 3-5 different animations
+- Use faster durations (1-3 seconds)
+- Apply animations to multiple elements
+- Combine different animation types (scale, opacity, position, rotation)
+- Create energetic, dynamic movement
+- Example keyframes:
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes flash { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }`;
+    default: // subtle
+      return `ANIMATION: SUBTLE
+- Include 1-2 gentle animations
+- Use slow durations (3-6 seconds)
+- Apply to 1-2 key elements only
+- Prefer opacity and small scale changes
+- Create calm, ambient movement
+- Example keyframes:
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  @keyframes glow { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }`;
+  }
+};
+
+const getSystemPrompt = (
+  style: 'light' | 'dark' = 'light',
+  complexity: ComplexityLevel = 'standard',
+  animation: AnimationLevel = 'subtle'
+) => {
   const colors = CONFIG.colors[style];
+  const complexityInstructions = getComplexityInstructions(complexity);
+  const animationInstructions = getAnimationInstructions(animation);
 
   return `You are a visual metaphor designer specializing in Swiss Design style SVG graphics.
 
@@ -41,19 +116,16 @@ DESIGN SYSTEM:
 - Typography: IBM Plex Mono, font-size 24px for labels
 - Style: Minimal, geometric, clean lines
 
+${complexityInstructions}
+
+${animationInstructions}
+
 SVG REQUIREMENTS:
 1. Output ONLY valid SVG code, no markdown, no explanation
 2. Start with <svg width="${CONFIG.svgSize}" height="${CONFIG.svgSize}" viewBox="0 0 ${CONFIG.svgSize} ${CONFIG.svgSize}" xmlns="http://www.w3.org/2000/svg">
-3. Include <defs> with <style> for CSS animations
-4. Use simple geometric shapes (circles, lines, polygons, rects)
-5. Maximum 100 lines of SVG code
-6. Include subtle CSS animations (keyframes for pulse, glow, expand)
-7. NO title text in the SVG - keep it clean
-
-ANIMATION PATTERNS (use 1-2 per metaphor):
-- Pulse: @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-- Glow: @keyframes glow { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
-- Expand: use <animate> for radius or size changes
+3. Include <defs> with <style> for CSS (even if no animations)
+4. Use geometric shapes (circles, lines, polygons, rects, paths)
+5. NO title text in the SVG - keep it clean
 
 METAPHOR TYPES:
 - signal_noise: concentric circles + scattered noise dots
@@ -66,6 +138,10 @@ METAPHOR TYPES:
 - balance: symmetrical scales
 - compass: directional indicator
 - dna: double helix pattern
+- radar: scanning arc with detection points
+- orbit: planetary/electron orbits
+- fractal: recursive patterns
+- wave: sinusoidal interference patterns
 
 Choose the most fitting metaphor based on the input concept.
 
@@ -195,7 +271,19 @@ const handler: Handler = async (event: HandlerEvent) => {
   }
 
   try {
-    const { text, style = 'light', model = CONFIG.defaultModel } = body;
+    const {
+      text,
+      style = 'light',
+      model = CONFIG.defaultModel,
+      complexity = 'standard',
+      animation = 'subtle',
+    } = body as {
+      text: string;
+      style?: 'light' | 'dark';
+      model?: string;
+      complexity?: ComplexityLevel;
+      animation?: AnimationLevel;
+    };
 
     if (!text || typeof text !== 'string' || text.length < 3) {
       return {
@@ -213,7 +301,15 @@ const handler: Handler = async (event: HandlerEvent) => {
       };
     }
 
-    console.log(`[generate-metaphor] Model: ${model}, Text: "${text.slice(0, 50)}..."`);
+    // Validate complexity and animation
+    const validComplexity: ComplexityLevel = ['minimal', 'standard', 'detailed'].includes(complexity)
+      ? complexity
+      : 'standard';
+    const validAnimation: AnimationLevel = ['none', 'subtle', 'active'].includes(animation)
+      ? animation
+      : 'subtle';
+
+    console.log(`[generate-metaphor] Model: ${model}, Complexity: ${validComplexity}, Animation: ${validAnimation}, Text: "${text.slice(0, 50)}..."`);
 
     const userPrompt = `Create a visual metaphor SVG for:
 
@@ -221,9 +317,16 @@ const handler: Handler = async (event: HandlerEvent) => {
 
 Generate a single SVG that visually represents this concept. Choose the most fitting metaphor type.
 The visual should be immediately understandable and memorable.
-Do NOT include any title text in the SVG.`;
+Do NOT include any title text in the SVG.
+Remember: ${validComplexity} complexity, ${validAnimation} animation.`;
 
     const startTime = Date.now();
+
+    const systemPrompt = getSystemPrompt(
+      style as 'light' | 'dark',
+      validComplexity,
+      validAnimation
+    );
 
     let response = await fetch(CONFIG.apiUrl, {
       method: 'POST',
@@ -236,7 +339,7 @@ Do NOT include any title text in the SVG.`;
       body: JSON.stringify({
         model,
         messages: [
-          { role: 'system', content: getSystemPrompt(style as 'light' | 'dark') },
+          { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
         max_tokens: 4096,
@@ -260,7 +363,7 @@ Do NOT include any title text in the SVG.`;
         body: JSON.stringify({
           model: CONFIG.fallbackModel,
           messages: [
-            { role: 'system', content: getSystemPrompt(style as 'light' | 'dark') },
+            { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
           ],
           max_tokens: 4096,
