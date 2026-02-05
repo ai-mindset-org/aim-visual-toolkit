@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
-import { Bookmark, Trash2, Download, Copy, Check, Sparkles, BookmarkX } from 'lucide-react';
+import { Bookmark, Trash2, Download, Copy, Check, Sparkles, BookmarkX, Archive, Loader2 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { Link } from 'react-router-dom';
+import JSZip from 'jszip';
 import { useSavedMetaphors, type GeneratedMetaphor } from '../hooks/useSavedMetaphors';
 import { getMetaphorById, type Metaphor } from '../data/metaphors';
 import { MetaphorModal } from '../components/metaphors';
 import { MetaphorCard } from '../components/metaphors';
-import { downloadBlob, MIME_TYPES } from '../utils/download';
+import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../utils/download';
 
 const sanitizeSvg = (svg: string): string => {
   return DOMPurify.sanitize(svg, {
@@ -30,6 +31,7 @@ export default function SavedPage() {
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [selectedMetaphor, setSelectedMetaphor] = useState<Metaphor | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
   // Get catalog metaphors from IDs
   const catalogMetaphors = useMemo(() => {
@@ -55,6 +57,67 @@ export default function SavedPage() {
     downloadBlob(svg, filename, MIME_TYPES.SVG);
   };
 
+  const handleDownloadAll = async () => {
+    if (totalCount === 0 || isDownloadingAll) return;
+
+    setIsDownloadingAll(true);
+
+    try {
+      const zip = new JSZip();
+      const catalogFolder = zip.folder('catalog');
+      const generatedFolder = zip.folder('generated');
+
+      // Fetch and add catalog metaphors
+      for (const metaphor of catalogMetaphors) {
+        try {
+          let svgContent: string;
+
+          if (metaphor.format === 'svg-inline' && metaphor.svg) {
+            // Use inline SVG directly
+            svgContent = metaphor.svg;
+          } else if (metaphor.filename) {
+            // Fetch SVG file from public folder
+            const response = await fetch(`/metaphors/${metaphor.filename}`);
+            if (!response.ok) {
+              console.warn(`Failed to fetch ${metaphor.filename}`);
+              continue;
+            }
+            svgContent = await response.text();
+          } else {
+            console.warn(`No SVG source for ${metaphor.id}`);
+            continue;
+          }
+
+          const filename = `${metaphor.id}.svg`;
+          catalogFolder?.file(filename, svgContent);
+        } catch (err) {
+          console.warn(`Error processing catalog metaphor ${metaphor.id}:`, err);
+        }
+      }
+
+      // Add generated metaphors (already have SVG content)
+      for (const metaphor of generatedMetaphors) {
+        try {
+          const filename = metaphor.titleEn
+            ? `${metaphor.titleEn.toLowerCase().replace(/\s+/g, '-')}.svg`
+            : `${metaphor.id}.svg`;
+          generatedFolder?.file(filename, metaphor.svg);
+        } catch (err) {
+          console.warn(`Error processing generated metaphor ${metaphor.id}:`, err);
+        }
+      }
+
+      // Generate and download ZIP
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const date = new Date().toISOString().split('T')[0];
+      downloadBinaryBlob(blob, `saved-metaphors-${date}.zip`);
+    } catch (err) {
+      console.error('Failed to create ZIP:', err);
+    } finally {
+      setIsDownloadingAll(false);
+    }
+  };
+
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
       month: 'short',
@@ -76,9 +139,30 @@ export default function SavedPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Bookmark size={24} className="text-[#DC2626]" />
-          <h1 className="text-2xl font-bold text-neutral-900">Saved Metaphors</h1>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <Bookmark size={24} className="text-[#DC2626]" />
+            <h1 className="text-2xl font-bold text-neutral-900">Saved Metaphors</h1>
+          </div>
+          {totalCount > 0 && (
+            <button
+              onClick={handleDownloadAll}
+              disabled={isDownloadingAll}
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-neutral-900 text-white rounded-lg hover:bg-[#DC2626] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isDownloadingAll ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Creating ZIP...
+                </>
+              ) : (
+                <>
+                  <Archive size={16} />
+                  Download All
+                </>
+              )}
+            </button>
+          )}
         </div>
         <p className="text-sm text-neutral-500">
           Your collection of saved catalog and generated metaphors

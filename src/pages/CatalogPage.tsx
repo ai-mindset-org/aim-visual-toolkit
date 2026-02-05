@@ -10,10 +10,94 @@ import {
   isCommunityLoaded,
   type Metaphor,
 } from '../data/metaphors';
-import { GalleryFilters, GalleryGrid } from '../components/gallery';
-import { MetaphorModal } from '../components/metaphors';
+import { GalleryFilters } from '../components/gallery';
+import { MetaphorCard, MetaphorModal } from '../components/metaphors';
 import type { GridSize } from '../components/gallery/GalleryGrid';
 import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
+
+const GRID_CLASSES: Record<GridSize, string> = {
+  tiny: 'grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8',
+  small: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5',
+  medium: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  large: 'grid-cols-1 sm:grid-cols-2',
+};
+
+// Generate Your Own Card - same style as MetaphorCard
+function GenerateCard({ showLabel, onClick }: { showLabel: boolean; onClick: () => void }) {
+  return (
+    <div
+      className="group relative rounded-xl border-2 border-dashed bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden border-[#DC2626]/40 hover:border-[#DC2626] cursor-pointer"
+      onClick={onClick}
+    >
+      {/* Preview area - matches MetaphorCard aspect-square */}
+      <div className="aspect-square p-4 flex items-center justify-center bg-white relative">
+        <div className="flex flex-col items-center justify-center gap-3">
+          <div className="w-16 h-16 rounded-xl bg-[#DC2626]/10 flex items-center justify-center group-hover:bg-[#DC2626]/20 transition-colors">
+            <Plus size={32} className="text-[#DC2626]" />
+          </div>
+        </div>
+      </div>
+
+      {/* Info - matches MetaphorCard */}
+      {showLabel && (
+        <div className="p-4 border-t border-neutral-100">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="min-w-0">
+              <h3 className="font-medium text-sm text-neutral-900 group-hover:text-[#DC2626] transition-colors">
+                Generate Your Own
+              </h3>
+              <p className="text-[10px] text-neutral-400 font-mono uppercase">CREATE NEW</p>
+            </div>
+          </div>
+          <p className="text-xs text-neutral-500 mb-3 line-clamp-2">
+            Create a custom metaphor with AI based on your insight
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Community Grid with Generator card at the end
+interface CommunityGridProps {
+  metaphors: Metaphor[];
+  gridSize: GridSize;
+  showLabels: boolean;
+  onSelect: (metaphor: Metaphor) => void;
+  savedIds: Set<string>;
+  onSave: (id: string) => void;
+  onRemove: (id: string) => void;
+  onGenerate: () => void;
+}
+
+function CommunityGridWithGenerator({
+  metaphors,
+  gridSize,
+  showLabels,
+  onSelect,
+  savedIds,
+  onSave,
+  onRemove,
+  onGenerate,
+}: CommunityGridProps) {
+  return (
+    <div className={`grid gap-4 ${GRID_CLASSES[gridSize]}`}>
+      {metaphors.map((metaphor) => (
+        <MetaphorCard
+          key={metaphor.id}
+          metaphor={metaphor}
+          showLabel={showLabels}
+          onClick={() => onSelect(metaphor)}
+          isSaved={savedIds.has(metaphor.id)}
+          onSave={() => onSave(metaphor.id)}
+          onRemove={() => onRemove(metaphor.id)}
+        />
+      ))}
+      {/* Generate Your Own card at the end */}
+      <GenerateCard showLabel={showLabels} onClick={onGenerate} />
+    </div>
+  );
+}
 
 export default function CatalogPage() {
   const navigate = useNavigate();
@@ -121,15 +205,19 @@ export default function CatalogPage() {
 
       {/* Core Metaphors Grid */}
       {coreMetaphors.length > 0 ? (
-        <GalleryGrid
-          metaphors={coreMetaphors}
-          gridSize={gridSize}
-          showLabels={showLabels}
-          onSelect={setSelectedMetaphor}
-          savedIds={savedIds}
-          onSave={addMetaphor}
-          onRemove={removeMetaphor}
-        />
+        <div className={`grid gap-4 ${GRID_CLASSES[gridSize]}`}>
+          {coreMetaphors.map((metaphor) => (
+            <MetaphorCard
+              key={metaphor.id}
+              metaphor={metaphor}
+              showLabel={showLabels}
+              onClick={() => setSelectedMetaphor(metaphor)}
+              isSaved={savedIds.has(metaphor.id)}
+              onSave={() => addMetaphor(metaphor.id)}
+              onRemove={() => removeMetaphor(metaphor.id)}
+            />
+          ))}
+        </div>
       ) : activeCategory === 'community' ? null : (
         <div className="py-16 text-center">
           <p className="text-neutral-400 text-sm mb-2">No metaphors found</p>
@@ -162,7 +250,7 @@ export default function CatalogPage() {
           {/* Community Grid with red accent border */}
           <div className="p-4 rounded-xl border-2 border-[#DC2626]/20 bg-gradient-to-br from-red-50/50 to-transparent">
             {(activeCategory === 'community' ? filteredMetaphors : communityMetaphors).length > 0 ? (
-              <GalleryGrid
+              <CommunityGridWithGenerator
                 metaphors={activeCategory === 'community' ? filteredMetaphors : communityMetaphors}
                 gridSize={gridSize}
                 showLabels={showLabels}
@@ -170,6 +258,7 @@ export default function CatalogPage() {
                 savedIds={savedIds}
                 onSave={addMetaphor}
                 onRemove={removeMetaphor}
+                onGenerate={() => navigate('/generator')}
               />
             ) : (
               <div className="py-8 text-center">
@@ -179,26 +268,6 @@ export default function CatalogPage() {
               </div>
             )}
           </div>
-
-          {/* Generate Your Own Card */}
-          <button
-            onClick={() => navigate('/generator')}
-            className="mt-6 w-full p-6 rounded-xl border-2 border-dashed border-[#DC2626]/40 bg-white hover:bg-red-50/50 hover:border-[#DC2626] transition-all group"
-          >
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-[#DC2626]/10 flex items-center justify-center group-hover:bg-[#DC2626]/20 transition-colors">
-                <Plus size={24} className="text-[#DC2626]" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-bold text-neutral-900 group-hover:text-[#DC2626] transition-colors">
-                  Generate Your Own
-                </p>
-                <p className="text-xs text-neutral-500">
-                  Create a custom metaphor with AI
-                </p>
-              </div>
-            </div>
-          </button>
         </div>
       )}
 

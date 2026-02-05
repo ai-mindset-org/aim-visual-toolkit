@@ -1,7 +1,143 @@
 {
   "version": 1,
-  "updatedAt": "2026-01-22T00:29:04.369Z",
+  "updatedAt": "2026-02-04T14:09:50.236Z",
   "metaphors": [
+    {
+      "id": "cm-ml83tmzg-2o7108",
+      "title": "Навигатор",
+      "titleEn": "Navigator",
+      "description": "AT01: Коучинг",
+      "prompt": "AT01: Коучинг",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;display=swap');\n      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n      .strokewhite { stroke: #FFFFFF; stroke-width: 4; fill: none; }\n      .red { fill: #DC2626; }\n      .line { stroke: #171717; stroke-width: 2; }\n      @keyframes pulse {\n        0%, 100% { transform: scale(1); opacity: 1; }\n        50% { transform: scale(1.15); opacity: 0.8; }\n      }\n      .pulse-node { transform-origin: 400px 320px; animation: pulse 3s ease-in-out infinite; }\n      .beam { stroke: #DC2626; stroke-width: 3; stroke-dasharray: 10, 5; }\n    </style>\n  </defs>\n\n  <!-- Background -->\n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\" />\n\n  <!-- Grid Pattern (Subtle) -->\n  <path d=\"M0 400H800M400 0V800\" stroke=\"#F3F4F6\" stroke-width=\"1\" />\n\n  <!-- Compass/Directional Metaphor -->\n  <circle cx=\"400\" cy=\"320\" r=\"180\" stroke=\"#171717\" stroke-width=\"2\" fill=\"none\" />\n  <circle cx=\"400\" cy=\"320\" r=\"140\" stroke=\"#171717\" stroke-width=\"1\" fill=\"none\" stroke-dasharray=\"4 8\" />\n  \n  <!-- Static Guides -->\n  <line x1=\"400\" y1=\"140\" x2=\"400\" y2=\"500\" class=\"line\" opacity=\"0.2\" />\n  <line x1=\"220\" y1=\"320\" x2=\"580\" y2=\"320\" class=\"line\" opacity=\"0.2\" />\n\n  <!-- The \"Coaching\" Pointer / Transformation -->\n  <g class=\"pulse-node\">\n    <circle cx=\"400\" cy=\"320\" r=\"60\" class=\"red\" />\n    <path d=\"M400 200 L420 320 L380 320 Z\" fill=\"#FFFFFF\" />\n  </g>\n\n  <!-- Directional Elements -->\n  <path d=\"M400 80 L410 100 H390 Z\" fill=\"#171717\" />\n  <path d=\"M400 560 L410 540 H390 Z\" fill=\"#171717\" opacity=\"0.3\" />\n  \n  <!-- Connection Nodes -->\n  <circle cx=\"400\" cy=\"320\" r=\"8\" fill=\"#FFFFFF\" />\n  <circle cx=\"400\" cy=\"140\" r=\"6\" fill=\"#171717\" />\n  <circle cx=\"400\" cy=\"500\" r=\"6\" fill=\"#171717\" opacity=\"0.3\" />\n  <circle cx=\"220\" cy=\"320\" r=\"6\" fill=\"#171717\" opacity=\"0.3\" />\n  <circle cx=\"580\" cy=\"320\" r=\"6\" fill=\"#171717\" opacity=\"0.3\" />\n\n  <!-- Accents -->\n  <rect x=\"398\" y=\"320\" width=\"4\" height=\"180\" class=\"red\" opacity=\"0.1\" />\n  \n  <!-- Labels -->\n  <text x=\"60\" y=\"740\" class=\"text\">AT01: КОУЧИНГ</text>\n  \n  <!-- Swiss Cross Detail -->\n  <rect x=\"700\" y=\"60\" width=\"40\" height=\"40\" fill=\"#DC2626\" />\n  <path d=\"M710 80 H730 M720 70 V90\" stroke=\"white\" stroke-width=\"4\" />\n</svg>",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-02-04T14:09:50.236Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-ml62kdos-spzdh6",
+      "title": "Световой Скелет",
+      "titleEn": "Light Skeleton",
+      "description": "FOS #18",
+      "prompt": "FOS #18",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n<defs>\n<style>\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;display=swap');\n.mono { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n.accent { fill: #DC2626; }\n.stroke-main { stroke: #171717; stroke-width: 2; fill: none; }\n.node { fill: #171717; }\n@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } }\n@keyframes flow { 0% { stroke-dashoffset: 40; } 100% { stroke-dashoffset: 0; } }\n.anim-pulse { transform-origin: center; animation: pulse 3s ease-in-out infinite; }\n.anim-flow { stroke-dasharray: 4, 8; animation: flow 2s linear infinite; }\n</style>\n</defs>\n<rect width=\"800\" height=\"800\" fill=\"#FFFFFF\"/>\n\n<!-- Network Metaphor for FOS #18 -->\n<g transform=\"translate(400, 380)\">\n    <!-- Central Structure -->\n    <circle cx=\"0\" cy=\"0\" r=\"160\" class=\"stroke-main\" stroke-dasharray=\"2,4\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"80\" class=\"stroke-main\"/>\n    \n    <!-- Connection Lines -->\n    <line x1=\"-200\" y1=\"-100\" x2=\"200\" y2=\"100\" class=\"stroke-main\" opacity=\"0.2\"/>\n    <line x1=\"-200\" y1=\"100\" x2=\"200\" y2=\"-100\" class=\"stroke-main\" opacity=\"0.2\"/>\n    <line x1=\"0\" y1=\"-220\" x2=\"0\" y2=\"220\" class=\"stroke-main\" opacity=\"0.2\"/>\n\n    <!-- Nodes -->\n    <circle cx=\"0\" cy=\"-220\" r=\"8\" class=\"node\"/>\n    <circle cx=\"190\" cy=\"-110\" r=\"8\" class=\"node\"/>\n    <circle cx=\"190\" cy=\"110\" r=\"8\" class=\"node\"/>\n    <circle cx=\"0\" cy=\"220\" r=\"8\" class=\"node\"/>\n    <circle cx=\"-190\" cy=\"110\" r=\"8\" class=\"node\"/>\n    <circle cx=\"-190\" cy=\"-110\" r=\"8\" class=\"node\"/>\n\n    <!-- Pulsing Core #18 -->\n    <g class=\"anim-pulse\">\n        <polygon points=\"0,-40 35,20 -35,20\" class=\"accent\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"12\" fill=\"#FFFFFF\"/>\n    </g>\n\n    <!-- Flowing Outer Ring -->\n    <circle cx=\"0\" cy=\"0\" r=\"260\" class=\"stroke-main anim-flow\" opacity=\"0.5\"/>\n</g>\n\n<!-- Swiss Design Elements -->\n<rect x=\"60\" y=\"60\" width=\"40\" height=\"4\" class=\"accent\"/>\n<text x=\"60\" y=\"740\" class=\"mono\">FOS #18</text>\n<text x=\"700\" y=\"740\" class=\"mono\" text-anchor=\"end\">018</text>\n</svg>",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-02-03T03:59:06.316Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-ml5kv9vo-qeuw43",
+      "title": "Механическая Нежность",
+      "titleEn": "Mechanical Tenderness",
+      "description": "Девочка гладит роботизированного мальчика по голове",
+      "insight": "Саша Павелев очень хороший",
+      "prompt": "Девочка гладит роботизированного мальчика по голове",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap');\n      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n      .accent { fill: #DC2626; }\n      .outline { stroke: #171717; stroke-width: 3; fill: none; }\n      .connection { stroke: #DC2626; stroke-width: 2; stroke-dasharray: 8 4; }\n      @keyframes pulse {\n        0%, 100% { transform: scale(1); opacity: 1; }\n        50% { transform: scale(1.05); opacity: 0.7; }\n      }\n      .pulse-node { transform-origin: 400px 450px; animation: pulse 3s ease-in-out infinite; }\n      @keyframes flow {\n        from { stroke-dashoffset: 24; }\n        to { stroke-dashoffset: 0; }\n      }\n      .flow-line { animation: flow 1s linear infinite; }\n    </style>\n  </defs>\n\n  <!-- Background -->\n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\" />\n\n  <!-- Metaphor: Network/Connection (Human touch meeting mechanical structure) -->\n  \n  <!-- Robot Head Representation (Geometric/Hexagonal) -->\n  <path d=\"M300 400 L500 400 L550 500 L500 600 L300 600 L250 500 Z\" class=\"outline\" />\n  <rect x=\"340\" y=\"460\" width=\"120\" height=\"20\" fill=\"#171717\" /> <!-- Eyes -->\n  \n  <!-- The \"Hand\" (Human Element - Curved Arc) -->\n  <path d=\"M280 320 Q400 280 520 320\" class=\"outline\" stroke-linecap=\"round\" />\n  \n  <!-- Connection Points (Interaction) -->\n  <circle cx=\"400\" cy=\"300\" r=\"12\" class=\"accent\" />\n  <circle cx=\"400\" cy=\"300\" r=\"30\" class=\"outline\" stroke-dasharray=\"4 4\" />\n  \n  <!-- Pulse Effect around the contact point -->\n  <g class=\"pulse-node\">\n    <circle cx=\"400\" cy=\"450\" r=\"60\" fill=\"none\" stroke=\"#DC2626\" stroke-width=\"1\" opacity=\"0.3\" />\n    <circle cx=\"400\" cy=\"450\" r=\"80\" fill=\"none\" stroke=\"#DC2626\" stroke-width=\"1\" opacity=\"0.1\" />\n  </g>\n\n  <!-- Data Flow Lines (The \"Response\") -->\n  <line x1=\"400\" y1=\"312\" x2=\"400\" y2=\"390\" class=\"connection flow-line\" />\n  <path d=\"M350 315 L320 380\" class=\"connection flow-line\" style=\"animation-delay: 0.2s\" />\n  <path d=\"M450 315 L480 380\" class=\"connection flow-line\" style=\"animation-delay: 0.4s\" />\n\n  <!-- Swiss Design Grid Elements -->\n  <line x1=\"40\" y1=\"40\" x2=\"120\" y2=\"40\" stroke=\"#171717\" stroke-width=\"4\" />\n  <line x1=\"40\" y1=\"40\" x2=\"40\" y2=\"120\" stroke=\"#171717\" stroke-width=\"4\" />\n\n  <!-- Label -->\n  <text x=\"40\" y=\"750\" class=\"text\">HUMAN INTERFACE</text>\n  <text x=\"40\" y=\"720\" class=\"text\" font-weight=\"600\" fill=\"#DC2626\">01</text>\n</svg>",
+      "author": "anca",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-02-02T19:43:41.508Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-ml270yri-akilay",
+      "title": "Бинарная Реальность",
+      "titleEn": "Binary Reality",
+      "description": "весь мир это if: else:",
+      "insight": "На воркшопе Офисаура сейчас пришла идея, что весь мир — это логика if-else.",
+      "prompt": "весь мир это if: else:",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap');\n      .mono { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; }\n      .bold { font-weight: 600; }\n      .accent { fill: #DC2626; }\n      .line { stroke: #171717; stroke-width: 3; fill: none; }\n      .pulse { animation: pulse 3s infinite ease-in-out; transform-origin: center; }\n      @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }\n      .glow { animation: glow 2s infinite ease-in-out; }\n      @keyframes glow { 0%, 100% { stroke-width: 3; } 50% { stroke-width: 6; stroke: #DC2626; } }\n    </style>\n  </defs>\n\n  <!-- Background -->\n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\" />\n\n  <!-- Decision Node (The World) -->\n  <g transform=\"translate(400, 300)\">\n    <!-- Central Logic Point -->\n    <rect x=\"-40\" y=\"-40\" width=\"80\" height=\"80\" class=\"line pulse\" transform=\"rotate(45)\" />\n    <circle r=\"8\" class=\"accent\" />\n    \n    <!-- Input Line -->\n    <line x1=\"0\" y1=\"-200\" x2=\"0\" y2=\"-57\" class=\"line\" />\n    <polygon points=\"0,-57 -5,-67 5,-67\" fill=\"#171717\" />\n\n    <!-- Branching Paths -->\n    <path d=\"M 0,57 L 0,100 L -200,100 L -200,250\" class=\"line glow\" />\n    <path d=\"M 0,57 L 0,100 L 200,100 L 200,250\" class=\"line\" />\n\n    <!-- Terminators -->\n    <rect x=\"-240\" y=\"250\" width=\"80\" height=\"40\" class=\"line accent\" />\n    <rect x=\"160\" y=\"250\" width=\"80\" height=\"40\" class=\"line\" />\n\n    <!-- Labels -->\n    <text x=\"-10\" y=\"-80\" text-anchor=\"end\" class=\"mono\">if (</text>\n    <circle cx=\"20\" cy=\"-88\" r=\"10\" class=\"accent pulse\" />\n    <text x=\"40\" y=\"-80\" text-anchor=\"start\" class=\"mono\">)</text>\n    \n    <text x=\"-200\" y=\"230\" text-anchor=\"middle\" class=\"mono bold\">TRUE</text>\n    <text x=\"200\" y=\"230\" text-anchor=\"middle\" class=\"mono\">FALSE</text>\n    \n    <text x=\"-120\" y=\"90\" text-anchor=\"middle\" class=\"mono accent\">if:</text>\n    <text x=\"130\" y=\"90\" text-anchor=\"middle\" class=\"mono\">else:</text>\n  </g>\n\n  <!-- Grid Elements for Swiss Style -->\n  <line x1=\"40\" y1=\"40\" x2=\"100\" y2=\"40\" class=\"line\" stroke-width=\"1\" />\n  <line x1=\"40\" y1=\"40\" x2=\"40\" y2=\"100\" class=\"line\" stroke-width=\"1\" />\n\n  <!-- Bottom Title -->\n  <text x=\"40\" y=\"740\" class=\"mono bold\">BINARY WORLD</text>\n  <text x=\"40\" y=\"765\" class=\"mono\" font-size=\"16\">SYSTEM LOGIC v.1.0</text>\n</svg>",
+      "author": "alexander vasilev",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-01-31T10:52:53.886Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-ml0pqhjz-blnisl",
+      "title": "Цифровая Алхимия",
+      "titleEn": "Digital Alchemy",
+      "description": "Проведение онлайн-сессии по прикладной философии и ее связи с технологиями в контексте современной алхимии",
+      "insight": "Проведение онлайн-сессии по прикладной философии и ее связи с технологиями в контексте современной алхимии",
+      "prompt": "Проведение онлайн-сессии по прикладной философии и ее связи с технологиями в контексте современной алхимии",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap');\n      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n      .red { fill: #DC2626; }\n      .stroke { stroke: #171717; stroke-width: 2; fill: none; }\n      .pulse { transform-origin: center; animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }\n      .rotate { transform-origin: center; animation: rotate 20s linear infinite; }\n      @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } }\n      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }\n    </style>\n  </defs>\n  \n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\"/>\n  \n  <!-- Alchemy Circle / Portal Metaphor -->\n  <g transform=\"translate(400, 360)\">\n    <!-- Outer Rings -->\n    <circle cx=\"0\" cy=\"0\" r=\"280\" class=\"stroke\" opacity=\"0.2\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"260\" class=\"stroke\"/>\n    \n    <!-- Rotating Geometric Framework -->\n    <g class=\"rotate\">\n      <polygon points=\"0,-260 225,130 -225,130\" class=\"stroke\"/>\n      <polygon points=\"0,260 -225,-130 225,-130\" class=\"stroke\"/>\n      <circle cx=\"0\" cy=\"0\" r=\"150\" class=\"stroke\" stroke-dasharray=\"8 8\"/>\n    </g>\n    \n    <!-- The Core (The Transmutation) -->\n    <g class=\"pulse\">\n      <rect x=\"-60\" y=\"-60\" width=\"120\" height=\"120\" class=\"red\"/>\n      <rect x=\"-40\" y=\"-40\" width=\"80\" height=\"80\" fill=\"#FFFFFF\"/>\n      <circle cx=\"0\" cy=\"0\" r=\"25\" class=\"red\"/>\n    </g>\n    \n    <!-- Technology Elements (Data Points) -->\n    <g>\n      <circle cx=\"0\" cy=\"-260\" r=\"8\" fill=\"#171717\"/>\n      <circle cx=\"225\" cy=\"130\" r=\"8\" fill=\"#171717\"/>\n      <circle cx=\"-225\" cy=\"130\" r=\"8\" fill=\"#171717\"/>\n      <circle cx=\"0\" cy=\"260\" r=\"8\" class=\"red\"/>\n      <circle cx=\"-225\" cy=\"-130\" r=\"8\" fill=\"#171717\"/>\n      <circle cx=\"225\" cy=\"-130\" r=\"8\" fill=\"#171717\"/>\n    </g>\n  </g>\n  \n  <!-- Swiss Design Labels -->\n  <line x1=\"40\" y1=\"720\" x2=\"760\" y2=\"720\" stroke=\"#171717\" stroke-width=\"1\"/>\n  <text x=\"40\" y=\"760\" class=\"text\" font-weight=\"600\">TECHNE</text>\n  <text x=\"160\" y=\"760\" class=\"text\" opacity=\"0.3\">ALCHYMIA</text>\n  \n  <!-- Coordinates -->\n  <text x=\"700\" y=\"60\" class=\"text\" font-size=\"12\">47.3769° N</text>\n  <text x=\"700\" y=\"80\" class=\"text\" font-size=\"12\">8.5417° E</text>\n</svg>",
+      "author": "sukhov",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-01-30T10:01:05.375Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-mkzrsnzz-10ng0z",
+      "title": "Крошечные Котята",
+      "titleEn": "Tiny Kittens",
+      "description": "Маленькие котики",
+      "insight": "Я провожу сейчас workshop по демо-презентациям.",
+      "prompt": "Маленькие котики",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;display=swap');\n      .pulse { animation: pulse 3s ease-in-out infinite; transform-origin: center; }\n      .float { animation: float 4s ease-in-out infinite; }\n      @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }\n      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }\n      text { font-family: 'IBM+Plex+Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; }\n    </style>\n  </defs>\n  \n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\"/>\n  \n  <!-- Abstract Geometric Cats (Minimalist Swiss Style) -->\n  <g class=\"float\" style=\"animation-delay: 0s;\">\n    <path d=\"M250 300 L210 240 L290 240 Z\" fill=\"#DC2626\" />\n    <path d=\"M350 300 L310 240 L390 240 Z\" fill=\"#DC2626\" />\n    <circle cx=\"300\" cy=\"400\" r=\"100\" fill=\"#171717\" class=\"pulse\" />\n    <circle cx=\"270\" cy=\"380\" r=\"10\" fill=\"#FFFFFF\" />\n    <circle cx=\"330\" cy=\"380\" r=\"10\" fill=\"#FFFFFF\" />\n  </g>\n\n  <g class=\"float\" style=\"animation-delay: 1s;\">\n    <path d=\"M500 500 L480 470 L520 470 Z\" fill=\"#DC2626\" />\n    <path d=\"M550 500 L530 470 L570 470 Z\" fill=\"#DC2626\" />\n    <circle cx=\"525\" cy=\"550\" r=\"50\" fill=\"#171717\" />\n    <circle cx=\"510\" cy=\"540\" r=\"5\" fill=\"#FFFFFF\" />\n    <circle cx=\"540\" cy=\"540\" r=\"5\" fill=\"#FFFFFF\" />\n  </g>\n\n  <g class=\"float\" style=\"animation-delay: 0.5s;\">\n    <path d=\"M150 550 L135 530 L165 530 Z\" fill=\"#DC2626\" />\n    <path d=\"M190 550 L175 530 L205 530 Z\" fill=\"#DC2626\" />\n    <circle cx=\"170\" cy=\"590\" r=\"40\" fill=\"#171717\" />\n    <circle cx=\"158\" cy=\"582\" r=\"4\" fill=\"#FFFFFF\" />\n    <circle cx=\"182\" cy=\"582\" r=\"4\" fill=\"#FFFFFF\" />\n  </g>\n\n  <!-- Swiss Grid Accents -->\n  <line x1=\"40\" y1=\"40\" x2=\"120\" y2=\"40\" stroke=\"#171717\" stroke-width=\"2\"/>\n  <line x1=\"40\" y1=\"40\" x2=\"40\" y2=\"120\" stroke=\"#171717\" stroke-width=\"2\"/>\n  \n  <text x=\"40\" y=\"760\">МАЛЕНЬКИЕ КОТИКИ</text>\n</svg>",
+      "author": "alex",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-01-29T18:11:00.095Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-mky1u91d-5y8d82",
+      "title": "Цифровой Проповедник",
+      "titleEn": "Digital Preacher",
+      "description": "робот пытается продать человеку инфородукт",
+      "insight": "продающий lms",
+      "prompt": "робот пытается продать человеку инфородукт",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap');\n      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n      .accent { fill: #DC2626; }\n      .stroke-red { stroke: #DC2626; stroke-width: 3; fill: none; }\n      .stroke-dark { stroke: #171717; stroke-width: 2; fill: none; }\n      .pulse { animation: pulse 3s infinite ease-in-out; transform-origin: 400px 400px; }\n      @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }\n      .flow { stroke-dasharray: 10, 10; animation: dash 20s linear infinite; }\n      @keyframes dash { to { stroke-dashoffset: -1000; } }\n    </style>\n  </defs>\n  \n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\" />\n  \n  <!-- Robot Side (Left) -->\n  <rect x=\"100\" y=\"300\" width=\"120\" height=\"120\" class=\"stroke-dark\" />\n  <rect x=\"120\" y=\"320\" width=\"80\" height=\"80\" class=\"accent\" />\n  <line x1=\"160\" y1=\"420\" x2=\"160\" y2=\"460\" class=\"stroke-dark\" />\n  <line x1=\"130\" y1=\"460\" x2=\"190\" y2=\"460\" class=\"stroke-dark\" />\n  \n  <!-- The \"Info Product\" (Signal/Flow) -->\n  <g class=\"pulse\">\n    <circle cx=\"400\" cy=\"360\" r=\"100\" class=\"stroke-red\" />\n    <circle cx=\"400\" cy=\"360\" r=\"140\" class=\"stroke-red\" opacity=\"0.3\" />\n    <circle cx=\"400\" cy=\"360\" r=\"180\" class=\"stroke-red\" opacity=\"0.1\" />\n  </g>\n  \n  <g class=\"flow\">\n    <circle cx=\"400\" cy=\"360\" r=\"60\" class=\"stroke-dark\" stroke-dasharray=\"5,5\" />\n    <path d=\"M220 360 H580\" class=\"stroke-red\" stroke-width=\"1\" />\n  </g>\n\n  <!-- Human Side (Right) -->\n  <circle cx=\"640\" cy=\"360\" r=\"60\" class=\"stroke-dark\" />\n  <path d=\"M640 420 V500\" class=\"stroke-dark\" />\n  <path d=\"M600 540 L640 500 L680 540\" class=\"stroke-dark\" />\n  \n  <!-- Connection/Transaction -->\n  <path d=\"M220 340 Q400 200 580 340\" class=\"stroke-red\" fill=\"none\" stroke-width=\"2\" stroke-dasharray=\"4,4\" />\n  <polygon points=\"580,340 570,335 575,345\" fill=\"#DC2626\" />\n\n  <!-- Labels -->\n  <text x=\"60\" y=\"740\" class=\"text\" font-weight=\"600\">ALGO SALES</text>\n  <text x=\"100\" y=\"280\" class=\"text\" font-size=\"14\">SENDER</text>\n  <text x=\"600\" y=\"280\" class=\"text\" font-size=\"14\">TARGET</text>\n</svg>",
+      "author": "alex",
+      "votes": {
+        "up": 1,
+        "down": 1
+      },
+      "createdAt": "2026-01-28T13:16:37.825Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-mkuypomn-uhzhbr",
+      "title": "Кибернетический Прыжок",
+      "titleEn": "Cybernetic Jump",
+      "description": "Типа два робота прыгают на батуте.",
+      "prompt": "Типа два робота прыгают на батуте.",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;display=swap');\n      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n      .robot { fill: #171717; }\n      .accent { fill: #DC2626; stroke: #DC2626; stroke-width: 4; }\n      .line { stroke: #171717; stroke-width: 2; fill: none; }\n      @keyframes bounce-1 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-150px); } }\n      @keyframes bounce-2 { 0%, 100% { transform: translateY(-120px); } 50% { transform: translateY(30px); } }\n      @keyframes stretch { 0%, 100% { d: path(\"M 150 550 Q 400 550 650 550\"); } 50% { d: path(\"M 150 550 Q 400 620 650 550\"); } }\n      .b1 { animation: bounce-1 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }\n      .b2 { animation: bounce-2 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }\n      .trampoline { animation: stretch 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }\n    </style>\n  </defs>\n  \n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\" />\n  \n  <!-- Trampoline Structure -->\n  <line x1=\"150\" y1=\"550\" x2=\"150\" y2=\"600\" class=\"line\" />\n  <line x1=\"650\" y1=\"550\" x2=\"650\" y2=\"600\" class=\"line\" />\n  <path id=\"surface\" d=\"M 150 550 Q 400 550 650 550\" fill=\"none\" stroke=\"#171717\" stroke-width=\"6\" class=\"trampoline\" />\n  \n  <!-- Robot A -->\n  <g class=\"b1\">\n    <rect x=\"280\" y=\"450\" width=\"60\" height=\"60\" class=\"robot\" />\n    <rect x=\"295\" y=\"435\" width=\"30\" height=\"15\" class=\"robot\" />\n    <circle cx=\"310\" cy=\"470\" r=\"6\" class=\"accent\" />\n    <line x1=\"280\" y1=\"510\" x2=\"290\" y2=\"530\" class=\"line\" />\n    <line x1=\"340\" y1=\"510\" x2=\"330\" y2=\"530\" class=\"line\" />\n  </g>\n\n  <!-- Robot B -->\n  <g class=\"b2\">\n    <rect x=\"460\" y=\"450\" width=\"60\" height=\"60\" class=\"robot\" />\n    <rect x=\"475\" y=\"435\" width=\"30\" height=\"15\" class=\"robot\" />\n    <circle cx=\"490\" cy=\"470\" r=\"6\" class=\"accent\" />\n    <line x1=\"460\" y1=\"510\" x2=\"470\" y2=\"530\" class=\"line\" />\n    <line x1=\"520\" y1=\"510\" x2=\"510\" y2=\"530\" class=\"line\" />\n  </g>\n\n  <!-- Swiss Grid Elements -->\n  <line x1=\"40\" y1=\"40\" x2=\"100\" y2=\"40\" class=\"accent\" />\n  <line x1=\"40\" y1=\"40\" x2=\"40\" y2=\"100\" class=\"accent\" />\n  \n  <text x=\"40\" y=\"750\" class=\"text\">KINETIC ENERGY</text>\n</svg>",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-01-26T09:25:47.375Z",
+      "source": "community"
+    },
+    {
+      "id": "cm-mkpi4ml1-7xjsvg",
+      "title": "Цифровой Нарцисс",
+      "titleEn": "Digital Narcissus",
+      "description": "Робот, смотрящий в зеркало",
+      "prompt": "Робот, смотрящий в зеркало",
+      "svg": "<svg width=\"800\" height=\"800\" viewBox=\"0 0 800 800\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap');\n      .text { font-family: 'IBM Plex Mono', monospace; font-size: 24px; fill: #171717; text-transform: uppercase; letter-spacing: 2px; }\n      .accent { fill: #DC2626; }\n      .stroke { stroke: #171717; stroke-width: 4; fill: none; }\n      .mirror-line { stroke: #DC2626; stroke-width: 2; stroke-dasharray: 8 8; }\n      @keyframes pulse {\n        0%, 100% { transform: scale(1); opacity: 1; }\n        50% { transform: scale(1.15); opacity: 0.7; }\n      }\n      .core { transform-origin: center; animation: pulse 3s ease-in-out infinite; }\n      .reflection { opacity: 0.4; }\n    </style>\n  </defs>\n\n  <!-- Background -->\n  <rect width=\"800\" height=\"800\" fill=\"#FFFFFF\" />\n\n  <!-- Central Mirror Axis -->\n  <line x1=\"400\" y1=\"150\" x2=\"400\" y2=\"650\" class=\"mirror-line\" />\n\n  <!-- Left Side: The Machine -->\n  <g transform=\"translate(220, 400)\">\n    <!-- Head Outline -->\n    <rect x=\"-80\" y=\"-80\" width=\"160\" height=\"160\" class=\"stroke\" />\n    <!-- Mechanical Eye -->\n    <rect x=\"-40\" y=\"-20\" width=\"80\" height=\"10\" fill=\"#171717\" />\n    <!-- Core -->\n    <circle cx=\"0\" cy=\"20\" r=\"15\" class=\"accent core\" />\n  </g>\n\n  <!-- Right Side: The Reflection (Slightly Offset/Abstracted) -->\n  <g transform=\"translate(580, 400)\" class=\"reflection\">\n    <!-- Head Outline -->\n    <rect x=\"-80\" y=\"-80\" width=\"160\" height=\"160\" class=\"stroke\" />\n    <!-- Humanoid Eye (Circle instead of Rect) -->\n    <circle cx=\"0\" cy=\"-15\" r=\"25\" class=\"stroke\" />\n    <!-- Core Reflection -->\n    <circle cx=\"0\" cy=\"20\" r=\"15\" class=\"accent core\" />\n  </g>\n\n  <!-- Connecting Lines (Gaze) -->\n  <line x1=\"300\" y1=\"385\" x2=\"500\" y2=\"385\" stroke=\"#171717\" stroke-width=\"1\" opacity=\"0.2\" />\n  <line x1=\"300\" y1=\"420\" x2=\"500\" y2=\"420\" stroke=\"#171717\" stroke-width=\"1\" opacity=\"0.2\" />\n\n  <!-- Minimal Decorative Elements -->\n  <circle cx=\"400\" cy=\"400\" r=\"300\" class=\"stroke\" opacity=\"0.05\" />\n  <rect x=\"390\" y=\"150\" width=\"20\" height=\"4\" class=\"accent\" />\n  <rect x=\"390\" y=\"646\" width=\"20\" height=\"4\" class=\"accent\" />\n\n  <!-- Label -->\n  <text x=\"60\" y=\"740\" class=\"text\">SELF AWARE</text>\n</svg>",
+      "votes": {
+        "up": 0,
+        "down": 0
+      },
+      "createdAt": "2026-01-22T13:42:40.213Z",
+      "source": "community"
+    },
     {
       "id": "cm-mkops1yp-byuhg8",
       "title": "Цифровая Улыбка",

@@ -250,12 +250,15 @@ export default function GeneratorPage() {
                 >
                   {MODELS.map((model) => (
                     <option key={model.id} value={model.id}>
-                      {model.name} — {model.description}
+                      {model.name} — {model.description} ({model.cost})
                     </option>
                   ))}
                 </select>
                 <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
               </div>
+              <p className="mt-1 text-[10px] text-neutral-400">
+                Est. cost per generation (~2000 tokens): {MODELS.find(m => m.id === settings.model)?.cost || '$0.01'}
+              </p>
             </div>
 
             {/* Style */}

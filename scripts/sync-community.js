@@ -3,15 +3,15 @@
  * Copies community.json and generated SVGs to public/metaphors/
  */
 
-import { existsSync, mkdirSync, copyFileSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, copyFileSync, readdirSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
-// Source paths (LMS submodule)
-const LMS_METAPHORS = join(ROOT, 'lms/public/metaphors');
+// Source paths (LMS submodule) - content/metaphors is the correct location
+const LMS_METAPHORS = join(ROOT, 'lms/content/metaphors');
 const LMS_COMMUNITY_JSON = join(LMS_METAPHORS, 'community.json');
 const LMS_GENERATED = join(LMS_METAPHORS, 'generated');
 
@@ -24,7 +24,8 @@ console.log('🔄 Syncing community metaphors from LMS...');
 
 // Check if LMS submodule exists
 if (!existsSync(LMS_METAPHORS)) {
-  console.log('⚠️  LMS submodule not found. Run: git submodule update --init');
+  console.log('⚠️  LMS submodule not found at:', LMS_METAPHORS);
+  console.log('   Run: git submodule update --init');
   console.log('   Skipping community sync.');
   process.exit(0);
 }
@@ -45,7 +46,7 @@ if (existsSync(LMS_COMMUNITY_JSON)) {
   const data = JSON.parse(readFileSync(LMS_COMMUNITY_JSON, 'utf-8'));
   console.log(`✅ Copied community.json (${data.metaphors?.length || 0} metaphors)`);
 } else {
-  console.log('⚠️  community.json not found in LMS');
+  console.log('⚠️  community.json not found at:', LMS_COMMUNITY_JSON);
 }
 
 // Copy generated SVGs

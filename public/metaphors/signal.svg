@@ -8,14 +8,103 @@
       .gray-dark { fill: #6B7280; }
       .noise { fill: #D1D5DB; }
 
+      /* Signal wave pulsing animation - flowing motion along the wave */
       @keyframes signal-pulse {
-        0%, 100% { stroke-dashoffset: 0; }
-        50% { stroke-dashoffset: -40; }
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: -80; }
       }
 
-      @keyframes noise-fade {
-        0%, 100% { opacity: 0.3; }
+      /* Signal glow pulsing */
+      @keyframes signal-glow {
+        0%, 100% {
+          stroke-width: 12;
+          opacity: 1;
+        }
+        50% {
+          stroke-width: 14;
+          opacity: 0.9;
+        }
+      }
+
+      /* Endpoint pulse */
+      @keyframes endpoint-pulse {
+        0%, 100% {
+          r: 16;
+          opacity: 1;
+        }
+        50% {
+          r: 20;
+          opacity: 0.8;
+        }
+      }
+
+      /* Noise fade animation - groups fade at different rates */
+      @keyframes noise-fade-1 {
+        0%, 100% { opacity: 0.25; }
         50% { opacity: 0.6; }
+      }
+
+      @keyframes noise-fade-2 {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 0.2; }
+      }
+
+      @keyframes noise-fade-3 {
+        0%, 100% { opacity: 0.35; }
+        33% { opacity: 0.7; }
+        66% { opacity: 0.15; }
+      }
+
+      /* Noise drift animations - subtle position changes */
+      @keyframes noise-drift-1 {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(2px, -1px); }
+        50% { transform: translate(-1px, 2px); }
+        75% { transform: translate(1px, 1px); }
+      }
+
+      @keyframes noise-drift-2 {
+        0%, 100% { transform: translate(0, 0); }
+        33% { transform: translate(-2px, 1px); }
+        66% { transform: translate(1px, -2px); }
+      }
+
+      @keyframes noise-drift-3 {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(2px, 2px); }
+      }
+
+      /* Line flicker for noise lines */
+      @keyframes line-flicker {
+        0%, 100% { opacity: 0.4; }
+        25% { opacity: 0.7; }
+        50% { opacity: 0.3; }
+        75% { opacity: 0.6; }
+      }
+
+      .noise-group-1 {
+        animation: noise-fade-1 4s ease-in-out infinite, noise-drift-1 6s ease-in-out infinite;
+      }
+
+      .noise-group-2 {
+        animation: noise-fade-2 3.5s ease-in-out infinite, noise-drift-2 5s ease-in-out infinite;
+      }
+
+      .noise-group-3 {
+        animation: noise-fade-3 5s ease-in-out infinite, noise-drift-3 7s ease-in-out infinite;
+      }
+
+      .noise-lines {
+        animation: line-flicker 2.5s ease-in-out infinite;
+      }
+
+      .signal-wave {
+        animation: signal-pulse 1.5s linear infinite, signal-glow 2s ease-in-out infinite;
+        stroke-dasharray: 20 10;
+      }
+
+      .signal-endpoint {
+        animation: endpoint-pulse 2s ease-in-out infinite;
       }
     </style>
   </defs>
@@ -23,8 +112,9 @@
   <rect width="800" height="800" class="bg"/>
 
   <!-- Noise field - scattered dots and short lines (left side, fading toward center) -->
-  <g style="animation: noise-fade 3s ease-in-out infinite;">
-    <!-- Scattered noise dots - dense on left, sparse toward middle -->
+
+  <!-- Noise group 1 - dense left side -->
+  <g class="noise-group-1">
     <circle cx="80" cy="200" r="4" class="gray"/>
     <circle cx="120" cy="180" r="3" class="gray-dark"/>
     <circle cx="100" cy="240" r="5" class="noise"/>
@@ -32,6 +122,10 @@
     <circle cx="60" cy="280" r="4" class="gray-dark"/>
     <circle cx="130" cy="300" r="3" class="noise"/>
     <circle cx="90" cy="340" r="5" class="gray"/>
+  </g>
+
+  <!-- Noise group 2 - middle left -->
+  <g class="noise-group-2">
     <circle cx="170" cy="260" r="4" class="gray-dark"/>
     <circle cx="110" cy="380" r="3" class="gray"/>
     <circle cx="140" cy="360" r="4" class="noise"/>
@@ -39,6 +133,10 @@
     <circle cx="160" cy="420" r="3" class="gray"/>
     <circle cx="100" cy="450" r="4" class="noise"/>
     <circle cx="130" cy="480" r="3" class="gray-dark"/>
+  </g>
+
+  <!-- Noise group 3 - lower and transition zone -->
+  <g class="noise-group-3">
     <circle cx="80" cy="520" r="5" class="gray"/>
     <circle cx="150" cy="500" r="4" class="noise"/>
     <circle cx="60" cy="560" r="3" class="gray-dark"/>
@@ -46,8 +144,10 @@
     <circle cx="180" cy="340" r="3" class="noise"/>
     <circle cx="200" cy="380" r="4" class="gray"/>
     <circle cx="190" cy="440" r="3" class="gray-dark"/>
+  </g>
 
-    <!-- Short noise lines -->
+  <!-- Short noise lines with flicker -->
+  <g class="noise-lines">
     <line x1="85" y1="160" x2="105" y2="170" stroke="#9CA3AF" stroke-width="2"/>
     <line x1="55" y1="230" x2="75" y2="225" stroke="#6B7280" stroke-width="2"/>
     <line x1="145" y1="290" x2="165" y2="285" stroke="#D1D5DB" stroke-width="2"/>
@@ -58,14 +158,22 @@
     <line x1="210" y1="300" x2="230" y2="310" stroke="#6B7280" stroke-width="2"/>
     <line x1="220" y1="420" x2="240" y2="425" stroke="#D1D5DB" stroke-width="2"/>
     <line x1="200" y1="520" x2="220" y2="515" stroke="#9CA3AF" stroke-width="2"/>
+  </g>
 
-    <!-- Additional noise - medium zone -->
+  <!-- Additional noise - medium zone with different animation timing -->
+  <g class="noise-group-1" style="animation-delay: 0.5s;">
     <circle cx="230" cy="250" r="3" class="noise"/>
     <circle cx="260" cy="320" r="4" class="gray"/>
     <circle cx="240" cy="390" r="3" class="gray-dark"/>
+  </g>
+
+  <g class="noise-group-2" style="animation-delay: 1s;">
     <circle cx="270" cy="460" r="4" class="noise"/>
     <circle cx="250" cy="540" r="3" class="gray"/>
     <circle cx="280" cy="280" r="3" class="gray-dark"/>
+  </g>
+
+  <g class="noise-group-3" style="animation-delay: 0.75s;">
     <circle cx="300" cy="360" r="4" class="noise"/>
     <circle cx="290" cy="440" r="3" class="gray"/>
     <circle cx="310" cy="500" r="4" class="gray-dark"/>
@@ -77,6 +185,7 @@
 
   <!-- The Signal - bold red sine wave emerging from the filter -->
   <path
+    class="signal-wave"
     d="M 340 400
        Q 400 300, 460 400
        Q 520 500, 580 400
@@ -87,7 +196,6 @@
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-    style="animation: signal-pulse 2s linear infinite; stroke-dasharray: 40 0;"
   />
 
   <!-- Signal emphasis - thin parallel line above for depth -->
@@ -106,8 +214,8 @@
     opacity="0.3"
   />
 
-  <!-- Clean endpoint indicator -->
-  <circle cx="760" cy="400" r="16" class="red" stroke="none"/>
+  <!-- Clean endpoint indicator with pulse -->
+  <circle cx="760" cy="400" class="red signal-endpoint" stroke="none"/>
   <circle cx="760" cy="400" r="8" fill="#FFFFFF"/>
 
 </svg>

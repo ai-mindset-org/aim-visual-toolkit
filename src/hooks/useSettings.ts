@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 export type ComplexityLevel = 'minimal' | 'standard' | 'detailed';
 export type AnimationLevel = 'none' | 'subtle' | 'active';
 export type ModelId =
-  | 'google/gemini-2.5-pro'
-  | 'google/gemini-exp-1206'
-  | 'google/gemini-3-flash-preview'
-  | 'google/gemini-2.5-flash';
+  | 'google/gemini-2.5-pro-preview'
+  | 'google/gemini-2.5-flash'
+  | 'google/gemini-2.0-flash-exp'
+  | 'google/gemini-exp-1206';
 
 export interface Settings {
   openRouterKey: string;
@@ -20,7 +20,7 @@ const STORAGE_KEY = 'aim-visual-toolkit-settings';
 
 const DEFAULT_SETTINGS: Settings = {
   openRouterKey: '',
-  model: 'google/gemini-2.5-pro',
+  model: 'google/gemini-2.5-pro-preview',
   style: 'light',
   complexity: 'standard',
   animation: 'subtle',
@@ -58,10 +58,10 @@ export function useSettings() {
 }
 
 export const MODELS = [
-  { id: 'google/gemini-2.5-pro', name: 'Gemini 2.5 Pro', description: 'Best quality' },
-  { id: 'google/gemini-exp-1206', name: 'Gemini Exp 1206', description: 'Experimental' },
-  { id: 'google/gemini-3-flash-preview', name: 'Gemini 3 Flash', description: 'Fast, latest' },
-  { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', description: 'Stable, fast' },
+  { id: 'google/gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro', description: 'Best quality', cost: '$0.01' },
+  { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', description: 'Fast & cheap', cost: '$0.001' },
+  { id: 'google/gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash', description: 'Experimental', cost: '$0.002' },
+  { id: 'google/gemini-exp-1206', name: 'Gemini Exp 1206', description: 'Latest experimental', cost: '$0.005' },
 ] as const;
 
 export const COMPLEXITY_OPTIONS = [
