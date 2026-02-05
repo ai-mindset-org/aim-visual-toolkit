@@ -22,12 +22,22 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #0d1117 50%, #0a0a0a 100%);
+      background: #0a0a0a;
       color: #ffffff;
       position: relative;
     }
 
-    /* Subtle grid pattern */
+    /* Red accent bar at top - Swiss Design */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: #DC2626;
+    }
+
+    /* Subtle grid pattern with red tint */
     .grid-pattern {
       position: absolute;
       top: 0;
@@ -35,8 +45,8 @@
       width: 100%;
       height: 100%;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
       background-size: 40px 40px;
       pointer-events: none;
     }
@@ -60,9 +70,9 @@
     }
 
     .logo {
-      width: 180px;
-      height: auto;
-      opacity: 0.9;
+      width: 48px;
+      height: 48px;
+      opacity: 0.8;
     }
 
     /* Main content */
@@ -71,109 +81,125 @@
       justify-content: space-between;
       align-items: center;
       flex: 1;
-      margin-top: -40px;
+      margin-top: -20px;
     }
 
     .content {
-      max-width: 580px;
+      max-width: 550px;
     }
 
     .title {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 72px;
+      font-size: 64px;
       font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -2px;
-      margin-bottom: 24px;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      color: #f5f5f5;
     }
 
     .title .accent {
-      color: #4a9eff;
+      color: #DC2626;
     }
 
     .subtitle {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 400;
-      color: rgba(255, 255, 255, 0.6);
-      line-height: 1.4;
-      margin-bottom: 32px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.5;
     }
 
-    /* Geometric Swiss design element */
+    /* Geometric Swiss design element - more red */
     .visual {
       position: relative;
-      width: 400px;
-      height: 400px;
-      margin-right: -20px;
+      width: 420px;
+      height: 420px;
     }
 
     .rect {
       position: absolute;
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
     }
 
+    /* Main frame */
     .rect-1 {
-      width: 280px;
-      height: 280px;
+      width: 300px;
+      height: 300px;
       top: 60px;
       right: 0;
-      background: linear-gradient(135deg, rgba(74, 158, 255, 0.08) 0%, transparent 100%);
-      border-color: rgba(74, 158, 255, 0.3);
-    }
-
-    .rect-2 {
-      width: 200px;
-      height: 200px;
-      top: 20px;
-      right: 120px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
-    }
-
-    .rect-3 {
-      width: 160px;
-      height: 160px;
-      top: 160px;
-      right: 40px;
-      background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%);
-      border-color: rgba(220, 38, 38, 0.5);
-    }
-
-    .rect-4 {
-      width: 100px;
-      height: 100px;
-      top: 100px;
-      right: 180px;
+      border-color: rgba(255, 255, 255, 0.15);
       background: rgba(255, 255, 255, 0.02);
     }
 
-    .rect-5 {
-      width: 60px;
-      height: 60px;
-      top: 240px;
-      right: 220px;
-      background: rgba(220, 38, 38, 0.8);
+    /* Secondary frame */
+    .rect-2 {
+      width: 220px;
+      height: 220px;
+      top: 20px;
+      right: 100px;
+      border-color: rgba(220, 38, 38, 0.3);
+      background: rgba(220, 38, 38, 0.05);
+    }
+
+    /* Red accent square - solid */
+    .rect-3 {
+      width: 140px;
+      height: 140px;
+      top: 180px;
+      right: 40px;
+      background: #DC2626;
       border: none;
     }
 
-    /* Decorative lines */
+    /* Small dark square */
+    .rect-4 {
+      width: 80px;
+      height: 80px;
+      top: 100px;
+      right: 200px;
+      background: #171717;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Tiny accent */
+    .rect-5 {
+      width: 40px;
+      height: 40px;
+      top: 280px;
+      right: 280px;
+      background: rgba(220, 38, 38, 0.6);
+      border: none;
+    }
+
+    /* Circle accent */
+    .circle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #DC2626;
+      top: 80px;
+      right: 320px;
+    }
+
+    /* Lines */
     .line {
       position: absolute;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .line-h {
-      width: 120px;
+      width: 100px;
       height: 2px;
-      top: 180px;
-      right: 300px;
+      top: 160px;
+      right: 320px;
     }
 
     .line-v {
       width: 2px;
-      height: 80px;
-      top: 300px;
-      right: 140px;
+      height: 60px;
+      top: 340px;
+      right: 160px;
     }
 
     /* Footer */
@@ -185,24 +211,25 @@
 
     .url {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.4);
       letter-spacing: 0.5px;
     }
 
     .attribution {
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.4);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.35);
     }
 
     .attribution span {
-      color: rgba(220, 38, 38, 0.8);
+      color: #DC2626;
       font-weight: 600;
     }
   </style>
 </head>
 <body>
+  <div class="top-bar"></div>
   <div class="grid-pattern"></div>
 
   <div class="container">
@@ -213,22 +240,23 @@
     <main class="main">
       <div class="content">
         <h1 class="title">AIM Visual<br><span class="accent">Toolkit</span></h1>
-        <p class="subtitle">Swiss Design visual metaphors<br>for AI education</p>
+        <p class="subtitle">Swiss Design visual metaphors<br>for AI concepts</p>
       </div>
 
       <div class="visual">
         <div class="rect rect-1"></div>
         <div class="rect rect-2"></div>
-        <div class="rect rect-3"></div>
         <div class="rect rect-4"></div>
+        <div class="rect rect-3"></div>
         <div class="rect rect-5"></div>
+        <div class="circle"></div>
         <div class="line line-h"></div>
         <div class="line line-v"></div>
       </div>
     </main>
 
     <footer class="footer">
-      <div class="url">visual.aimindset.org</div>
+      <div class="url">aimindset-visual.netlify.app</div>
       <div class="attribution">by <span>AI Mindset</span></div>
     </footer>
   </div>
