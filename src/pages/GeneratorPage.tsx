@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Sparkles, Download, Copy, Check, RefreshCw, Settings, ChevronDown, Bookmark, BookmarkCheck, Globe, Loader2 } from 'lucide-react';
-import DOMPurify from 'dompurify';
-import { toPng } from 'html-to-image';
 import { useSettings, MODELS, COMPLEXITY_OPTIONS, ANIMATION_OPTIONS } from '../hooks/useSettings';
-import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../utils/download';
+import { downloadBlob, MIME_TYPES } from '../utils/download';
 import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
+import { sanitizeSvg } from '../utils/svg-utils';
+import { exportSvgToPng } from '../utils/png-export';
 
 interface GeneratedMetaphor {
   svg: string;
@@ -13,14 +13,6 @@ interface GeneratedMetaphor {
   elapsed?: number;
   model?: string;
 }
-
-const sanitizeSvg = (svg: string): string => {
-  return DOMPurify.sanitize(svg, {
-    USE_PROFILES: { svg: true, svgFilters: true },
-    ADD_TAGS: ['use', 'feGaussianBlur', 'feOffset', 'feMerge', 'feMergeNode', 'feBlend', 'animate'],
-    ADD_ATTR: ['xlink:href', 'href', 'clip-path', 'fill-opacity', 'stroke-opacity'],
-  });
-};
 
 export default function GeneratorPage() {
   const { settings, updateSettings, hasCustomKey } = useSettings();
@@ -35,7 +27,6 @@ export default function GeneratorPage() {
   const [communitySaving, setCommunitySaving] = useState(false);
   const [communitySaved, setCommunitySaved] = useState(false);
   const [communityError, setCommunityError] = useState<string | null>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = async () => {
     if (!prompt.trim() || prompt.length < 3) {
@@ -120,20 +111,17 @@ export default function GeneratorPage() {
   };
 
   const handleDownloadPng = async () => {
-    if (!previewRef.current || !result) return;
+    if (!result) return;
 
     try {
-      const dataUrl = await toPng(previewRef.current, {
-        pixelRatio: 4,
+      const filename = result.titleEn
+        ? result.titleEn.toLowerCase().replace(/\s+/g, '-')
+        : 'metaphor';
+
+      await exportSvgToPng(sanitizeSvg(result.svg), {
+        filename,
         backgroundColor: settings.style === 'dark' ? '#0a0a0a' : '#FFFFFF',
       });
-
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      const filename = result.titleEn
-        ? `${result.titleEn.toLowerCase().replace(/\s+/g, '-')}.png`
-        : 'metaphor.png';
-      downloadBinaryBlob(blob, filename);
     } catch (err) {
       console.error('Failed to export PNG:', err);
     }
@@ -400,7 +388,6 @@ export default function GeneratorPage() {
           {/* Preview with frame */}
           <div className="p-8 bg-neutral-100">
             <div
-              ref={previewRef}
               className={`aspect-square max-w-md mx-auto border border-neutral-200 rounded-lg p-6 overflow-hidden ${
                 settings.style === 'dark' ? 'bg-neutral-900' : 'bg-white'
               }`}

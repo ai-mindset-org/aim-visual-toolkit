@@ -1,18 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Copy, Download, Check, Bookmark, BookmarkCheck } from 'lucide-react';
-import DOMPurify from 'dompurify';
-import { toPng } from 'html-to-image';
 import type { Metaphor } from '../../data/metaphors';
-import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../../utils/download';
+import { downloadBlob, MIME_TYPES } from '../../utils/download';
+import { sanitizeSvg } from '../../utils/svg-utils';
+import { exportSvgToPng } from '../../utils/png-export';
 import StaticMetaphor from './StaticMetaphor';
-
-const sanitizeSvg = (svg: string): string => {
-  return DOMPurify.sanitize(svg, {
-    USE_PROFILES: { svg: true, svgFilters: true },
-    ADD_TAGS: ['use', 'feGaussianBlur', 'feOffset', 'feMerge', 'feMergeNode', 'feBlend', 'animate'],
-    ADD_ATTR: ['xlink:href', 'href', 'clip-path', 'fill-opacity', 'stroke-opacity'],
-  });
-};
 
 interface MetaphorModalProps {
   metaphor: Metaphor | null;
@@ -31,7 +23,6 @@ export default function MetaphorModal({
 }: MetaphorModalProps) {
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -93,18 +84,23 @@ export default function MetaphorModal({
   };
 
   const handleDownloadPng = async () => {
-    if (!previewRef.current) return;
-
     setExporting(true);
     try {
-      const dataUrl = await toPng(previewRef.current, {
-        pixelRatio: 4,
+      // Get SVG content
+      let svg: string;
+      if (metaphor.format === 'svg-inline' && metaphor.svg) {
+        svg = metaphor.svg;
+      } else if (metaphor.filename) {
+        const response = await fetch(`/metaphors/${metaphor.filename}`);
+        svg = await response.text();
+      } else {
+        return;
+      }
+
+      await exportSvgToPng(sanitizeSvg(svg), {
+        filename: metaphor.id,
         backgroundColor: '#FFFFFF',
       });
-
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      downloadBinaryBlob(blob, `${metaphor.id}.png`);
     } catch (err) {
       console.error('Failed to export PNG:', err);
     } finally {
@@ -133,10 +129,7 @@ export default function MetaphorModal({
 
         {/* SVG Preview with frame */}
         <div className="p-8 bg-neutral-100">
-          <div
-            ref={previewRef}
-            className="aspect-square max-w-md mx-auto bg-white border border-neutral-200 rounded-lg p-6"
-          >
+          <div className="aspect-square max-w-md mx-auto bg-white border border-neutral-200 rounded-lg p-6">
             {metaphor.format === 'svg-inline' && metaphor.svg ? (
               <div
                 className="w-full h-full metaphor-container"
