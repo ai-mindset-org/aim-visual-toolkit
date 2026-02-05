@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 export type ComplexityLevel = 'minimal' | 'standard' | 'detailed';
 export type AnimationLevel = 'none' | 'subtle' | 'active';
 export type ModelId =
+  | 'google/gemini-2.5-flash-preview'
+  | 'google/gemini-2.5-pro-preview'
   | 'google/gemini-2.0-flash-001'
-  | 'google/gemini-2.0-flash-exp'
-  | 'google/gemini-1.5-flash'
-  | 'google/gemini-1.5-pro'
-  | 'google/gemini-2.0-pro-exp-02-05';
+  | 'anthropic/claude-3.5-sonnet'
+  | 'anthropic/claude-3-5-haiku'
+  | 'openai/gpt-4o'
+  | 'openai/gpt-4o-mini';
 
 export interface Settings {
   openRouterKey: string;
@@ -21,7 +23,7 @@ const STORAGE_KEY = 'aim-visual-toolkit-settings';
 
 const DEFAULT_SETTINGS: Settings = {
   openRouterKey: '',
-  model: 'google/gemini-2.0-flash-001',
+  model: 'google/gemini-2.5-flash-preview',
   style: 'light',
   complexity: 'standard',
   animation: 'subtle',
@@ -59,11 +61,16 @@ export function useSettings() {
 }
 
 export const MODELS = [
-  { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash', description: 'Fast, latest (Recommended)', cost: '$0.001' },
-  { id: 'google/gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash Exp', description: 'Experimental thinking', cost: '$0.001' },
-  { id: 'google/gemini-2.0-pro-exp-02-05', name: 'Gemini 2.0 Pro', description: 'Best quality', cost: '$0.01' },
-  { id: 'google/gemini-1.5-flash', name: 'Gemini 1.5 Flash', description: 'Stable, reliable', cost: '$0.0005' },
-  { id: 'google/gemini-1.5-pro', name: 'Gemini 1.5 Pro', description: 'High quality', cost: '$0.005' },
+  // Google Gemini (newest)
+  { id: 'google/gemini-2.5-flash-preview', name: 'Gemini 2.5 Flash', description: 'Newest, fast (Recommended)', cost: '$0.001' },
+  { id: 'google/gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro', description: 'Best Google model', cost: '$0.01' },
+  { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash', description: 'Stable, reliable', cost: '$0.001' },
+  // Anthropic Claude
+  { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', description: 'Best for design', cost: '$0.015' },
+  { id: 'anthropic/claude-3-5-haiku', name: 'Claude 3.5 Haiku', description: 'Fast Claude', cost: '$0.001' },
+  // OpenAI GPT
+  { id: 'openai/gpt-4o', name: 'GPT-4o', description: 'OpenAI flagship', cost: '$0.015' },
+  { id: 'openai/gpt-4o-mini', name: 'GPT-4o Mini', description: 'Fast & cheap', cost: '$0.0005' },
 ] as const;
 
 export const COMPLEXITY_OPTIONS = [

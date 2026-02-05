@@ -19,7 +19,7 @@ type AnimationLevel = 'none' | 'subtle' | 'active';
 
 const CONFIG = {
   apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
-  defaultModel: 'google/gemini-2.0-flash-001',
+  defaultModel: 'google/gemini-2.5-flash-preview',
   fallbackModel: 'google/gemini-2.5-flash',
   svgSize: 800,
   colors: {
