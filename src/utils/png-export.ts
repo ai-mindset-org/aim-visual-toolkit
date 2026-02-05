@@ -1,4 +1,3 @@
-import { toPng } from 'html-to-image';
 import { downloadBinaryBlob } from './download';
 
 export interface PngExportOptions {
@@ -13,8 +12,8 @@ export interface PngExportOptions {
 }
 
 /**
- * Export SVG content to PNG file
- * Creates a clean render at native SVG size
+ * Export SVG content to PNG file using Canvas
+ * Removes animations for clean static export
  */
 export async function exportSvgToPng(
   svgContent: string,
@@ -27,48 +26,79 @@ export async function exportSvgToPng(
     size = 800,
   } = options;
 
-  // Create temporary container
-  const container = document.createElement('div');
-  container.style.cssText = `
-    position: fixed;
-    left: -9999px;
-    top: 0;
-    width: ${size}px;
-    height: ${size}px;
-    background: ${backgroundColor};
-    overflow: hidden;
-  `;
+  // Remove CSS animations and set elements to final state
+  let cleanSvg = svgContent
+    // Remove @keyframes blocks
+    .replace(/@keyframes[^}]+\{[^}]+\}[^}]*\}/g, '')
+    // Remove animation properties
+    .replace(/animation:[^;}"]+[;"]?/g, '')
+    .replace(/animation-[a-z-]+:[^;}"]+[;"]?/g, '')
+    // Remove transform that might offset elements
+    .replace(/transform:\s*translateY\([^)]+\)/g, '')
+    // Ensure full opacity
+    .replace(/opacity:\s*0[^0-9]/g, 'opacity: 1;');
 
-  // Insert SVG
-  container.innerHTML = svgContent;
+  // Ensure SVG has correct dimensions
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(cleanSvg, 'image/svg+xml');
+  const svg = doc.querySelector('svg');
 
-  // Force SVG to fill container exactly
-  const svg = container.querySelector('svg');
   if (svg) {
     svg.setAttribute('width', String(size));
     svg.setAttribute('height', String(size));
-    svg.style.display = 'block';
-    svg.style.width = `${size}px`;
-    svg.style.height = `${size}px`;
+    // Ensure viewBox exists
+    if (!svg.getAttribute('viewBox')) {
+      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+    }
   }
 
-  document.body.appendChild(container);
+  const serializer = new XMLSerializer();
+  cleanSvg = serializer.serializeToString(doc);
 
-  // Wait for fonts and animations to settle
-  await new Promise(resolve => setTimeout(resolve, 100));
+  // Create canvas
+  const canvas = document.createElement('canvas');
+  const outputSize = size * pixelRatio;
+  canvas.width = outputSize;
+  canvas.height = outputSize;
 
-  try {
-    const dataUrl = await toPng(container, {
-      pixelRatio,
-      backgroundColor,
-      width: size,
-      height: size,
-    });
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Failed to get canvas context');
 
-    const response = await fetch(dataUrl);
-    const blob = await response.blob();
-    downloadBinaryBlob(blob, `${filename}.png`);
-  } finally {
-    document.body.removeChild(container);
-  }
+  // Fill background
+  ctx.fillStyle = backgroundColor;
+  ctx.fillRect(0, 0, outputSize, outputSize);
+
+  // Create image from SVG
+  const img = new Image();
+  const blob = new Blob([cleanSvg], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  return new Promise((resolve, reject) => {
+    img.onload = () => {
+      // Draw SVG scaled to canvas
+      ctx.drawImage(img, 0, 0, outputSize, outputSize);
+      URL.revokeObjectURL(url);
+
+      // Export as PNG
+      canvas.toBlob(
+        (pngBlob) => {
+          if (pngBlob) {
+            downloadBinaryBlob(pngBlob, `${filename}.png`);
+            resolve();
+          } else {
+            reject(new Error('Failed to create PNG blob'));
+          }
+        },
+        'image/png',
+        1.0
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load SVG as image'));
+    };
+
+    img.src = url;
+  });
 }
