@@ -3,11 +3,16 @@ import { useState, useEffect } from 'react';
 export type ComplexityLevel = 'minimal' | 'standard' | 'detailed';
 export type AnimationLevel = 'none' | 'subtle' | 'active';
 export type ModelId =
+  // Gemini 3 (newest)
+  | 'google/gemini-3-flash'
+  | 'google/gemini-3-pro'
+  // Gemini 2.5
   | 'google/gemini-2.5-flash-preview'
   | 'google/gemini-2.5-pro-preview'
-  | 'google/gemini-2.0-flash-001'
+  // Claude
   | 'anthropic/claude-3.5-sonnet'
   | 'anthropic/claude-3-5-haiku'
+  // OpenAI
   | 'openai/gpt-4o'
   | 'openai/gpt-4o-mini';
 
@@ -23,7 +28,7 @@ const STORAGE_KEY = 'aim-visual-toolkit-settings';
 
 const DEFAULT_SETTINGS: Settings = {
   openRouterKey: '',
-  model: 'google/gemini-2.5-flash-preview',
+  model: 'google/gemini-3-flash',
   style: 'light',
   complexity: 'standard',
   animation: 'subtle',
@@ -61,10 +66,12 @@ export function useSettings() {
 }
 
 export const MODELS = [
-  // Google Gemini (newest)
-  { id: 'google/gemini-2.5-flash-preview', name: 'Gemini 2.5 Flash', description: 'Newest, fast (Recommended)', cost: '$0.001' },
-  { id: 'google/gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro', description: 'Best Google model', cost: '$0.01' },
-  { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash', description: 'Stable, reliable', cost: '$0.001' },
+  // Gemini 3 (newest generation)
+  { id: 'google/gemini-3-flash', name: 'Gemini 3 Flash', description: 'Latest & fastest (Recommended)', cost: '$0.001' },
+  { id: 'google/gemini-3-pro', name: 'Gemini 3 Pro', description: 'Best quality', cost: '$0.01' },
+  // Gemini 2.5
+  { id: 'google/gemini-2.5-flash-preview', name: 'Gemini 2.5 Flash', description: 'Fast, stable', cost: '$0.001' },
+  { id: 'google/gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro', description: 'High quality', cost: '$0.01' },
   // Anthropic Claude
   { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', description: 'Best for design', cost: '$0.015' },
   { id: 'anthropic/claude-3-5-haiku', name: 'Claude 3.5 Haiku', description: 'Fast Claude', cost: '$0.001' },
