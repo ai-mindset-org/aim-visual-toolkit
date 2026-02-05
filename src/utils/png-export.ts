@@ -14,7 +14,7 @@ export interface PngExportOptions {
 
 /**
  * Export SVG content to PNG file
- * Creates a clean render without borders/padding
+ * Creates a clean render at native SVG size
  */
 export async function exportSvgToPng(
   svgContent: string,
@@ -27,7 +27,7 @@ export async function exportSvgToPng(
     size = 800,
   } = options;
 
-  // Create temporary container for clean render
+  // Create temporary container
   const container = document.createElement('div');
   container.style.cssText = `
     position: fixed;
@@ -36,40 +36,33 @@ export async function exportSvgToPng(
     width: ${size}px;
     height: ${size}px;
     background: ${backgroundColor};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px;
-    box-sizing: border-box;
+    overflow: hidden;
   `;
 
-  // Inner SVG container
-  const inner = document.createElement('div');
-  inner.style.cssText = `
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
-  inner.innerHTML = svgContent;
+  // Insert SVG
+  container.innerHTML = svgContent;
 
-  // Style the SVG to fit
-  const svg = inner.querySelector('svg');
+  // Force SVG to fill container exactly
+  const svg = container.querySelector('svg');
   if (svg) {
-    svg.style.maxWidth = '100%';
-    svg.style.maxHeight = '100%';
-    svg.style.width = 'auto';
-    svg.style.height = 'auto';
+    svg.setAttribute('width', String(size));
+    svg.setAttribute('height', String(size));
+    svg.style.display = 'block';
+    svg.style.width = `${size}px`;
+    svg.style.height = `${size}px`;
   }
 
-  container.appendChild(inner);
   document.body.appendChild(container);
+
+  // Wait for fonts and animations to settle
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   try {
     const dataUrl = await toPng(container, {
       pixelRatio,
       backgroundColor,
+      width: size,
+      height: size,
     });
 
     const response = await fetch(dataUrl);
@@ -78,24 +71,4 @@ export async function exportSvgToPng(
   } finally {
     document.body.removeChild(container);
   }
-}
-
-/**
- * Export element to PNG (for preview containers)
- * Note: Will include element's borders/padding
- */
-export async function exportElementToPng(
-  element: HTMLElement,
-  filename: string,
-  backgroundColor = '#FFFFFF',
-  pixelRatio = 4
-): Promise<void> {
-  const dataUrl = await toPng(element, {
-    pixelRatio,
-    backgroundColor,
-  });
-
-  const response = await fetch(dataUrl);
-  const blob = await response.blob();
-  downloadBinaryBlob(blob, `${filename}.png`);
 }
