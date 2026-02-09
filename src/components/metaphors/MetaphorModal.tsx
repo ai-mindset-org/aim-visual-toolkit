@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Copy, Download, Check, Bookmark, BookmarkCheck } from 'lucide-react';
 import type { Metaphor } from '../../data/metaphors';
 import { downloadBlob, MIME_TYPES } from '../../utils/download';
-import { sanitizeSvg } from '../../utils/svg-utils';
+import { sanitizeSvg, fixSvgForXml } from '../../utils/svg-utils';
 import { exportSvgToPng } from '../../utils/png-export';
 import StaticMetaphor from './StaticMetaphor';
 
@@ -77,7 +77,7 @@ export default function MetaphorModal({
       } else {
         return;
       }
-      downloadBlob(svg, `${metaphor.id}.svg`, MIME_TYPES.SVG);
+      downloadBlob(fixSvgForXml(svg), `${metaphor.id}.svg`, MIME_TYPES.SVG);
     } catch (err) {
       console.error('Failed to download:', err);
     }

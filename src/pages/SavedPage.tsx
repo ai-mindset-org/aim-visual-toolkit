@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
 import { Bookmark, Trash2, Download, Copy, Check, Sparkles, BookmarkX, Archive, Loader2 } from 'lucide-react';
-import DOMPurify from 'dompurify';
 import { Link } from 'react-router-dom';
 import JSZip from 'jszip';
 import { useSavedMetaphors, type GeneratedMetaphor } from '../hooks/useSavedMetaphors';
@@ -8,14 +7,7 @@ import { getMetaphorById, type Metaphor } from '../data/metaphors';
 import { MetaphorModal } from '../components/metaphors';
 import { MetaphorCard } from '../components/metaphors';
 import { downloadBlob, downloadBinaryBlob, MIME_TYPES } from '../utils/download';
-
-const sanitizeSvg = (svg: string): string => {
-  return DOMPurify.sanitize(svg, {
-    USE_PROFILES: { svg: true, svgFilters: true },
-    ADD_TAGS: ['use', 'feGaussianBlur', 'feOffset', 'feMerge', 'feMergeNode', 'feBlend', 'animate'],
-    ADD_ATTR: ['xlink:href', 'href', 'clip-path', 'fill-opacity', 'stroke-opacity'],
-  });
-};
+import { sanitizeSvg, fixSvgForXml } from '../utils/svg-utils';
 
 type TabType = 'all' | 'catalog' | 'generated';
 
@@ -54,7 +46,7 @@ export default function SavedPage() {
     const filename = title
       ? `${title.toLowerCase().replace(/\s+/g, '-')}.svg`
       : 'metaphor.svg';
-    downloadBlob(svg, filename, MIME_TYPES.SVG);
+    downloadBlob(fixSvgForXml(svg), filename, MIME_TYPES.SVG);
   };
 
   const handleDownloadAll = async () => {
@@ -89,7 +81,7 @@ export default function SavedPage() {
           }
 
           const filename = `${metaphor.id}.svg`;
-          catalogFolder?.file(filename, svgContent);
+          catalogFolder?.file(filename, fixSvgForXml(svgContent));
         } catch (err) {
           console.warn(`Error processing catalog metaphor ${metaphor.id}:`, err);
         }
@@ -101,7 +93,7 @@ export default function SavedPage() {
           const filename = metaphor.titleEn
             ? `${metaphor.titleEn.toLowerCase().replace(/\s+/g, '-')}.svg`
             : `${metaphor.id}.svg`;
-          generatedFolder?.file(filename, metaphor.svg);
+          generatedFolder?.file(filename, fixSvgForXml(metaphor.svg));
         } catch (err) {
           console.warn(`Error processing generated metaphor ${metaphor.id}:`, err);
         }

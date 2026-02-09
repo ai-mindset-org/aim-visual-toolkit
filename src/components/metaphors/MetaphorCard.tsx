@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Copy, Download, Check, Bookmark, BookmarkCheck } from 'lucide-react';
 import type { Metaphor } from '../../data/metaphors';
 import { downloadBlob, downloadFromUrl, MIME_TYPES } from '../../utils/download';
+import { fixSvgForXml } from '../../utils/svg-utils';
 import StaticMetaphor from './StaticMetaphor';
 
 interface MetaphorCardProps {
@@ -46,7 +47,7 @@ export default function MetaphorCard({
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (metaphor.format === 'svg-inline' && metaphor.svg) {
-      downloadBlob(metaphor.svg, `${metaphor.id}.svg`, MIME_TYPES.SVG);
+      downloadBlob(fixSvgForXml(metaphor.svg), `${metaphor.id}.svg`, MIME_TYPES.SVG);
     } else if (metaphor.filename) {
       downloadFromUrl(`/metaphors/${metaphor.filename}`, metaphor.filename.split('/').pop() || `${metaphor.id}.svg`);
     }

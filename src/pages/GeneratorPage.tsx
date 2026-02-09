@@ -3,7 +3,7 @@ import { Sparkles, Download, Copy, Check, RefreshCw, Settings, ChevronDown, Book
 import { useSettings, MODELS, COMPLEXITY_OPTIONS, ANIMATION_OPTIONS } from '../hooks/useSettings';
 import { downloadBlob, MIME_TYPES } from '../utils/download';
 import { useSavedMetaphors } from '../hooks/useSavedMetaphors';
-import { sanitizeSvg } from '../utils/svg-utils';
+import { sanitizeSvg, fixSvgForXml } from '../utils/svg-utils';
 import { exportSvgToPng } from '../utils/png-export';
 
 interface GeneratedMetaphor {
@@ -107,7 +107,7 @@ export default function GeneratorPage() {
     const filename = result.titleEn
       ? `${result.titleEn.toLowerCase().replace(/\s+/g, '-')}.svg`
       : 'metaphor.svg';
-    downloadBlob(result.svg, filename, MIME_TYPES.SVG);
+    downloadBlob(fixSvgForXml(result.svg), filename, MIME_TYPES.SVG);
   };
 
   const handleDownloadPng = async () => {

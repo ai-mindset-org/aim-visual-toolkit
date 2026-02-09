@@ -1,4 +1,5 @@
 import { downloadBinaryBlob } from './download';
+import { fixSvgForXml } from './svg-utils';
 
 export interface PngExportOptions {
   /** Output filename (without extension) */
@@ -26,9 +27,12 @@ export async function exportSvgToPng(
     size = 800,
   } = options;
 
+  // Fix XML entities before parsing (& in URLs, etc.)
+  const xmlSafe = fixSvgForXml(svgContent);
+
   // Parse SVG to ensure correct dimensions
   const parser = new DOMParser();
-  const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+  const doc = parser.parseFromString(xmlSafe, 'image/svg+xml');
   const svg = doc.querySelector('svg');
 
   if (!svg) {
