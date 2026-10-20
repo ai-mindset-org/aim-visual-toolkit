@@ -1,5 +1,9 @@
 # AIM Visual Toolkit
 
+<!-- aim-public-links:start -->
+[AI Mindset labs](https://aimindset.org/?utm_source=website&utm_medium=article&utm_campaign=start&utm_content=github-aim-visual-toolkit#learning) · [Knowledge base](https://base.aimindset.org/?utm_source=website&utm_medium=article&utm_campaign=start&utm_content=github-aim-visual-toolkit)
+<!-- aim-public-links:end -->
+
 Swiss Design visual metaphors for AI education.
 
 ## Features
@@ -43,5 +47,5 @@ Automatic deployment via Netlify on push to `main`.
 
 ## Links
 
-- [AI Mindset](https://aimindset.org)
-- [AIM LMS](https://learn.aimindset.org)
+- [AI Mindset](https://aimindset.org?utm_source=website&utm_medium=article&utm_campaign=start&utm_content=github-aim-visual-toolkit)
+- [AIM LMS](https://learn.aimindset.org?utm_source=website&utm_medium=article&utm_campaign=start&utm_content=github-aim-visual-toolkit)
